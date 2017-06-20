@@ -13,11 +13,11 @@ fi
 # Customize to your needs...
 
 
-conda_env() {
+ubuntu_env() {
 	echo "nothing" > /dev/null;
 }
 
-pyenv_env() {
+darwin_env() {
 	# Use neovim instead of vim:
 	alias vim=nvim
 
@@ -41,12 +41,13 @@ pyenv_env() {
 		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
 	}
 
-
+	source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+	source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 }
 
 case `hostname` in 
-	(Gauss) conda_env;;
-	(Galactica.local) pyenv_env;;
+	(Gauss) ubuntu_env;;
+	(Galactica.local) darwin_env;;
 	(*) echo "Unknown host";;
 esac
 
