@@ -70,4 +70,4 @@ bindkey -M vicmd "//" history-beginning-search-backward
 bindkey -M vicmd "??" history-beginning-search-forward
 
 
-
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
