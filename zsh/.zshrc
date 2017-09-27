@@ -68,7 +68,7 @@ darwin_env() {
 case `hostname` in 
 	(Gauss) ubuntu_env;;
 	(Zeus) zeus_env;;
-	(Galactica.local) darwin_env;;
+	(Galactica*|Pan*) darwin_env;;
 	(*) echo "Unknown host";;
 esac
 
