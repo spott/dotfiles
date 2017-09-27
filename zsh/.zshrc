@@ -5,16 +5,36 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
 
 # Customize to your needs...
 
 
 ubuntu_env() {
 	echo "nothing" > /dev/null;
+}
+
+zeus_env() {
+	echo "Welcome to Zeus"
+	#activate autoenv
+	if [ -f "/usr/local/opt/autoenv/activate.sh" ]; then
+		source /usr/local/opt/autoenv/activate.sh
+	fi
+
+	# settings for python virtualenvwrapper
+	export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+	export WORKON_HOME=$HOME/.virtualenvs
+	export PROJECT_HOME=$HOME/code
+	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
+		source /usr/local/bin/virtualenvwrapper.sh
+	fi
+
+	# Only allow pip commands if within a virtual environment
+	export PIP_REQUIRE_VIRTUALENV=true
+	# Provide alias `gpip` to install python packages outside a virtualenv
+	gpip3(){
+		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+	}
+
 }
 
 darwin_env() {
@@ -47,9 +67,15 @@ darwin_env() {
 
 case `hostname` in 
 	(Gauss) ubuntu_env;;
+	(Zeus) zeus_env;;
 	(Galactica.local) darwin_env;;
 	(*) echo "Unknown host";;
 esac
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 
 # directory options:
 setopt AUTO_CD
