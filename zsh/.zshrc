@@ -4,8 +4,8 @@
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
+[[ "$TERM" == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
-# Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
@@ -71,3 +71,5 @@ bindkey -M vicmd "//" history-beginning-search-backward
 bindkey -M vicmd "??" history-beginning-search-forward
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+[[ $- == *i* && $SSH_TTY && -z $TMUX && ! -r ~/.notmux ]] && tmux -CC attach && exit
