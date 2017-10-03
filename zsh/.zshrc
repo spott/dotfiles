@@ -69,10 +69,13 @@ darwin_env() {
 	fi
 }
 
-case `hostname` in 
-	(Gauss) ubuntu_env;;
-	(Zeus) zeus_env;;
-	(Galactica*|Pan*) darwin_env;;
+#HNAME=(${(s/./)`hostname`})
+HNAME=`hostname`
+
+case $HNAME:l in 
+	(gauss) ubuntu_env;;
+	(zeus) zeus_env;;
+	(galactica*|pan*) darwin_env;;
 	(*) echo "Unknown host";;
 esac
 
