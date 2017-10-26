@@ -10,7 +10,7 @@
 
 
 ubuntu_env() {
-	echo "nothing" > /dev/null;
+	echo "Welcome to ${hostname}"
 }
 
 zeus_env() {
@@ -41,6 +41,7 @@ zeus_env() {
 }
 
 darwin_env() {
+	echo "Welcome to ${hostname}"
 	# Use neovim instead of vim:
 	alias vim=nvim
 
