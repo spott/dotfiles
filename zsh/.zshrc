@@ -57,7 +57,7 @@ darwin_env() {
 	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
 		source /usr/local/bin/virtualenvwrapper.sh
 	fi
-
+    export PATH=/Users/spott/.local/bin:$PATH
 	# Only allow pip commands if within a virtual environment
 	export PIP_REQUIRE_VIRTUALENV=true
 	# Provide alias `gpip` to install python packages outside a virtualenv
@@ -110,3 +110,5 @@ bindkey -M vicmd "??" history-beginning-search-forward
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 #[[ $- == *i* && $SSH_TTY && -z $TMUX && ! -r ~/.notmux ]] && tmux -CC attach-session -d && exit
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
