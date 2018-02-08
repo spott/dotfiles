@@ -16,28 +16,28 @@ ubuntu_env() {
 zeus_env() {
 	echo "Welcome to Zeus"
 	#activate autoenv
-	if [ -f "/usr/local/opt/autoenv/activate.sh" ]; then
-		source /usr/local/opt/autoenv/activate.sh
-	fi
+	#if [ -f "/usr/local/opt/autoenv/activate.sh" ]; then
+		#source /usr/local/opt/autoenv/activate.sh
+	#fi
 
 	# settings for python virtualenvwrapper
-	export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-	export WORKON_HOME=$HOME/.virtualenvs
+	#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+	#export WORKON_HOME=$HOME/.virtualenvs
 	export PROJECT_HOME=$HOME/code
 	export PATH=/usr/local/cuda-9.0/bin${PATH:+:${PATH}}
 	export export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
-	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
-		source /usr/local/bin/virtualenvwrapper.sh
-	fi
+	#if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
+		#source /usr/local/bin/virtualenvwrapper.sh
+	#fi
 
 	# Only allow pip commands if within a virtual environment
-	export PIP_REQUIRE_VIRTUALENV=true
+	#export PIP_REQUIRE_VIRTUALENV=true
 
 	# Provide alias `gpip` to install python packages outside a virtualenv
-	gpip3(){
-		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-	}
+	#gpip3(){
+		#PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+	#}
 }
 
 darwin_env() {
