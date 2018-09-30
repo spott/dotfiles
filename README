@@ -1,0 +1,8 @@
+Use gnu stow to load files:
+
+    cd ~/.dotfiles
+    stow <foldername>
+
+see
+http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html
+for more information
