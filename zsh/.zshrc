@@ -51,15 +51,15 @@ darwin_env() {
 	fi
 
 	# settings for python virtualenvwrapper
-	export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-	export WORKON_HOME=$HOME/.virtualenvs
+	#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+	#export WORKON_HOME=$HOME/.virtualenvs
 	export PROJECT_HOME=$HOME/code
-	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
-		source /usr/local/bin/virtualenvwrapper.sh
-	fi
-    export PATH=/Users/spott/.local/bin:$PATH
+	#if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
+		#source /usr/local/bin/virtualenvwrapper.sh
+	#fi
+    export PATH=/Users/spott/.local/bin:/Users/spott/.cargo/bin/:$PATH
 	# Only allow pip commands if within a virtual environment
-	export PIP_REQUIRE_VIRTUALENV=true
+	#export PIP_REQUIRE_VIRTUALENV=true
 	# Provide alias `gpip` to install python packages outside a virtualenv
 	gpip3(){
 		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
