@@ -10,11 +10,11 @@
 
 
 ubuntu_env() {
-	echo "Welcome to ${hostname}"
+	echo "Welcome to `hostname`"
 }
 
 zeus_env() {
-	echo "Welcome to Zeus"
+	echo "Welcome to `hostname`"
 	#activate autoenv
 	#if [ -f "/usr/local/opt/autoenv/activate.sh" ]; then
 		#source /usr/local/opt/autoenv/activate.sh
@@ -41,7 +41,7 @@ zeus_env() {
 }
 
 darwin_env() {
-	echo "Welcome to ${hostname}"
+	echo "Welcome to `hostname`"
 	# Use neovim instead of vim:
 	alias vim=nvim
 
@@ -50,27 +50,36 @@ darwin_env() {
 		source /usr/local/opt/autoenv/activate.sh
 	fi
 
-	# settings for python virtualenvwrapper
-	export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-	export WORKON_HOME=$HOME/.virtualenvs
-	export PROJECT_HOME=$HOME/code
-	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
-		source /usr/local/bin/virtualenvwrapper.sh
-	fi
-    export PATH=/Users/spott/.local/bin:$PATH
-	# Only allow pip commands if within a virtual environment
-	export PIP_REQUIRE_VIRTUALENV=true
-	# Provide alias `gpip` to install python packages outside a virtualenv
-	gpip3(){
-		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-	}
+    #if [ -f "/usr/local/Caskroom/miniconda/base/condabin/conda" ]; then
+        #
 
-	if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then
-		source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-	fi
-	if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then
-		source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-	fi
+
+    if [ -f "/usr/local/miniconda3/bin/conda" ]; then
+# source /usr/local/miniconda3/etc/profile.d/conda.sh  # commented out by conda initialize
+        echo "miniconda is installed!"
+    fi
+
+	# settings for python virtualenvwrapper
+#	export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+#	export WORKON_HOME=$HOME/.virtualenvs
+#	export PROJECT_HOME=$HOME/code
+#	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
+#		source /usr/local/bin/virtualenvwrapper.sh
+#	fi
+#    export PATH=/Users/spott/.local/bin:$PATH
+#	# Only allow pip commands if within a virtual environment
+#	export PIP_REQUIRE_VIRTUALENV=true
+#	# Provide alias `gpip` to install python packages outside a virtualenv
+#	gpip3(){
+#		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+#	}
+#
+#	if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then
+#		source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+#	fi
+#	if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then
+#		source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+#	fi
 }
 
 #HNAME=(${(s/./)`hostname`})
@@ -113,3 +122,19 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 #[[ $- == *i* && $SSH_TTY && -z $TMUX && ! -r ~/.notmux ]] && tmux -CC attach-session -d && exit
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/local/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
