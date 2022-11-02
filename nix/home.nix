@@ -43,40 +43,70 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  #
+  # bat (cat replacement)
+  #
   programs.bat.enable = true;
-  #programs.bat.config
+  programs.bat.config = {
+    theme = "Dracula";
+  };
 
+
+  #
+  # bottom (btm command, top replacement)
+  #
   programs.bottom.enable = true;
   # see https://github.com/ClementTsang/bottom/blob/master/sample_configs/default_config.toml for possiblities
   #programs.bottom.settings
 
-  programs.direnv.enableZshIntegration = true;
+  #
+  # direnv
+  #
+  programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+  programs.direnv.enableZshIntegration = true;
 
+  #
+  # exa (ls replacement)
+  #
   programs.exa.enable = true;
-  #programs.exa.enableAlias = true;
 
-  # github cli tool
-  #programs.gh.enable = true;
-  
+  # 
+  # tmux
+  #
   programs.tmux.enable = true;
   programs.tmux.keyMode= "vi";
   programs.tmux.prefix = "C-a";
 
+  #
+  # neovim
+  #
   programs.neovim.enable = true;
   xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
   xdg.configFile."nvim/lua/bootstrap.lua".source = ./nvim/lua/bootstrap.lua;
 
+  #
+  # zsh
+  #
   programs.zsh.enable = true;
   programs.zsh.dotDir = ".config/zsh";
   programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
   programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
-  #xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
+  
+  # 
+  # SSH
+  #
   programs.ssh.enable = true;
   programs.ssh.extraConfig = "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-  #programs.ssh.extraOptionOverrides = {IdentityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";};
-  #vscode:
+  
+  #
+  # vscode:
+  # 
   # programs.vscode.enable
+  
+  #
+  # gh (github commandline)
+  # 
   programs.gh.enable = true;
   programs.gh.settings.git_protocol = "ssh";
 
