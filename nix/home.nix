@@ -16,8 +16,6 @@
 
   # Packages:
   home.packages = with pkgs; [
-    #exa
-    #neovim
     delta
     bottom
     du-dust
@@ -25,9 +23,7 @@
     ripgrep
     duf
     dog
-    #bat
     lsd
-    direnv
   ];
 
   # This value determines the Home Manager release that your
@@ -92,6 +88,23 @@
   programs.zsh.dotDir = ".config/zsh";
   programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
   programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
+  programs.zsh.dirHashes = {
+    nix   = "$HOME/.dotfiles/nix";
+    proj  = "$HOME/projects";
+    ic    = "$HOME/iCloudDocuments";
+    docs  = "$HOME/Documents";
+  };
+  programs.zsh.shellAliases = {
+    cat = "bat";
+    diff = "delta";
+    df = "duf";
+    du = "dust";
+    dog = "dig";
+    find = "fd";
+    top = "btm";
+    grep = "rg";
+    vim = "nvim";
+  };
   
   # 
   # SSH
