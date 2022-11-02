@@ -1,152 +1,62 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-[[ "$TERM" == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+source "/Users/spott/.config/zsh/.zshrc_personal"
 
-# Customize to your needs...
+typeset -U path cdpath fpath manpath
 
 
-ubuntu_env() {
-	echo "Welcome to `hostname`"
-}
 
-zeus_env() {
-	echo "Welcome to `hostname`"
-	#activate autoenv
-	#if [ -f "/usr/local/opt/autoenv/activate.sh" ]; then
-		#source /usr/local/opt/autoenv/activate.sh
-	#fi
+for profile in ${(z)NIX_PROFILES}; do
+  fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
+done
 
-	# settings for python virtualenvwrapper
-	#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-	#export WORKON_HOME=$HOME/.virtualenvs
-	export PROJECT_HOME=$HOME/code
-	export PATH=/usr/local/cuda-9.0/bin${PATH:+:${PATH}}
-	export export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-
-	#if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
-		#source /usr/local/bin/virtualenvwrapper.sh
-	#fi
-
-	# Only allow pip commands if within a virtual environment
-	#export PIP_REQUIRE_VIRTUALENV=true
-
-	# Provide alias `gpip` to install python packages outside a virtualenv
-	#gpip3(){
-		#PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-	#}
-}
-
-darwin_env() {
-	echo "Welcome to `hostname`"
-	# Use neovim instead of vim:
-	alias vim=nvim
-
-	#activate autoenv
-	if [ -f "/usr/local/opt/autoenv/activate.sh" ]; then
-		source /usr/local/opt/autoenv/activate.sh
-	fi
-
-	# settings for python virtualenvwrapper
-	#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-	#export WORKON_HOME=$HOME/.virtualenvs
-	export PROJECT_HOME=$HOME/code
-	#if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
-		#source /usr/local/bin/virtualenvwrapper.sh
-	#fi
-    export PATH=/Users/spott/.local/bin:/Users/spott/.cargo/bin/:$PATH
-	# Only allow pip commands if within a virtual environment
-	#export PIP_REQUIRE_VIRTUALENV=true
-	# Provide alias `gpip` to install python packages outside a virtualenv
-	gpip3(){
-		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-	}
+HELPDIR="/nix/store/h61gsvc70l2vlfc1ap2bbi2c28bw0mw7-zsh-5.9/share/zsh/$ZSH_VERSION/help"
 
 
-    if [ -f "/usr/local/miniconda3/bin/conda" ]; then
-# source /usr/local/miniconda3/etc/profile.d/conda.sh  # commented out by conda initialize
-        echo "miniconda is installed!"
-    fi
 
-	# settings for python virtualenvwrapper
-#	export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-#	export WORKON_HOME=$HOME/.virtualenvs
-#	export PROJECT_HOME=$HOME/code
-#	if [ -f "/usr/local/bin/virtualenvwrapper.sh" ]; then
-#		source /usr/local/bin/virtualenvwrapper.sh
-#	fi
-#    export PATH=/Users/spott/.local/bin:$PATH
-#	# Only allow pip commands if within a virtual environment
-#	export PIP_REQUIRE_VIRTUALENV=true
-#	# Provide alias `gpip` to install python packages outside a virtualenv
-#	gpip3(){
-#		PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-#	}
-#
-#	if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then
-#		source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-#	fi
-#	if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then
-#		source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-#	fi
-}
 
-#HNAME=(${(s/./)`hostname`})
-HNAME=`hostname`
 
-case $HNAME:l in 
-	(gauss) ubuntu_env;;
-	(Gauss) ubuntu_env;;
-	(zeus) zeus_env;;
-	(galactica*|pan*) darwin_env;;
-	(*) echo "Unknown host";;
-esac
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
 
-# directory options:
-setopt AUTO_CD
-setopt AUTO_PUSHD
-setopt EXTENDED_GLOB
 
-# 10 second wait if you do something that will delete everything.  I wish I'd had this before...
-setopt RM_STAR_WAIT
 
-# hows about arrays be awesome?  (that is, frew${cool}frew has frew surrounding all the variables, not just first and last
-setopt RC_EXPAND_PARAM
+# Oh-My-Zsh/Prezto calls compinit during initialization,
+# calling it twice causes slight start up slowdown
+# as all $fpath entries will be traversed again.
+autoload -U compinit && compinit
 
-# Incremental search is elite!
-bindkey -M vicmd "/" history-incremental-search-backward
-bindkey -M vicmd "?" history-incremental-search-forward
 
-# Search based on what you typed in already
-bindkey -M vicmd "//" history-beginning-search-backward
-bindkey -M vicmd "??" history-beginning-search-forward
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-#[[ $- == *i* && $SSH_TTY && -z $TMUX && ! -r ~/.notmux ]] && tmux -CC attach-session -d && exit
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/usr/local/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+
+
+
+# History options should be set in .zshrc and after oh-my-zsh sourcing.
+# See https://github.com/nix-community/home-manager/issues/177.
+HISTSIZE="10000"
+SAVEHIST="10000"
+
+HISTFILE="$ZDOTDIR/.zsh_history"
+mkdir -p "$(dirname "$HISTFILE")"
+
+setopt HIST_FCNTL_LOCK
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+unsetopt HIST_EXPIRE_DUPS_FIRST
+setopt SHARE_HISTORY
+unsetopt EXTENDED_HISTORY
+
+
+
+
+# Aliases
+
+
+# Global Aliases
+
+
+# Named Directory Hashes
+
+
+
 
