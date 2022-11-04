@@ -6,16 +6,18 @@
   home.username = "spott";
   home.homeDirectory = "/Users/spott";
 
-  #nixpkgs.config = import ./nixpkgs-config.nix;
-  #xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
+  nixpkgs.config = import ./nixpkgs-config.nix;
+  xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
   xdg.configFile."git/config".source = ./git/config;
 
   nix.package = pkgs.nix;
-  nix.settings = { experimental-features = [ "nix-command" "flakes" ]; };
+  nix.settings = { experimental-features = [ "nix-command" "flakes" ]; 
+                   extra-platforms = [ "x86_64_darwin" "aarch64_darwin" ]; };
 
   # Packages:
   home.packages = with pkgs; [
+  # shell
     delta
     bottom
     du-dust
@@ -24,6 +26,11 @@
     duf
     dog
     lsd
+
+  # development
+    #python310Packages.poetry
+    (poetry.override {python = python310;})
+    python39Full
   ];
 
   # This value determines the Home Manager release that your
@@ -115,7 +122,7 @@
   #
   # vscode:
   # 
-  # programs.vscode.enable
+  #programs.vscode.enable = true;
   
   #
   # gh (github commandline)

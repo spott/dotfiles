@@ -17,6 +17,7 @@
     let 
       system = "aarch64-darwin";
       #pkgs = nixpkgs;
+      #nixpkgs.config = { allowUnfree = true; };
       pkgs = nixpkgs.legacyPackages.${system};
 
       nixpkgsConfig = {
