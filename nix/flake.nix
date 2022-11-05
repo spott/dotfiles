@@ -28,6 +28,7 @@
         inherit pkgs;
         modules = [
           ./home.nix
+	  ./zsh/zsh.nix
         ];
       };
       /* darwinConfigurations."Endeavor" = darwin.lib.darwinSystem {

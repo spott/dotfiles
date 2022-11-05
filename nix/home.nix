@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -14,7 +13,8 @@
   nix.package = pkgs.nix;
   nix.settings = { experimental-features = [ "nix-command" "flakes" ]; 
                    extra-platforms = [ "x86_64_darwin" "aarch64_darwin" ]; };
-
+	
+ # inherit zsh;
   # Packages:
   home.packages = with pkgs; [
   # shell
@@ -88,31 +88,6 @@
   xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
   xdg.configFile."nvim/lua/bootstrap.lua".source = ./nvim/lua/bootstrap.lua;
 
-  #
-  # zsh
-  #
-  programs.zsh.enable = true;
-  programs.zsh.dotDir = ".config/zsh";
-  programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
-  programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
-  programs.zsh.dirHashes = {
-    nix   = "$HOME/.dotfiles/nix";
-    proj  = "$HOME/projects";
-    ic    = "$HOME/iCloudDocuments";
-    docs  = "$HOME/Documents";
-  };
-  programs.zsh.shellAliases = {
-    cat = "bat";
-    diff = "delta";
-    df = "duf";
-    du = "dust";
-    dog = "dig";
-    find = "fd";
-    top = "btm";
-    grep = "rg";
-    vim = "nvim";
-  };
-  
   # 
   # SSH
   #

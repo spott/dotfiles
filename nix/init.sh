@@ -11,3 +11,6 @@ nix build --no-link .\#homeConfigurations.spott.activationPackage
 #
 # to install paq on nvim
 # nvim --headless -u NONE -c 'lua require("bootstrap").bootstrap_paq()'
+#
+# For touchid for sudo in terminal:
+# add 'auth sufficient pam_tid.so' to the top of /etc/pam/sudo
