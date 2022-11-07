@@ -18,14 +18,24 @@
   # Packages:
   home.packages = with pkgs; [
   # shell
-    delta
-    bottom
-    du-dust
-    fd
-    ripgrep
-    duf
-    dog
-    lsd
+    delta # diff pager
+    difftastic # diff engine
+    bottom # top replacement
+    du-dust # du replacement
+    fd # find replacement
+    ripgrep # grep replacement
+    duf # df replacement
+    dog # dig replacement
+    lsd # ls replacement... I'm using exa, so this might not be necessary
+    sd # sed replacement
+    tldr # examples for commands
+    mosh # ssh replacement
+
+  # iac (only needed on Normandy... but might as well install them everywhere
+    terraform
+    ansible
+    pulumi-bin
+    kubectl
 
   # development
     #python310Packages.poetry
