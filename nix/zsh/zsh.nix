@@ -18,7 +18,7 @@
     diff = "delta";
     df = "duf";
     #du = "dust"; # this isn't really a replacement for du... 
-    dog = "dig";
+    dig = "dog";
     find = "fd";
     top = "btm";
     grep = "rg";

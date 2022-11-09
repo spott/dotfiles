@@ -25,7 +25,7 @@
     fd # find replacement
     ripgrep # grep replacement
     duf # df replacement
-    dog # dig replacement
+    dogdns # dig replacement
     lsd # ls replacement... I'm using exa, so this might not be necessary
     sd # sed replacement
     tldr # examples for commands
