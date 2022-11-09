@@ -17,7 +17,7 @@
     cat = "bat";
     diff = "delta";
     df = "duf";
-    du = "dust";
+    #du = "dust"; # this isn't really a replacement for du... 
     dog = "dig";
     find = "fd";
     top = "btm";
