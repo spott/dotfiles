@@ -24,44 +24,19 @@
         config = { allowUnfree = true; };
       };
     in {
-      homeConfigurations.spott = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./home.nix
-	  ./zsh/zsh.nix
+          ./normandy.nix
+          ./zsh/zsh.nix
         ];
       };
-      /* darwinConfigurations."Endeavor" = darwin.lib.darwinSystem {
-        inherit system;
+      homeConfigurations."spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
         modules = [
-        ./darwin.nix
-        home-manager.darwinModules.home-manager
-          {
-            #nixpkgs = nixpkgsConfig;
-            # `home-manager` config
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-	    home-manager.verbose = true;
-            home-manager.users.spott = import ./home.nix;            
-          }
+          ./endeavor.nix
+          ./zsh/zsh.nix
         ];
-      }; */
-    };
-
-    /* let
-      username = "spott";
-      email = "andrew.spott@submittable.com";
-
-      config = {
-        configuration = import ./home.nix;
-        inherit username;
-        stateVersion = "22.05";
       };
-      # system = "aarch64-darwin":
-      # pkgs = nixpkgs.legacyPackages.${system};
-    in {
-        homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration (config // {system = "aarch64-darwin";});
-
-      #homeConfigurations.spott = home-manager.lib.homeManagerConfiguration
-    }; */
+    };
 }

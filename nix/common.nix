@@ -1,10 +1,27 @@
-{ config, pkgs, ... }:
+{config, pkgs, ...}:
 {
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "spott";
-  home.homeDirectory = "/Users/spott";
+packages = with pkgs; [
+# shell
+  delta # diff pager
+  difftastic # diff engine
+  bottom # top replacement
+  du-dust # du replacement
+  fd # find replacement
+  ripgrep # grep replacement
+  duf # df replacement
+  dogdns # dig replacement
+  lsd # ls replacement... I'm using exa, so this might not be necessary
+  sd # sed replacement
+  tldr # examples for commands
+  mosh # ssh replacement
 
+# development
+  #python310Packages.poetry
+  (poetry.override {python = python310;})
+  python39Full
+];
+
+common = {
   nixpkgs.config = import ./nixpkgs-config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
@@ -13,35 +30,7 @@
   nix.package = pkgs.nix;
   nix.settings = { experimental-features = [ "nix-command" "flakes" ]; 
                    extra-platforms = [ "x86_64_darwin" "aarch64_darwin" ]; };
-	
- # inherit zsh;
-  # Packages:
-  home.packages = with pkgs; [
-  # shell
-    delta # diff pager
-    difftastic # diff engine
-    bottom # top replacement
-    du-dust # du replacement
-    fd # find replacement
-    ripgrep # grep replacement
-    duf # df replacement
-    dogdns # dig replacement
-    lsd # ls replacement... I'm using exa, so this might not be necessary
-    sd # sed replacement
-    tldr # examples for commands
-    mosh # ssh replacement
 
-  # iac (only needed on Normandy... but might as well install them everywhere
-    terraform
-    ansible
-    pulumi-bin
-    kubectl
-
-  # development
-    #python310Packages.poetry
-    (poetry.override {python = python310;})
-    python39Full
-  ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -103,7 +92,7 @@
   #
   programs.ssh.enable = true;
   programs.ssh.extraConfig = "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-  
+
   #
   # vscode:
   # 
@@ -114,6 +103,5 @@
   # 
   programs.gh.enable = true;
   programs.gh.settings.git_protocol = "ssh";
-
-
+};
 }
