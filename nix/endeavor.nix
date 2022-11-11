@@ -1,8 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 let
-  common = import ./common.nix {inherit config pkgs;};
+  common_pkgs = import ./common_pkgs.nix {inherit pkgs;};
 in
-lib.mkMerge[
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -10,6 +9,5 @@ lib.mkMerge[
   home.homeDirectory = "/Users/spott";
 	
   # Packages:
-  home.packages = common.packages;
+  home.packages = common_pkgs;
 } 
-common.common]

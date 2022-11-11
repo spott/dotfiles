@@ -28,6 +28,7 @@
         inherit pkgs;
         modules = [
           ./normandy.nix
+          ./common.nix
           ./zsh/zsh.nix
         ];
       };
@@ -35,6 +36,7 @@
         inherit pkgs;
         modules = [
           ./endeavor.nix
+          ./common.nix
           ./zsh/zsh.nix
         ];
       };

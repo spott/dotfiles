@@ -1,8 +1,7 @@
 { config, pkgs, lib, ... }:
 let
-  common = import ./common.nix {inherit config pkgs;};
+  common_pkgs = import ./common_pkgs.nix {inherit pkgs;};
 in
-lib.mkMerge[
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -17,6 +16,6 @@ lib.mkMerge[
     ansible
     pulumi-bin
     kubectl
-  ] ++ common.packages;
+    kubernetes-helm
+  ] ++ common_pkgs;
 } 
-common.common]
