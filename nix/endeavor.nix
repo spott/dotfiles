@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  common_pkgs = import ./common_pkgs.nix {inherit pkgs;};
+  common = import ./common_vars.nix {inherit pkgs;};
 in
 {
   # Home Manager needs a bit of information about you and the
@@ -9,5 +9,10 @@ in
   home.homeDirectory = "/Users/spott";
 	
   # Packages:
-  home.packages = common_pkgs;
+  home.packages = common.packages;
+  programs.zsh.dirHashes = common.dirHashes // {
+    proj  = "$HOME/projects";
+    docs  = "$HOME/iCloudDocuments";
+  };
+
 } 

@@ -1,23 +1,13 @@
 {config, pkgs, ...}:
 {
-  #
-  # zsh
-  #
   programs.zsh.enable = true;
   programs.zsh.dotDir = ".config/zsh";
   programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
   programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
-  programs.zsh.dirHashes = {
-    nix   = "$HOME/.dotfiles/nix";
-    proj  = "$HOME/projects";
-    ic    = "$HOME/iCloudDocuments";
-    docs  = "$HOME/Documents";
-  };
   programs.zsh.shellAliases = {
     cat = "bat";
     diff = "delta";
     df = "duf";
-    #du = "dust"; # this isn't really a replacement for du... 
     dig = "dog";
     find = "fd";
     top = "btm";

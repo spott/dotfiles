@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  common_pkgs = import ./common_pkgs.nix {inherit pkgs;};
+  common = import ./common_vars.nix {inherit pkgs;};
 in
 {
   # Home Manager needs a bit of information about you and the
@@ -17,5 +17,10 @@ in
     pulumi-bin
     kubectl
     kubernetes-helm
-  ] ++ common_pkgs;
+  ] ++ common.packages;
+
+  programs.zsh.dirHashes = common.dirHashes // {
+    code  = "$HOME/Documents/code";
+    hl    = "$HOME/Documents/Homelab";
+  };
 } 

@@ -1,5 +1,6 @@
 {pkgs,...}:
-with pkgs; [
+{
+packages = with pkgs; [
 # shell
   delta # diff pager
   difftastic # diff engine
@@ -18,4 +19,12 @@ with pkgs; [
   #python310Packages.poetry
   (poetry.override {python = python310;})
   python39Full
-]
+];
+
+dirHashes = {
+    nix   = "$HOME/.dotfiles/nix";
+    docs  = "$HOME/Documents";
+};
+
+}
+
