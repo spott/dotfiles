@@ -28,19 +28,19 @@ require('lualine').setup {
   options = {
     theme = 'dracula-nvim'
   }
-)
+}
 
 require'lspconfig'.rnix.setup{}
 require'lspconfig'.pyright.setup{}
 
 require('nvim-surround').setup()
-require('Comment').setup {
+require('comment').setup {
     ---Add a space b/w comment and the line
     padding = true,
     ---Whether the cursor should stay at its position
     sticky = true,
     ---Lines to be ignored while (un)comment
-    ignore = '^\s*$',
+    ignore = '^\\s*$',
     ---LHS of toggle mappings in NORMAL mode
     toggler = {
         ---Line-comment toggle keymap
@@ -103,9 +103,11 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-set completeopt=menu,menuone,noselect
+vim.o.completeopt="menuone,noinsert,noselect"
 
-require'cmp'.setup {
+local cmp = require'cmp'
+
+cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -115,12 +117,12 @@ require'cmp'.setup {
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
-  ),
-}
+  }),
+})
 
 -- fold using nvim treesitter
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = nvim_treesitter#foldexpr()
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevel = 99 --this makes the folds not show up initially
 
 vim.o.smartcase = true
