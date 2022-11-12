@@ -13,6 +13,9 @@
   programs.zsh.enableVteIntegration = true;
   programs.zsh.defaultKeymap = "viins";
   programs.zsh.historySubstringSearch.enable = true;
+  programs.zsh.historySubstringSearch.searchDownKey = "^n";
+  programs.zsh.historySubstringSearch.searchUpKey = "^p";
+
 
 
   programs.zsh.shellAliases = {

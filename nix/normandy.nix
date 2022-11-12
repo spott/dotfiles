@@ -17,6 +17,7 @@ in
     pulumi-bin
     kubectl
     kubernetes-helm
+    k9s
   ] ++ common.packages;
 
   programs.zsh.dirHashes = common.dirHashes // {

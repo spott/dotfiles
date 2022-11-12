@@ -74,7 +74,63 @@
   #
   # vscode:
   # 
-  #programs.vscode.enable = true;
+  programs.vscode.enable = true;
+  programs.vscode.extensions = with pkgs.vscode-extensions; [
+      asvetliakov.vscode-neovim
+      arrterian.nix-env-selector
+      jnoortheen.nix-ide
+      kamadorueda.alejandra
+      dracula-theme.theme-dracula
+      eamodio.gitlens
+      ms-python.python
+      ms-python.vscode-pylance
+      redhat.vscode-yaml
+      ms-toolsai.jupyter
+      ms-toolsai.jupyter-renderers
+      ms-toolsai.jupyter-keymap
+    ];
+
+  programs.vscode.userSettings = {
+    "workbench.colorTheme" = "Dracula";
+    "vscode-neovim.neovimExecutablePaths.darwin" = "/Users/spott/.nix-profile/bin/nvim";
+    "vscode-neovim.neovimInitVimPaths.darwin" = " /Users/spott/.config/nvim/init.lua";
+    "jupyter.sendSelectionToInteractiveWindow" = true;
+    "jupyter.themeMatplotlibPlots" = true;
+    "jupyter.askForKernelRestart" = false;
+    "git.autofetch" = false;
+    "editor.accessibilitySupport" = "off";
+    "[python]" = {
+        "editor.formatOnType" = true;
+    };
+    "python.analysis.diagnosticMode" = "workspace";
+    "editor.fontFamily" = "Hurmit Nerd Font";
+    "editor.renderWhitespace" = "trailing";
+    "editor.bracketPairColorization.independentColorPoolPerBracketType" = true;
+    "editor.formatOnPaste" = true;
+    "editor.formatOnSave" = true;
+    "editor.minimap.autohide" = true;
+    "workbench.preferredDarkColorTheme" = "Dracula";
+    "workbench.editor.highlightModifiedTabs" = true;
+    "workbench.settings.useSplitJSON" = true;
+    "window.openFoldersInNewWindow" = "on";
+    "explorer.fileNesting.expand" = false;
+    "terminal.explorerKind" = "external";
+    "terminal.external.osxExec" = "/Users/spott/.nix-profile/Applications/kitty.app";
+    "terminal.integrated.defaultProfile.osx" = "zsh";
+    "problems.showCurrentInStatus" = true;
+    "python.analysis.autoImportCompletions" = true;
+    "python.analysis.importFormat" = "relative";
+    "python.analysis.indexing" = true;
+    "python.analysis.typeCheckingMode" = "strict";
+    "python.formatting.provider" = "black";
+    "python.linting.mypyEnabled" = true;
+    "python.linting.prospectorEnabled" = true;
+    "python.terminal.activateEnvInCurrentTerminal" = true;
+    "python.testing.pytestEnabled" = true;
+    "jupyter.allowUnauthorizedRemoteConnection" = true;
+    "github.gitProtocol" = "ssh";
+     "nix.enableLanguageServer" = true;
+  };
 
   #
   # fzf

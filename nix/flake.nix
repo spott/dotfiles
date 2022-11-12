@@ -18,7 +18,10 @@
       system = "aarch64-darwin";
       #pkgs = nixpkgs;
       #nixpkgs.config = { allowUnfree = true; };
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs { inherit system;
+                              config = {allowUnfree = true;};
+                              };
+      #nixpkgs.legacyPackages.${system};
 
       nixpkgsConfig = {
         config = { allowUnfree = true; };

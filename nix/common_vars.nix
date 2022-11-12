@@ -16,11 +16,20 @@ packages = with pkgs; [
   mosh # ssh replacement
   yq # jq replacement for yaml files and xml files as well
 
+  # nvim stuff
+  tree-sitter
 
-# development
+  # python development
   #python310Packages.poetry
+  black
+  prospector
+  pyright
   (poetry.override {python = python310;})
   python39Full
+
+  # nix developmentt
+  alejandra
+  rnix-lsp
 ];
 
 dirHashes = {
