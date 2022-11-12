@@ -25,6 +25,9 @@ zmodule utility
 zmodule exa
 zmodule magic-enter
 zmodule prompt-pwd
+zmodule fzf
+zmodule zim-github-cli
+zmodule zim-yq
 
 # https://github.com/jeffreytse/zsh-vi-mode
 zmodule jeffreytse/zsh-vi-mode

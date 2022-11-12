@@ -4,6 +4,17 @@
   programs.zsh.dotDir = ".config/zsh";
   programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
   programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
+  programs.zsh.history.extended = true;
+  programs.zsh.history.expireDuplicatesFirst = true;
+  programs.zsh.history.ignoreDups = false;
+  programs.zsh.history.ignoreSpace = true;
+  programs.zsh.history.save = 1000000000;
+  programs.zsh.history.size = 2000000000;
+  programs.zsh.enableVteIntegration = true;
+  programs.zsh.defaultKeymap = "viins";
+  programs.zsh.historySubstringSearch.enable = true;
+
+
   programs.zsh.shellAliases = {
     cat = "bat";
     diff = "delta";

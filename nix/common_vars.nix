@@ -14,6 +14,8 @@ packages = with pkgs; [
   sd # sed replacement
   tldr # examples for commands
   mosh # ssh replacement
+  yq # jq replacement for yaml files and xml files as well
+
 
 # development
   #python310Packages.poetry

@@ -75,10 +75,35 @@
   # vscode:
   # 
   #programs.vscode.enable = true;
+
+  #
+  # fzf
+  #
+  programs.fzf.enable = true;
+
+  #
+  # aria2
+  #
+  programs.aria2.enable = true;
   
   #
   # gh (github commandline)
   # 
   programs.gh.enable = true;
   programs.gh.settings.git_protocol = "ssh";
+
+  # 
+  # Kitty
+  #
+  programs.kitty.enable = true;
+  programs.kitty.font.name = "Hurmit Nerd Font";
+  programs.kitty.font.size = "12";
+  programs.kitty.settings = {
+    scrollback_lines = 100000;
+    enable_audio_bell = false;
+    update_check_interval = 0.0;
+    scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
+    scrollback_pager_history_size = 100;
+    };
+  programs.kitty.theme = "Dracula"
 }
