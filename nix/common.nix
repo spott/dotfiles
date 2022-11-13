@@ -103,7 +103,7 @@
         "editor.formatOnType" = true;
     };
     "python.analysis.diagnosticMode" = "workspace";
-    "editor.fontFamily" = "Hurmit Nerd Font";
+    "editor.fontFamily" = "Victor Mono Light";
     "editor.renderWhitespace" = "trailing";
     "editor.bracketPairColorization.independentColorPoolPerBracketType" = true;
     "editor.formatOnPaste" = true;
@@ -152,14 +152,7 @@
   # Kitty
   #
   programs.kitty.enable = true;
-  programs.kitty.font.name = "Hurmit Nerd Font";
-  programs.kitty.font.size = 12;
-  programs.kitty.settings = {
-    scrollback_lines = 100000;
-    enable_audio_bell = false;
-    update_check_interval = 0;
-    scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
-    scrollback_pager_history_size = 100;
-    };
-  programs.kitty.theme = "Dracula";
+  xdg.configFile."kitty/kitty.conf".source = ./kitty/kitty.conf;
+  xdg.configFile."kitty/dracula.conf".source = ./kitty/dracula.conf;
+  xdg.configFile."kitty/diff.conf".source = ./kitty/diff.conf;
 }
