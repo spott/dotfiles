@@ -16,9 +16,6 @@ packages = with pkgs; [
   mosh # ssh replacement
   yq # jq replacement for yaml files and xml files as well
 
-  # fonts:
-  victor-mono
-
   # nvim stuff
   tree-sitter
 
