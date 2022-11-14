@@ -97,13 +97,13 @@
     "jupyter.sendSelectionToInteractiveWindow" = true;
     "jupyter.themeMatplotlibPlots" = true;
     "jupyter.askForKernelRestart" = false;
+    "jupyter.allowUnauthorizedRemoteConnection" = true;
     "git.autofetch" = false;
     "editor.accessibilitySupport" = "off";
-    "[python]" = {
-        "editor.formatOnType" = true;
-    };
-    "python.analysis.diagnosticMode" = "workspace";
-    "editor.fontFamily" = "Victor Mono Light";
+    "editor.fontFamily" = "Victor Mono";
+    "editor.fontLigatures"= true;
+    "editor.fontSize" = 12.5;
+    "editor.fontWeight" = "300";
     "editor.renderWhitespace" = "trailing";
     "editor.bracketPairColorization.independentColorPoolPerBracketType" = true;
     "editor.formatOnPaste" = true;
@@ -118,18 +118,25 @@
     "terminal.external.osxExec" = "/Users/spott/.nix-profile/Applications/kitty.app";
     "terminal.integrated.defaultProfile.osx" = "zsh";
     "problems.showCurrentInStatus" = true;
+    "[python]" = {
+      "editor.formatOnType" = true;
+    };
+    "python.analysis.diagnosticMode" = "workspace";
     "python.analysis.autoImportCompletions" = true;
     "python.analysis.importFormat" = "relative";
     "python.analysis.indexing" = true;
     "python.analysis.typeCheckingMode" = "strict";
     "python.formatting.provider" = "black";
     "python.linting.mypyEnabled" = true;
+    "python.linting.mypyPath"= "~/.nix-profile/bin/mypy";
     "python.linting.prospectorEnabled" = true;
+    "python.linting.prospectorPath"= "~/.nix-profile/bin/prospector";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
-    "jupyter.allowUnauthorizedRemoteConnection" = true;
     "github.gitProtocol" = "ssh";
-     "nix.enableLanguageServer" = true;
+    "nix.enableLanguageServer" = true;
+    "source.fixAll.convertImportFormat" = true;
+    "source.fixAll.unusedImports" = true;
   };
 
   #

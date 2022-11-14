@@ -3,6 +3,8 @@ require "paq" {
 
   "kylechui/nvim-surround";
   "numToStr/Comment.nvim";
+  
+  "fladson/vim-kitty";
 
   "kyazdani42/nvim-web-devicons";
   "nvim-lualine/lualine.nvim";
