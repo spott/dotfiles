@@ -15,7 +15,8 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let 
-      system = "aarch64-darwin";
+      #system = "aarch64-darwin";
+      system = "x86_64-linux";
       #pkgs = nixpkgs;
       #nixpkgs.config = { allowUnfree = true; };
       pkgs = import nixpkgs { inherit system;
@@ -32,6 +33,7 @@
         modules = [
           ./normandy.nix
           ./common.nix
+	  ./darwin-common.nix
           ./zsh/zsh.nix
         ];
       };
@@ -39,6 +41,15 @@
         inherit pkgs;
         modules = [
           ./endeavor.nix
+          ./common.nix
+	  ./darwin-common.nix
+          ./zsh/zsh.nix
+        ];
+      };
+      homeConfigurations."spott@devbox" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          ./devbox.nix
           ./common.nix
           ./zsh/zsh.nix
         ];
