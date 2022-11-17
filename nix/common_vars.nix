@@ -25,6 +25,7 @@ packages = with pkgs; [
   prospector
   pyright
   (poetry.override {python = python310;})
+  pipenv
   python39Full
 
   # nix developmentt
