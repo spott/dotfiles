@@ -26,5 +26,5 @@ in
     hl    = "$HOME/Homelab";
   };
 
-  programs.ssh.extraConfig = "IdentityAgent ~/.1password/agent.sock";
+  #programs.ssh.extraConfig = "IdentityAgent ~/.1password/agent.sock";
 } 
