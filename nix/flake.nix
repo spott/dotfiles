@@ -42,9 +42,9 @@
             ./zsh/zsh.nix
           ];
         };};
-        x86-64-linux.homeConfigurations = {
+        x86_64-linux.homeConfigurations = {
         "spott@devbox" = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgs "x86-64-linux";
+          pkgs = pkgs "x86_64-linux";
           modules = [
             ./devbox.nix
             ./common.nix
