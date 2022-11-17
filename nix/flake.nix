@@ -2,57 +2,53 @@
   description = "Home Manager configuration of Spott";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
-    #nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.05-darwin";
-    #nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, flake-utils, ... }:
+    flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system: 
     let 
       #system = "aarch64-darwin";
-      system = "x86_64-linux";
-      #pkgs = nixpkgs;
-      #nixpkgs.config = { allowUnfree = true; };
+      #system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system;
                               config = {allowUnfree = true;};
                               };
-      #nixpkgs.legacyPackages.${system};
-
-      nixpkgsConfig = {
-        config = { allowUnfree = true; };
-      };
     in {
       homeConfigurations."spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        inherit pkgs system;
         modules = [
           ./normandy.nix
           ./common.nix
-	  ./darwin-common.nix
+          ./darwin-common.nix
           ./zsh/zsh.nix
         ];
       };
       homeConfigurations."spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        inherit pkgs system;
         modules = [
           ./endeavor.nix
           ./common.nix
-	  ./darwin-common.nix
+          ./darwin-common.nix
           ./zsh/zsh.nix
         ];
       };
       homeConfigurations."spott@devbox" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        inherit pkgs system;
         modules = [
           ./devbox.nix
           ./common.nix
           ./zsh/zsh.nix
         ];
       };
-    };
+    }
+  );
 }
