@@ -2,46 +2,56 @@
   description = "Home Manager configuration of Spott";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
-    #nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.05-darwin";
-    #nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    /* flake-utils = {
+      url = "github:numtide/flake-utils";
+    }; */
   };
 
   outputs = { nixpkgs, home-manager, ... }:
+    #flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system: 
     let 
-      system = "aarch64-darwin";
-      #pkgs = nixpkgs;
-      #nixpkgs.config = { allowUnfree = true; };
-      pkgs = import nixpkgs { inherit system;
+      #system = "aarch64-darwin";
+      #system = "x86_64-linux";
+      pkgs = sys: import nixpkgs { system = sys;
                               config = {allowUnfree = true;};
                               };
-      #nixpkgs.legacyPackages.${system};
-
-      nixpkgsConfig = {
-        config = { allowUnfree = true; };
-      };
     in {
-      homeConfigurations."spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          ./normandy.nix
-          ./common.nix
-          ./zsh/zsh.nix
-        ];
+        packages = {aarch64-darwin.homeConfigurations = {
+        "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgs "aarch64-darwin";
+          modules = [
+            ./normandy.nix
+            ./common.nix
+            ./darwin-common.nix
+            ./zsh/zsh.nix
+          ];
+        };
+        "spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgs "aarch64-darwin";
+          modules = [
+            ./endeavor.nix
+            ./common.nix
+            ./darwin-common.nix
+            ./zsh/zsh.nix
+          ];
+        };};
+        x86-64-linux.homeConfigurations = {
+        "spott@devbox" = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgs "x86-64-linux";
+          modules = [
+            ./devbox.nix
+            ./common.nix
+            ./zsh/zsh.nix
+          ];
+        };
       };
-      homeConfigurations."spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [
-          ./endeavor.nix
-          ./common.nix
-          ./zsh/zsh.nix
-        ];
       };
     };
 }

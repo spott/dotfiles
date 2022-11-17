@@ -42,7 +42,7 @@ zmodule duration-info
 zmodule git-info
 
 # A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
-zmodule s1ck94
+zmodule minimal
 
 #
 # Completion
