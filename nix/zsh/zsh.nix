@@ -1,5 +1,8 @@
-{config, pkgs, ...}:
 {
+  config,
+  pkgs,
+  ...
+}: {
   programs.zsh.enable = true;
   programs.zsh.dotDir = ".config/zsh";
   programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
@@ -15,8 +18,6 @@
   programs.zsh.historySubstringSearch.enable = true;
   programs.zsh.historySubstringSearch.searchDownKey = "^n";
   programs.zsh.historySubstringSearch.searchUpKey = "^p";
-
-
 
   programs.zsh.shellAliases = {
     cat = "bat";

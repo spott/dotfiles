@@ -1,5 +1,8 @@
-{config, pkgs, ...}:
 {
+  config,
+  pkgs,
+  ...
+}: {
   xdg.configFile."git/config".source = ./git/config;
 
   # This value determines the Home Manager release that your
@@ -23,7 +26,6 @@
     theme = "Dracula";
   };
 
-
   #
   # bottom (btm command, top replacement)
   #
@@ -43,11 +45,11 @@
   #
   programs.exa.enable = true;
 
-  # 
+  #
   # tmux
   #
   programs.tmux.enable = true;
-  programs.tmux.keyMode= "vi";
+  programs.tmux.keyMode = "vi";
   programs.tmux.prefix = "C-a";
 
   #
@@ -57,7 +59,7 @@
   xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
   xdg.configFile."nvim/lua/bootstrap.lua".source = ./nvim/lua/bootstrap.lua;
 
-  # 
+  #
   # SSH
   #
   programs.ssh.enable = true;
@@ -65,22 +67,22 @@
 
   #
   # vscode:
-  # 
+  #
   programs.vscode.enable = true;
   programs.vscode.extensions = with pkgs.vscode-extensions; [
-      asvetliakov.vscode-neovim
-      arrterian.nix-env-selector
-      jnoortheen.nix-ide
-      kamadorueda.alejandra
-      dracula-theme.theme-dracula
-      eamodio.gitlens
-      ms-python.python
-      ms-python.vscode-pylance
-      redhat.vscode-yaml
-      ms-toolsai.jupyter
-      ms-toolsai.jupyter-renderers
-      ms-toolsai.jupyter-keymap
-    ];
+    asvetliakov.vscode-neovim
+    arrterian.nix-env-selector
+    jnoortheen.nix-ide
+    kamadorueda.alejandra
+    dracula-theme.theme-dracula
+    eamodio.gitlens
+    ms-python.python
+    ms-python.vscode-pylance
+    redhat.vscode-yaml
+    ms-toolsai.jupyter
+    ms-toolsai.jupyter-renderers
+    ms-toolsai.jupyter-keymap
+  ];
 
   programs.vscode.userSettings = {
     "workbench.colorTheme" = "Dracula";
@@ -93,7 +95,7 @@
     "git.autofetch" = false;
     "editor.accessibilitySupport" = "off";
     "editor.fontFamily" = "Victor Mono";
-    "editor.fontLigatures"= true;
+    "editor.fontLigatures" = true;
     "editor.fontSize" = 12.5;
     "editor.fontWeight" = "300";
     "editor.renderWhitespace" = "trailing";
@@ -120,9 +122,9 @@
     "python.analysis.typeCheckingMode" = "strict";
     "python.formatting.provider" = "black";
     "python.linting.mypyEnabled" = true;
-    "python.linting.mypyPath"= "~/.nix-profile/bin/mypy";
+    "python.linting.mypyPath" = "~/.nix-profile/bin/mypy";
     "python.linting.prospectorEnabled" = true;
-    "python.linting.prospectorPath"= "~/.nix-profile/bin/prospector";
+    "python.linting.prospectorPath" = "~/.nix-profile/bin/prospector";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
     "github.gitProtocol" = "ssh";
@@ -140,10 +142,10 @@
   # aria2
   #
   programs.aria2.enable = true;
-  
+
   #
   # gh (github commandline)
-  # 
+  #
   programs.gh.enable = true;
   programs.gh.settings.git_protocol = "ssh";
 }
