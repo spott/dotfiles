@@ -17,3 +17,6 @@ nix build --no-link .\#homeConfigurations.spott.activationPackage
 #
 # If zimrc is changed:
 # zimfw install
+#
+# Generate brewfile
+# brew bundle dump
