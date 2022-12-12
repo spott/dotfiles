@@ -22,6 +22,9 @@ in {
       kubectl
       kubernetes-helm
       k9s
+
+      # remote
+      wireguard-tools
     ]
     ++ common.packages;
 
@@ -31,4 +34,12 @@ in {
       code = "$HOME/Documents/code";
       hl = "$HOME/Documents/Homelab";
     };
+
+  programs.ssh.matchBlocks."*.sc.spott.us".identityFile = "~/.ssh/sc.spott.us.pub";
+  programs.ssh.matchBlocks."*.sc.spott.us".identitiesOnly = true;
+  programs.ssh.matchBlocks."*.sc.spott.us".forwardAgent = true;
+  programs.ssh.matchBlocks."*.sc.spott.us".host = "*.sc.spott.us";
+
+  programs.ssh.matchBlocks."ha.sc.spott.us".host = "ha.sc.spott.us";
+  programs.ssh.matchBlocks."ha.sc.spott.us".user = "root";
 }

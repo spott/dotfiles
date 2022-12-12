@@ -12,10 +12,35 @@ require "paq" {
   "neovim/nvim-lspconfig";
   "hrsh7th/nvim-cmp";
   "epwalsh/obsidian.nvim";
-  "junegunn/fzf";
+  "nvim-lua/plenary.nvim";
+  {"nvim-telescope/telescope.nvim", branch='0.1.x'};
+  {'nvim-telescope/telescope-fzf-native.nvim', run='make'};
+  -- "junegunn/fzf";
+  -- "ibhagwan/fzf-lua";
   {"nvim-treesitter/nvim-treesitter", run='TSUpdate'};
 
 }
+
+require('telescope').setup {
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
+}
+require('telescope').load_extension('fzf')
+
+-- telescope keybindings
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+
 
 --theme:
 vim.cmd[[colorscheme dracula]]
@@ -79,6 +104,13 @@ require('Comment').setup {
     pre_hook = nil,
     ---Function to call after (un)comment
     post_hook = nil,
+}
+
+require('obsidian').setup {
+    dir = "~/Documents/Notes/Personal/",
+    completion = {
+        nvim_cmp = true,
+    }
 }
 
 -- treesitter config

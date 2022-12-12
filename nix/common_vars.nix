@@ -17,6 +17,21 @@
 
     # nvim stuff
     tree-sitter
+    # tree-sitter-grammars.tree-sitter-vim
+    # tree-sitter-grammars.tree-sitter-yaml
+    # tree-sitter-grammars.tree-sitter-toml
+    # tree-sitter-grammars.tree-sitter-sql
+    # tree-sitter-grammars.tree-sitter-rust
+    # tree-sitter-grammars.tree-sitter-python
+    # tree-sitter-grammars.tree-sitter-nix
+    # tree-sitter-grammars.tree-sitter-markdown
+    # tree-sitter-grammars.tree-sitter-markdown-inline
+    # tree-sitter-grammars.tree-sitter-json
+    # tree-sitter-grammars.tree-sitter-json5
+    # tree-sitter-grammars.tree-sitter-dockerfile
+    # tree-sitter-grammars.tree-sitter-lua
+    # tree-sitter-grammars.tree-sitter-comment
+    # tree-sitter-grammars.tree-sitter-bash
 
     # python development
     #python310Packages.poetry

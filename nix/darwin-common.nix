@@ -13,6 +13,11 @@
   };
 
   #
+  # Poetry
+  #
+  xdg.configFile."pypoetry/config.toml".source = ./pypoetry/config.toml;
+
+  #
   # SSH
   #
   programs.ssh.enable = true;
@@ -35,6 +40,7 @@
     ms-toolsai.jupyter
     ms-toolsai.jupyter-renderers
     ms-toolsai.jupyter-keymap
+    ms-vscode-remote.remote-ssh
   ];
 
   programs.vscode.userSettings = {

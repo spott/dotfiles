@@ -38,6 +38,26 @@
   #
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+  programs.direnv.stdlib = ''
+  layout_poetry() {
+    if [[ ! -f pyproject.toml ]]; then
+      log_error 'No pyproject.toml found. Use `poetry new` or `poetry init` to create one first.'
+      exit 2
+    fi
+
+    local VENV=''$(poetry env info --path)
+    if [[ -z ''$VENV || ! -d ''$VENV/bin ]]; then
+      log_error 'No poetry virtual environment found. Use `poetry install` to create one first.'
+      exit 2
+    fi
+
+    export VIRTUAL_ENV=''$VENV
+    export POETRY_ACTIVE=1
+    PATH_add "''$VENV/bin"
+    #source ''$VENV/bin/activate
+  }
+
+  '';
   programs.direnv.enableZshIntegration = true;
 
   #
@@ -63,7 +83,9 @@
   # SSH
   #
   programs.ssh.enable = true;
-  #programs.ssh.extraConfig = "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+  programs.ssh.controlMaster = "auto";
+  programs.ssh.controlPersist = "30m";
+  programs.ssh.controlPath = "~/Library/Caches/TemporaryItems/ssh/master-%r@%n:%p";
 
   #
   # vscode:
@@ -121,6 +143,7 @@
     "python.analysis.indexing" = true;
     "python.analysis.typeCheckingMode" = "strict";
     "python.formatting.provider" = "black";
+    "python.formatting.blackPath" = "~/.nix-profile/bin/black";
     "python.linting.mypyEnabled" = true;
     "python.linting.mypyPath" = "~/.nix-profile/bin/mypy";
     "python.linting.prospectorEnabled" = true;

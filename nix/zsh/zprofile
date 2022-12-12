@@ -11,6 +11,22 @@ fi
 
 export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
+# poetry and helm config directories should be in the linux place:
+
+export XDG_CONFIG_HOME="${HOME}/.config/"
+export XDG_DATA_HOME="${HOME}/.local/"
+export XDG_CACHE_HOME="${HOME}/.cache/"
+export XDG_RUNTIME_DIR="${HOME}/Library/Caches/TemporaryItems/"
+
+
+export POETRY_CONFIG_DIR="${XDG_CONFIG_HOME}/pypoetry"
+export POETRY_DATA_DIR="${XDG_DATA_HOME}/pypoetry"
+export POETRY_CONFIG_DIR="${XDG_CONFIG_HOME}/pypoetry"
+
+export HELM_CONFIG_HOME="${XDG_CONFIG_HOME}/helm"
+export HELM_DATA_HOME="${XDG_DATA_HOME}/helm"
+export HELM_CACHE_HOME="${XDG_CACHE_HOME}/helm"
+
 if test -n "$KITTY_INSTALLATION_DIR"; then
     export KITTY_SHELL_INTEGRATION="enabled"
     autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
