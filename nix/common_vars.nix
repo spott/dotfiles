@@ -14,6 +14,7 @@
     tldr # examples for commands
     mosh # ssh replacement
     yq # jq replacement for yaml files and xml files as well
+    jq # because yq doc for jq sucks, and having it isn't costly
 
     # nvim stuff
     tree-sitter
@@ -45,6 +46,7 @@
     # nix developmentt
     alejandra
     rnix-lsp
+    devbox
   ];
 
   dirHashes = {

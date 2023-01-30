@@ -98,12 +98,15 @@
     kamadorueda.alejandra
     dracula-theme.theme-dracula
     eamodio.gitlens
-    ms-python.python
+    ms-python.python #<- currenv version (2022.19.xxxx) uses a version of debugpython that doesn't work.
     ms-python.vscode-pylance
     redhat.vscode-yaml
     ms-toolsai.jupyter
     ms-toolsai.jupyter-renderers
     ms-toolsai.jupyter-keymap
+    ms-vscode-remote.remote-ssh
+    ms-kubernetes-tools.vscode-kubernetes-tools
+    ms-azuretools.vscode-docker
   ];
 
   programs.vscode.userSettings = {
@@ -141,7 +144,7 @@
     "python.analysis.autoImportCompletions" = true;
     "python.analysis.importFormat" = "relative";
     "python.analysis.indexing" = true;
-    "python.analysis.typeCheckingMode" = "strict";
+    "python.analysis.typeCheckingMode" = "basic";
     "python.formatting.provider" = "black";
     "python.formatting.blackPath" = "~/.nix-profile/bin/black";
     "python.linting.mypyEnabled" = true;

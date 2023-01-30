@@ -2,7 +2,7 @@
   description = "Home Manager configuration of Spott";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
 
     home-manager = {
       url = "github:nix-community/home-manager/";
