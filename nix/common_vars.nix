@@ -52,5 +52,6 @@
   dirHashes = {
     nix = "$HOME/.dotfiles/nix";
     docs = "$HOME/Documents";
+    envs = "$HOME/environments";
   };
 }

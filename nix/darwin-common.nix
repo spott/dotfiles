@@ -9,7 +9,7 @@
   nix.package = pkgs.nix;
   nix.settings = {
     experimental-features = ["nix-command" "flakes"];
-    extra-platforms = ["x86_64_darwin" "aarch64_darwin"];
+    extra-platforms = ["x86_64-darwin" "aarch64-darwin"];
   };
 
   #
