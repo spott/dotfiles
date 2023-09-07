@@ -22,7 +22,8 @@ zmodule utility
 #
 # My modules
 #
-zmodule exa
+# zmodule exa depreciated, use eza instead:
+zmodule spott/zimfw-eza
 zmodule magic-enter
 zmodule prompt-pwd
 zmodule fzf

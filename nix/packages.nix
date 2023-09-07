@@ -10,6 +10,7 @@
     duf # df replacement
     dogdns # dig replacement
     lsd # ls replacement... I'm using exa, so this might not be necessary
+    eza # exa is unmaintained now...
     sd # sed replacement
     tldr # examples for commands
     mosh # ssh replacement
@@ -39,14 +40,18 @@
     black
     prospector
     pyright
-    (poetry.override {python = python310;})
+    poetry#.override {python = python310;})
     pipenv
-    python39Full
+    (python310Full.withPackages(ps: [ps.pipx]))
 
     # nix developmentt
     alejandra
     rnix-lsp
     devbox
+
+    # jdk needed for moneta terminal
+    #zulu8
+    #zulu
   ];
 
   dirHashes = {

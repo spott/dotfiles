@@ -9,7 +9,17 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
 fi
 # End Nix
 
+# add VSCode to path:
 export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+# Add local python to path
+export PATH="${PATH}:${HOME}/Library/Python/3.9/bin"
+
+# Add .local/bin to path:
+export PATH="${PATH}:${HOME}/.local/bin"
+
+# For pipx, so python doesn't break on garbage collection:
+export PIPX_DEFAULT_PYTHON="${HOME}/.nix-profile/bin/python3"
 
 # poetry and helm config directories should be in the linux place:
 
@@ -17,7 +27,6 @@ export XDG_CONFIG_HOME="${HOME}/.config/"
 export XDG_DATA_HOME="${HOME}/.local/"
 export XDG_CACHE_HOME="${HOME}/.cache/"
 export XDG_RUNTIME_DIR="${HOME}/Library/Caches/TemporaryItems/"
-
 
 export POETRY_CONFIG_DIR="${XDG_CONFIG_HOME}/pypoetry"
 export POETRY_DATA_DIR="${XDG_DATA_HOME}/pypoetry"

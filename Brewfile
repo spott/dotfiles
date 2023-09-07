@@ -1,11 +1,12 @@
 tap "1password/tap"
-tap "hashicorp/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/command-not-found"
+tap "homebrew/services"
 tap "homebrew/core"
-tap "pulumi/tap"
+
 brew "mas"
+brew "ollama", restart_service: true
 
 cask "1password-cli"
 cask "anki"
@@ -15,6 +16,7 @@ cask "discord"
 cask "drawio"
 cask "figma"
 cask "firefox"
+cask "gnucash"
 cask "iina"
 cask "iterm2"
 cask "key-codes"
@@ -22,6 +24,7 @@ cask "kicad"
 cask "obsidian"
 cask "raycast"
 cask "superslicer"
+cask "zotero"
 mas "1Password for Safari", id: 1569813296
 mas "Affinity Photo", id: 824183456
 mas "Amphetamine", id: 937984704

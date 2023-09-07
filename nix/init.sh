@@ -20,3 +20,6 @@ nix build --no-link .\#homeConfigurations.spott.activationPackage
 #
 # Generate brewfile
 # brew bundle dump
+#
+# install onepassword plugin for homebrew:
+# https://developer.1password.com/docs/cli/shell-plugins/homebrew/
