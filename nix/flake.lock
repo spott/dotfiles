@@ -41,11 +41,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1693399033,
-        "narHash": "sha256-yXhiMo8MnE86sGtPIHAKaLHhmhe8v9tqGGotlUgKJvY=",
+        "lastModified": 1697622055,
+        "narHash": "sha256-t9rwzjlfgCnXDFGH3wsooYfAOA+XqQmgTojhzuNafZ4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "f5c15668f9842dd4d5430787d6aa8a28a07f7c10",
+        "rev": "84fa81c7acb018c3c5a504dcefbc28a182c933c2",
         "type": "github"
       },
       "original": {
@@ -61,11 +61,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1693444987,
-        "narHash": "sha256-XzFFVOCtOTmaKtnE3Y/iOC0i3ZAj2tdO5aWOa6J7IDc=",
+        "lastModified": 1697592152,
+        "narHash": "sha256-O+95kubUxK/64TKmDF9xzGH8I5h7Ye/wqNh+eTBnvuY=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "f878309889d6d91867f4455d223df0f521e2a6d1",
+        "rev": "4bdb4190da449d5ac0d062de2f3b92a95141d270",
         "type": "github"
       },
       "original": {
@@ -92,11 +92,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1693355128,
-        "narHash": "sha256-+ZoAny3ZxLcfMaUoLVgL9Ywb/57wP+EtsdNGuXUJrwg=",
+        "lastModified": 1697379843,
+        "narHash": "sha256-RcnGuJgC2K/UpTy+d32piEoBXq2M+nVFzM3ah/ZdJzg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a63a64b593dcf2fe05f7c5d666eb395950f36bc9",
+        "rev": "12bdeb01ff9e2d3917e6a44037ed7df6e6c3df9d",
         "type": "github"
       },
       "original": {
@@ -110,7 +110,25 @@
       "inputs": {
         "home-manager": "home-manager",
         "nix-vscode-extensions": "nix-vscode-extensions",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "runpodctl": "runpodctl"
+      }
+    },
+    "runpodctl": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1696463832,
+        "narHash": "sha256-C1q204jrIazL/onB54CK/8Tc25ho8H8rs5hd8KEcKOo=",
+        "path": "/Users/spott/Documents/code/my_code/flakes/runpod",
+        "type": "path"
+      },
+      "original": {
+        "path": "/Users/spott/Documents/code/my_code/flakes/runpod",
+        "type": "path"
       }
     },
     "systems": {

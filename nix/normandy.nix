@@ -22,6 +22,7 @@ in {
       kubectl
       kubernetes-helm
       k9s
+      runpodctl
 
       # remote
       wireguard-tools
@@ -31,7 +32,7 @@ in {
   programs.zsh.dirHashes =
     common.dirHashes
     // {
-      code = "$HOME/Documents/code";
+      code = "$HOME/code";
       hl = "$HOME/Documents/Homelab";
     };
 
@@ -57,4 +58,9 @@ in {
 
   programs.ssh.matchBlocks."ha.sc.spott.us".host = "ha.sc.spott.us";
   programs.ssh.matchBlocks."ha.sc.spott.us".user = "root";
+
+  programs.ssh.matchBlocks."10.42.0.101".identityFile = "~/.ssh/moneta-root.pub";
+  programs.ssh.matchBlocks."10.42.0.101".identitiesOnly = true;
+  programs.ssh.matchBlocks."10.42.0.101".host = "10.42.0.101";
+  programs.ssh.matchBlocks."10.42.0.101".user = "root";
 }

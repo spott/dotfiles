@@ -40,23 +40,36 @@
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.stdlib = ''
   layout_poetry() {
-    if [[ ! -f pyproject.toml ]]; then
-      log_error 'No pyproject.toml found. Use `poetry new` or `poetry init` to create one first.'
-      exit 2
+    PYPROJECT_TOML="''${PYPROJECT_TOML:-pyproject.toml}"
+    if [[ ! -f "$PYPROJECT_TOML" ]]; then
+        log_status "No pyproject.toml found. Executing \`poetry init\` to create a \`$PYPROJECT_TOML\` first."
+        poetry init
     fi
 
-    local VENV=''$(poetry env info --path)
-    if [[ -z ''$VENV || ! -d ''$VENV/bin ]]; then
-      log_error 'No poetry virtual environment found. Use `poetry install` to create one first.'
-      exit 2
+    if [[ -d ".venv" ]]; then
+        VIRTUAL_ENV="$(pwd)/.venv"
+    else
+        VIRTUAL_ENV=$(poetry env info --path 2>/dev/null ; true)
     fi
 
-    export VIRTUAL_ENV=''$VENV
+    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+        log_status "No virtual environment exists. Executing \`poetry install\` to create one."
+        poetry install
+        VIRTUAL_ENV=$(poetry env info --path)
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
     export POETRY_ACTIVE=1
-    PATH_add "''$VENV/bin"
-    #source ''$VENV/bin/activate
+    export VIRTUAL_ENV
   }
 
+  use_oprc() {
+    # from https://github.com/venkytv/direnv-op/blob/main/oprc.sh
+    [[ -f .oprc ]] || return 0
+    direnv_load op run --env-file .oprc --no-masking -- direnv dump
+  }
+
+  watch_file .oprc
   '';
   programs.direnv.enableZshIntegration = true;
 
@@ -166,12 +179,29 @@
     "nix.enableLanguageServer" = true;
     "source.fixAll.convertImportFormat" = true;
     "source.fixAll.unusedImports" = true;
+    "extensions.experimental.affinity" = {
+      "asvetliakov.vscode-neovim" = 1;
+    };
   };
 
   #
   # fzf
   #
   programs.fzf.enable = true;
+  programs.fzf.enableZshIntegration = true;
+  programs.fzf.colors = {
+    fg="-1";
+    bg="-1";
+    hl="#5fff87";
+    "fg+"="-1";
+    "bg+"="-1";
+    "hl+"="#ffaf5f";
+    info="#af87ff";
+    prompt="#5fff87";
+    pointer="#ff87d7";
+    marker="#ff87d7";
+    spinner="#ff87d7";
+  };
 
   #
   # aria2

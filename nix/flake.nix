@@ -10,6 +10,11 @@
     };
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+
+    runpodctl = {
+      url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     /*
        flake-utils = {
       url = "github:numtide/flake-utils";
@@ -21,6 +26,7 @@
     nixpkgs,
     home-manager,
     nix-vscode-extensions,
+    runpodctl,
     ...
   }:
   #flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system:
@@ -38,6 +44,7 @@
           python = super.python310;
         })
         nix-vscode-extensions.overlays.default
+        runpodctl.overlays.default
       ];
       
     pkgs = system:
