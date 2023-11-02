@@ -122,14 +122,7 @@
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-azuretools.vscode-docker
     pkgs.vscode-marketplace.continue.continue
-    #continue.continue
-  ];# ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-#      {
-#        name = "continue";
-#        publisher = "Continue";
-#        version = "0.47.2";
-#        sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-#      };
+  ];
 
   programs.vscode.userSettings = {
     "workbench.colorTheme" = "Dracula";
@@ -171,8 +164,8 @@
     "python.formatting.blackPath" = "~/.nix-profile/bin/black";
     "python.linting.mypyEnabled" = true;
     "python.linting.mypyPath" = "~/.nix-profile/bin/mypy";
-    "python.linting.prospectorEnabled" = true;
-    "python.linting.prospectorPath" = "~/.nix-profile/bin/prospector";
+    # "python.linting.prospectorEnabled" = true;
+    # "python.linting.prospectorPath" = "~/.nix-profile/bin/prospector";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
     "github.gitProtocol" = "ssh";
