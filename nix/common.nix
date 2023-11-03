@@ -122,16 +122,20 @@
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-azuretools.vscode-docker
     pkgs.vscode-marketplace.continue.continue
+    pkgs.vscode-marketplace.ms-python.mypy-type-checker
+    pkgs.vscode-marketplace.ms-python.black-formatter
+    pkgs.vscode-marketplace.ms-vscode.cpptools
+    pkgs.vscode-marketplace.ms-python.flake8
   ];
 
   programs.vscode.userSettings = {
     "workbench.colorTheme" = "Dracula";
     "vscode-neovim.neovimExecutablePaths.darwin" = "/Users/spott/.nix-profile/bin/nvim";
     "vscode-neovim.neovimInitVimPaths.darwin" = " /Users/spott/.config/nvim/init.lua";
-    "jupyter.sendSelectionToInteractiveWindow" = true;
     "jupyter.themeMatplotlibPlots" = true;
     "jupyter.askForKernelRestart" = false;
     "jupyter.allowUnauthorizedRemoteConnection" = true;
+    "jupyter.interactiveWindow.textEditor.executeSelection" = true;
     "git.autofetch" = false;
     "editor.accessibilitySupport" = "off";
     "editor.fontFamily" = "Victor Mono";
@@ -153,23 +157,24 @@
     "terminal.integrated.defaultProfile.osx" = "zsh";
     "problems.showCurrentInStatus" = true;
     "[python]" = {
-      "editor.formatOnType" = true;
+      "editor.defaultFormatter" = "ms-python.black-formatter";
+      "editor.formatOnSave" = true;
     };
     "python.analysis.diagnosticMode" = "workspace";
     "python.analysis.autoImportCompletions" = true;
     "python.analysis.importFormat" = "relative";
     "python.analysis.indexing" = true;
     "python.analysis.typeCheckingMode" = "basic";
-    "python.formatting.provider" = "black";
-    "python.formatting.blackPath" = "~/.nix-profile/bin/black";
-    "python.linting.mypyEnabled" = true;
-    "python.linting.mypyPath" = "~/.nix-profile/bin/mypy";
-    # "python.linting.prospectorEnabled" = true;
-    # "python.linting.prospectorPath" = "~/.nix-profile/bin/prospector";
+    "python.formatting.provider" = "none";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
     "github.gitProtocol" = "ssh";
     "nix.enableLanguageServer" = true;
+    "[nix]" = {
+      "editor.defaultFormatter"= "kamadorueda.alejandra";
+      "editor.formatOnPaste"= true;
+      "editor.formatOnSave"= true;
+    };
     "source.fixAll.convertImportFormat" = true;
     "source.fixAll.unusedImports" = true;
     "extensions.experimental.affinity" = {

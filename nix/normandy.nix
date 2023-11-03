@@ -18,7 +18,7 @@ in {
       # iac (only needed on Normandy
       terraform
       ansible
-      pulumi-bin
+      #pulumi-bin
       kubectl
       kubernetes-helm
       k9s
