@@ -24,6 +24,10 @@ in {
       k9s
       runpodctl
 
+      lima
+      colima
+      docker-client
+
       # remote
       wireguard-tools
     ]

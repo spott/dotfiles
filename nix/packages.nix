@@ -49,9 +49,11 @@
     rnix-lsp
     devbox
 
-    # jdk needed for moneta terminal
-    #zulu8
-    #zulu
+    # development
+    git
+
+    # cloud
+    awscli2 #<- This was annoying and broke all help text
   ];
 
   dirHashes = {

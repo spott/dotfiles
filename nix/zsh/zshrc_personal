@@ -130,3 +130,27 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # import onepassword plugins
 source /Users/spott/.config/op/plugins.sh
 
+initialize_conda() {
+  # >>> conda initialize >>>
+  # !! Contents within this block are managed by 'conda init' !!
+  __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+          . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+      else
+          export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  # <<< conda initialize <<<
+}
+#compdef oterm
+
+_oterm_completion() {
+  eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _OTERM_COMPLETE=complete_zsh oterm)
+}
+
+compdef _oterm_completion oterm
+

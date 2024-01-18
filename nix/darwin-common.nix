@@ -35,13 +35,13 @@
     "italic_font" = "Victor Mono Light Italic";
     "bold_italic_font" = "Victor Mono Medium Italic";
     "font_size" = "12.5";
-    "disable_ligatures" = "never";
+    "disable_ligatures" = "cursor";
     "font_features VictorMono-Light" = "+ss06 +ss03 +ss01 +ss07";
     "font_features VictorMono-Medium" = "+ss06 +ss03 +ss01";
     "font_features VictorMono-MediumItalic" = "+ss06 +ss03 +ss01";
     "font_features VictorMono-Italic" = "+ss06 +ss03 +ss01";
     "enable_audio_bell" = "no";
-    "visual_bell_duration" = "0.0";
+    "visual_bell_duration" = "0.1";
 
     "scrollback_lines" = "100000";
     "scrollback_pager" = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
@@ -59,6 +59,31 @@
     "macos_option_as_alt" = "yes";
     "macos_show_window_title_in" = "menubar";
 
-    "shell_integration" = "disabled";
+    #"enabled_layouts" = "splits *";
+
+    "map f4" = "launch --location=split";
+    "map f5" = "launch --location=hsplit";
+    "map f6" = "launch --location=vsplit";
+
+    "map f7" = "layout_action rotate";
+
+    # Move the active window in the indicated direction
+    "map shift+up" = "move_window up";
+    "map shift+left" = "move_window left";
+    "map shift+right" = "move_window right";
+    "map shift+down" = "move_window down";
+
+    # Move the active window to the indicated screen edge
+    "map ctrl+shift+up" = "layout_action move_to_screen_edge top";
+    "map ctrl+shift+left" = "layout_action move_to_screen_edge left";
+    "map ctrl+shift+right" = "layout_action move_to_screen_edge right";
+    "map ctrl+shift+down" = "layout_action move_to_screen_edge bottom";
+
+    # Switch focus to the neighboring window in the indicated direction
+    "map ctrl+left" = "neighboring_window left";
+    "map ctrl+right" = "neighboring_window right";
+    "map ctrl+up" = "neighboring_window up";
+    "map ctrl+down" = "neighboring_window down";
+
   };
 }

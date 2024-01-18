@@ -4,6 +4,9 @@
 	name = Andrew Spott
   email = andrew.spott@gmail.com
 
+[init]
+  defaultBranch = main
+
 [core]
   pager = delta
 

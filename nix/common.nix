@@ -92,6 +92,7 @@
   programs.neovim.enable = true;
   xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
   xdg.configFile."nvim/lua/bootstrap.lua".source = ./nvim/lua/bootstrap.lua;
+  xdg.configFile."nvim/lua/lsp.lua".source = ./nvim/lua/lsp.lua;
 
   #
   # SSH
@@ -122,16 +123,24 @@
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-azuretools.vscode-docker
     pkgs.vscode-marketplace.continue.continue
-    pkgs.vscode-marketplace.ms-python.mypy-type-checker
-    pkgs.vscode-marketplace.ms-python.black-formatter
+    #pkgs.vscode-marketplace.ms-python.mypy-type-checker
+    #pkgs.vscode-marketplace.ms-python.black-formatter
     pkgs.vscode-marketplace.ms-vscode.cpptools
-    pkgs.vscode-marketplace.ms-python.flake8
+    #pkgs.vscode-marketplace.ms-python.flake8
+    pkgs.vscode-marketplace.charliermarsh.ruff
+    #pkgs.vscode-marketplace.ms-pyright.pyright
+    github.copilot
+    github.copilot-chat
+    pkgs.vscode-marketplace.rangav.vscode-thunder-client	
+    pkgs.vscode-marketplace.mattflower.aider
+    pkgs.vscode-marketplace.mkhl.direnv
+    pkgs.vscode-marketplace.alexcvzz.vscode-sqlite
   ];
 
   programs.vscode.userSettings = {
     "workbench.colorTheme" = "Dracula";
     "vscode-neovim.neovimExecutablePaths.darwin" = "/Users/spott/.nix-profile/bin/nvim";
-    "vscode-neovim.neovimInitVimPaths.darwin" = " /Users/spott/.config/nvim/init.lua";
+    "vscode-neovim.neovimInitVimPaths.darwin" = "/Users/spott/.config/nvim/init.lua";
     "jupyter.themeMatplotlibPlots" = true;
     "jupyter.askForKernelRestart" = false;
     "jupyter.allowUnauthorizedRemoteConnection" = true;
@@ -157,7 +166,7 @@
     "terminal.integrated.defaultProfile.osx" = "zsh";
     "problems.showCurrentInStatus" = true;
     "[python]" = {
-      "editor.defaultFormatter" = "ms-python.black-formatter";
+      "editor.defaultFormatter" = "charliermarsh.ruff";
       "editor.formatOnSave" = true;
     };
     "python.analysis.diagnosticMode" = "workspace";
@@ -165,9 +174,22 @@
     "python.analysis.importFormat" = "relative";
     "python.analysis.indexing" = true;
     "python.analysis.typeCheckingMode" = "basic";
-    "python.formatting.provider" = "none";
+    "python.analysis.extraPaths" = [
+      "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
+    ];
+    "python.analysis.inlayHints.callArgumentNames" = "all";
+    "python.analysis.inlayHints.functionReturnTypes"= true;
+    "python.analysis.inlayHints.pytestParameters"= true;
+    "python.analysis.inlayHints.variableTypes"= true;
+    "python.autoComplete.extraPaths" = [
+      "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
+    ];
+    "ruff.showNotifications" = "always";
+    "ruff.trace.server"= "messages";
+    # "python.formatting.provider" = "none";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
+    "python.analysis.autoFormatStrings" = true;
     "github.gitProtocol" = "ssh";
     "nix.enableLanguageServer" = true;
     "[nix]" = {
@@ -175,11 +197,12 @@
       "editor.formatOnPaste"= true;
       "editor.formatOnSave"= true;
     };
-    "source.fixAll.convertImportFormat" = true;
-    "source.fixAll.unusedImports" = true;
+    # "source.fixAll.convertImportFormat" = true;
+    # "source.fixAll.unusedImports" = true;
     "extensions.experimental.affinity" = {
       "asvetliakov.vscode-neovim" = 1;
     };
+    "explorer.confirmDragAndDrop" = false;
   };
 
   #
