@@ -27,6 +27,7 @@ in {
       lima
       colima
       docker-client
+      docker-compose
 
       # remote
       wireguard-tools

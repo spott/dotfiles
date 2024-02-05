@@ -3,6 +3,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 require'lspconfig'.rnix.setup{ capabilities = capabilities }
 require'lspconfig'.pyright.setup{ capabilities = capabilities }
+require'lspconfig'.jsonls.setup{ capabilities = capabilities }
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions

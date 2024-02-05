@@ -70,6 +70,35 @@
   }
 
   watch_file .oprc
+
+  use_conda() {
+    local ACTIVATE="/opt/homebrew/Caskroom/miniconda/base/bin/activate"
+
+    if [ -n "$1" ]; then
+      # Explicit environment name from layout command.
+      local env_name="$1"
+      source $ACTIVATE $env_name
+    elif (grep -q name: environment.yml); then
+      # Detect environment name from `environment.yml` file in `.envrc` directory
+      source $ACTIVATE `grep name: environment.yml | sed -e 's/name: //' | cut -d "'" -f 2 | cut -d '"' -f 2`
+    else
+      (>&2 echo No environment specified);
+      exit 1;
+    fi;
+  }
+
+  aws_sso() {
+    local PROFILE=$1
+    AWS_SSO=$(aws sts get-caller-identity --query "Account" --profile $PROFILE)
+    if [ $\{#AWS_SSO\} -eq 14 ]; then
+      echo "Valid AWS SSO Sessions found."
+      export AWS_PROFILE=$PROFILE
+    else
+      echo "No valid AWS SSO Sessions found."
+      aws sso login --profile=$PROFILE
+      export AWS_PROFILE=$PROFILE
+    fi
+  }
   '';
   programs.direnv.enableZshIntegration = true;
 
@@ -203,6 +232,19 @@
       "asvetliakov.vscode-neovim" = 1;
     };
     "explorer.confirmDragAndDrop" = false;
+
+    # reduce whitespace for notebooks in vscode
+    # from https://github.com/microsoft/vscode/issues/175295
+    "editor.lineHeight"= 17;
+    "notebook.insertToolbarLocation" = "notebookToolbar";
+    "breadcrumbs.enabled"= false;
+    "notebook.showCellStatusBar" = "hidden";
+    "notebook.cellToolbarLocation" = {
+        "jupyter-notebook" = "hidden";
+    };
+    "notebook.globalToolbar" = false;
+    "notebook.output.scrolling" = true;
+    "notebook.consolidatedRunButton" = true;
   };
 
   #
