@@ -167,14 +167,11 @@
   ];
 
   programs.vscode.userSettings = {
+    "git.autofetch" = false;
     "workbench.colorTheme" = "Dracula";
     "vscode-neovim.neovimExecutablePaths.darwin" = "/Users/spott/.nix-profile/bin/nvim";
     "vscode-neovim.neovimInitVimPaths.darwin" = "/Users/spott/.config/nvim/init.lua";
-    "jupyter.themeMatplotlibPlots" = true;
-    "jupyter.askForKernelRestart" = false;
-    "jupyter.allowUnauthorizedRemoteConnection" = true;
-    "jupyter.interactiveWindow.textEditor.executeSelection" = true;
-    "git.autofetch" = false;
+
     "editor.accessibilitySupport" = "off";
     "editor.fontFamily" = "Victor Mono";
     "editor.fontLigatures" = true;
@@ -215,7 +212,6 @@
     ];
     "ruff.showNotifications" = "always";
     "ruff.trace.server"= "messages";
-    # "python.formatting.provider" = "none";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
     "python.analysis.autoFormatStrings" = true;
@@ -226,13 +222,18 @@
       "editor.formatOnPaste"= true;
       "editor.formatOnSave"= true;
     };
-    # "source.fixAll.convertImportFormat" = true;
-    # "source.fixAll.unusedImports" = true;
     "extensions.experimental.affinity" = {
       "asvetliakov.vscode-neovim" = 1;
     };
     "explorer.confirmDragAndDrop" = false;
 
+    #########
+    ## Jupyter Notebook stuff:
+    #########
+    "jupyter.themeMatplotlibPlots" = true;
+    "jupyter.askForKernelRestart" = false;
+    "jupyter.allowUnauthorizedRemoteConnection" = true;
+    "jupyter.interactiveWindow.textEditor.executeSelection" = true;
     # reduce whitespace for notebooks in vscode
     # from https://github.com/microsoft/vscode/issues/175295
     "editor.lineHeight"= 17;
