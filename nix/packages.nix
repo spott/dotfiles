@@ -23,12 +23,14 @@
 
     # python development
     #python310Packages.poetry
-    black
-    prospector
-    pyright
+    #black
+    #prospector
+    ruff
+    #pyright
     poetry#.override {python = python310;})
     pipenv
-    (python310Full.withPackages(ps: [ps.pipx]))
+    #pipx
+    (python311Full.withPackages(ps: [ps.pipx]))
 
     # nix developmentt
     alejandra
@@ -40,6 +42,9 @@
 
     # cloud
     awscli2 #<- This was annoying and broke all help text
+
+    # keep nix commands up to date (if only within the home manager environment:
+    nix
   ];
 
   dirHashes = {

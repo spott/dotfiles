@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    #nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
 
     home-manager = {
       url = "github:nix-community/home-manager/";
@@ -20,6 +21,7 @@
       url = "github:numtide/flake-utils";
     };
     */
+    #nixpkgs_stable.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
   };
 
   outputs = {
@@ -27,10 +29,16 @@
     home-manager,
     nix-vscode-extensions,
     runpodctl,
+    # nixpkgs_stable,
     ...
   }:
   #flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system:
   let
+    # pkgs_stable = system:
+    #   import nixpkgs {
+    #     inherit system;
+    #     config = {allowUnfree= true;};
+    #     };
     #system = "aarch64-darwin";
     #system = "x86_64-linux";
     # unstable-pkgs = sys:
@@ -40,9 +48,13 @@
     #   };
     #   
     overlays = [
-        (self: super: {
-          python = super.python310;
-        })
+        # (self: super: {
+        #   python = super.python311;
+        # })
+        # (self: super: {
+        #   python310 = (pkgs_stable "aarch64-darwin").python310;
+        #   python310packages = (pkgs_stable "aarch64-darwin").python310packages;
+        # })
         nix-vscode-extensions.overlays.default
         runpodctl.overlays.default
       ];

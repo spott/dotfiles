@@ -17,6 +17,9 @@
   #
   xdg.configFile."pypoetry/config.toml".source = ./pypoetry/config.toml;
 
+  # 1password config
+  xdg.configFile."1Password/ssh/agent.toml".source = ./1Password/ssh/agent.toml;
+
   #
   # SSH
   #

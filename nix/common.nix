@@ -164,6 +164,14 @@
     pkgs.vscode-marketplace.mattflower.aider
     pkgs.vscode-marketplace.mkhl.direnv
     pkgs.vscode-marketplace.alexcvzz.vscode-sqlite
+
+    pkgs.vscode-marketplace.doublebot.doublebot
+
+    ###
+    # Android stuff
+    ###
+    pkgs.vscode-marketplace.mathiasfrohlich.kotlin
+
   ];
 
   programs.vscode.userSettings = {
@@ -226,6 +234,7 @@
       "asvetliakov.vscode-neovim" = 1;
     };
     "explorer.confirmDragAndDrop" = false;
+    "continue.enableTabAutocomplete" = false;
 
     #########
     ## Jupyter Notebook stuff:
@@ -246,6 +255,7 @@
     "notebook.globalToolbar" = false;
     "notebook.output.scrolling" = true;
     "notebook.consolidatedRunButton" = true;
+
   };
 
   #
