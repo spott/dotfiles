@@ -255,7 +255,8 @@
     "notebook.globalToolbar" = false;
     "notebook.output.scrolling" = true;
     "notebook.consolidatedRunButton" = true;
-
+    
+    "doublebot.chatModel" = "Claude 3 (Opus)";
   };
 
   #

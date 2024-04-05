@@ -16,6 +16,7 @@
     mosh # ssh replacement
     yq # jq replacement for yaml files and xml files as well
     jq # because yq doc for jq sucks, and having it isn't costly
+    diffoscopeMinimal # to allow diffing of directories
 
     # nvim stuff
     tree-sitter
