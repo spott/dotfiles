@@ -28,6 +28,10 @@ in {
       colima
       docker-client
       docker-compose
+      docker-buildx
+
+      # docker
+      dive
 
       # remote
       wireguard-tools

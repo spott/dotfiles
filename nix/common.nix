@@ -189,7 +189,7 @@
     "editor.bracketPairColorization.independentColorPoolPerBracketType" = true;
     "editor.formatOnPaste" = true;
     "editor.formatOnSave" = true;
-    "editor.minimap.autohide" = true;
+    #"editor.minimap.autohide" = true;
     "workbench.preferredDarkColorTheme" = "Dracula";
     "workbench.editor.highlightModifiedTabs" = true;
     "workbench.settings.useSplitJSON" = true;
@@ -235,6 +235,7 @@
     };
     "explorer.confirmDragAndDrop" = false;
     "continue.enableTabAutocomplete" = false;
+    "editor.minimap.enabled" = false;
 
     #########
     ## Jupyter Notebook stuff:

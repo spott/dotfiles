@@ -17,6 +17,8 @@
     yq # jq replacement for yaml files and xml files as well
     jq # because yq doc for jq sucks, and having it isn't costly
     diffoscopeMinimal # to allow diffing of directories
+    viu # an image viewer for the terminal
+    fastfetch # system info + pretty picture
 
     # nvim stuff
     tree-sitter
@@ -46,6 +48,9 @@
 
     # keep nix commands up to date (if only within the home manager environment:
     nix
+
+    # utils
+    inetutils
   ];
 
   dirHashes = {
