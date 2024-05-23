@@ -3,14 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    #nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
 
     home-manager = {
       url = "github:nix-community/home-manager/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     runpodctl = {
       url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
@@ -26,6 +29,7 @@
 
   outputs = {
     nixpkgs,
+    nixpkgs-stable,
     home-manager,
     nix-vscode-extensions,
     runpodctl,
@@ -47,14 +51,14 @@
     #     config = {allowUnfree = true;};
     #   };
     #   
+    overlay-stable = final: prev: {
+        stable = import nixpkgs-stable {
+          system = prev.system;
+          config.allowUnfree = true;
+        };
+      };
     overlays = [
-        # (self: super: {
-        #   python = super.python311;
-        # })
-        # (self: super: {
-        #   python310 = (pkgs_stable "aarch64-darwin").python310;
-        #   python310packages = (pkgs_stable "aarch64-darwin").python310packages;
-        # })
+        overlay-stable
         nix-vscode-extensions.overlays.default
         runpodctl.overlays.default
       ];

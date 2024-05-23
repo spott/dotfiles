@@ -154,3 +154,13 @@ _oterm_completion() {
 
 compdef _oterm_completion oterm
 
+
+# highlight stuff
+function hl() {
+  if [ -z "$2" ]
+    then src="pbpaste"
+  else
+    src="cat $2"
+  fi
+  eval $src | highlight -O rtf --syntax $1 --font "Iosevka Custom" --style solarized-dark --font-size 24 | pbcopy
+}

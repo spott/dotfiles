@@ -16,8 +16,8 @@ in {
   home.packages = with pkgs;
     [
       # iac (only needed on Normandy
-      terraform
-      ansible
+      opentofu
+      stable.ansible
       #pulumi-bin
       kubectl
       kubernetes-helm

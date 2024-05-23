@@ -19,6 +19,7 @@
     diffoscopeMinimal # to allow diffing of directories
     viu # an image viewer for the terminal
     fastfetch # system info + pretty picture
+    highlight # for syntax highlighting
 
     # nvim stuff
     tree-sitter
@@ -34,10 +35,10 @@
     pipenv
     #pipx
     (python311Full.withPackages(ps: [ps.pipx]))
+    stable.parquet-tools
 
     # nix developmentt
     alejandra
-    rnix-lsp
     devbox
 
     # development
