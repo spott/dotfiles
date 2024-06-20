@@ -9,7 +9,6 @@
     ripgrep # grep replacement
     duf # df replacement
     dogdns # dig replacement
-    lsd # ls replacement... I'm using exa, so this might not be necessary
     eza # exa is unmaintained now...
     sd # sed replacement
     tldr # examples for commands
@@ -18,7 +17,7 @@
     jq # because yq doc for jq sucks, and having it isn't costly
     diffoscopeMinimal # to allow diffing of directories
     viu # an image viewer for the terminal
-    fastfetch # system info + pretty picture
+    fastfetch # system info + pretty picture (has a home-manager module)
     highlight # for syntax highlighting
 
     # nvim stuff
@@ -30,14 +29,8 @@
     nil
 
     # python development
-    #python310Packages.poetry
-    #black
-    #prospector
     ruff
-    #pyright
-    #poetry#.override {python = python310;})
     pipenv
-    #pipx
     (python311Full.withPackages(ps: [ps.pipx]))
     stable.parquet-tools
 

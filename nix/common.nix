@@ -181,6 +181,8 @@
   programs.git.extraConfig = {
     init.defaultBranch = "main";
     push.autosetupRemote = true;
+    merge.conflictstyle = "diff3";
+    diff.colorMoved = "default";
   };
 
 }
