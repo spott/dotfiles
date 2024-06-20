@@ -78,6 +78,7 @@
             ./common.nix
             ./darwin-common.nix
             ./zsh/zsh.nix
+            ./vscode.nix
           ];
         };
         "spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
@@ -87,6 +88,7 @@
             ./common.nix
             ./darwin-common.nix
             ./zsh/zsh.nix
+            ./vscode.nix
           ];
         };
       };
@@ -97,6 +99,7 @@
             ./devbox.nix
             ./common.nix
             ./zsh/zsh.nix
+            ./vscode.nix
           ];
         };
       };

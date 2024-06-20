@@ -24,6 +24,10 @@
     # nvim stuff
     tree-sitter
     vscode-langservers-extracted
+    terraform-lsp
+    nixd
+    pyright
+    nil
 
     # python development
     #python310Packages.poetry
@@ -31,7 +35,7 @@
     #prospector
     ruff
     #pyright
-    poetry#.override {python = python310;})
+    #poetry#.override {python = python310;})
     pipenv
     #pipx
     (python311Full.withPackages(ps: [ps.pipx]))
@@ -43,6 +47,7 @@
 
     # development
     git
+    dblab
 
     # cloud
     awscli2 #<- This was annoying and broke all help text
@@ -51,7 +56,43 @@
     nix
 
     # utils
-    inetutils
+    inetutils #telnet et al
+
+    # From terminaltrove:
+    atac # postman replacement for the terminal
+    age # file encryption tool
+    buku # bookmarking tool
+    csvlens 
+    calcurse # terminal calender
+    dijo # habit tracker
+    dua # disk space monitor tool
+    gdu # disk space monitor tool
+    fx # tui for json
+    glow # markdown renderer
+    gh-dash # tui for github cli
+    hledger # accounting software
+    hledger-ui # ui for accounting software
+    halp # help for commands...
+    hyperfine # benchmark tool
+    jnv # interactive json filter using jq
+    jqp # tui for jq
+    lazydocker
+    kalker # scientific calculator
+    mtr-gui # network diag tool
+    navi # interactive cheatsheet tool
+    ncdu # disk space usage
+    rizin # reverse engineering framework
+    sttr # for string transformations
+    sd # sed replacement...
+    diskonaut # disk space 
+    grex # regex generation tool
+    lemmeknow # file info tool?
+    wtf # personal information dashboard for the terminal
+    viddy # modern watch replacement
+    oxker # docker tui
+    numbat # scientific calculator with units
+    ouch # for compressing/decompressing
+    bandwhich # bandwidth by process
   ];
 
   dirHashes = {

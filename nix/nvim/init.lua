@@ -24,6 +24,7 @@ require "paq" {
 
   {"nvim-treesitter/nvim-treesitter", build=':TSUpdate'};
 
+  {"knubie/vim-kitty-navigator", build='cp ./*.py ~/.config/kitty/', opt=true};
 }
 
 vim.g.mapleader = ','
@@ -116,11 +117,12 @@ require('Comment').setup {
   
 if not vim.g.vscode then
   vim.cmd[[
+    packadd nvim-lspconfig
     packadd vim-kitty
+    packadd vim-kitty-navigator
     packadd dracula.nvim
     packadd lualine.nvim
     packadd nvim-cmp
-    packadd nvim-lspconfig
     packadd nvim-web-devicons
     packadd obsidian.nvim
     packadd plenary.nvim
@@ -190,8 +192,17 @@ if not vim.g.vscode then
     }),
   })
 
-  require('lsp')
+  require('lsp') -- in lua/lsp.lua
+  -- vim-kitty-navigator
+  if os.getenv("TERM") == "xterm-kitty" then
+      vim.g.kitty_navigator_no_mappings = 1
+      vim.g.tmux_navigator_no_mappings = 1
 
+      vim.api.nvim_set_keymap('n', 'C-h', ':KittyNavigateLeft <CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', 'C-j', ':KittyNavigateDown <CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', 'C-k', ':KittyNavigateUp <CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', 'C-l', ':KittyNavigateRight <CR>', { noremap = true, silent = true })
+  end
 
 end
 

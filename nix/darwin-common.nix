@@ -12,13 +12,16 @@
     extra-platforms = ["x86_64-darwin" "aarch64-darwin"];
   };
 
-  #
-  # Poetry
-  #
-  xdg.configFile."pypoetry/config.toml".source = ./pypoetry/config.toml;
+  # #
+  # # Poetry
+  # #
+  # xdg.configFile."pypoetry/config.toml".source = ./pypoetry/config.toml;
 
   # 1password config
   xdg.configFile."1Password/ssh/agent.toml".source = ./1Password/ssh/agent.toml;
+
+  # aerospace config
+  xdg.configFile."aerospace/aerospace.toml".source = ./aerospace/aerospace.toml;
 
   #
   # SSH
@@ -62,7 +65,16 @@
     "macos_option_as_alt" = "yes";
     "macos_show_window_title_in" = "menubar";
 
+    "shell_integration" = "enabled";
+
+    "allow_remote_control" = "yes";
+    "listen_on" = "unix:/tmp/mykitty";
+
     #"enabled_layouts" = "splits *";
+    "map ctrl+j" = "kitten pass_keys.py bottom ctrl+j";
+    "map ctrl+k" = "kitten pass_keys.py top    ctrl+k";
+    "map ctrl+h" = "kitten pass_keys.py left   ctrl+h";
+    "map ctrl+l" = "kitten pass_keys.py right  ctrl+l";
 
     "map f4" = "launch --location=split";
     "map f5" = "launch --location=hsplit";
