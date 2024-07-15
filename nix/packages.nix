@@ -25,7 +25,10 @@
     vscode-langservers-extracted
     terraform-lsp
     nixd
-    pyright
+    efm-langserver
+    #pyright # depreciated in favor of basedpyright
+    basedpyright
+    lua-language-server
     nil
 
     # python development

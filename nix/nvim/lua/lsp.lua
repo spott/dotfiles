@@ -1,24 +1,63 @@
-
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-require'lspconfig'.pyright.setup{ capabilities = capabilities }
-require'lspconfig'.jsonls.setup{ capabilities = capabilities }
-require'lspconfig'.terraform_lsp.setup{ capabilities = capabilities }
+require "lspconfig".efm.setup {
+  autostart = true,
+  init_options = { documentFormatting = true },
+  settings = {
+    rootMarkers = { ".git/" },
+    languages = {
+      python = {
+        require('efmls-configs.formatters.ruff'),
+        require('efmls-configs.formatters.ruff_sort'),
+        require('efmls-configs.linters.ruff'),
+      },
+      nix = {
+        require('efmls-configs.formatters.alejandra'),
+      },
+    }
+  }
+}
+
+require 'lspconfig'.basedpyright.setup {
+  autostart = true,
+  capabilities = capabilities,
+  settings = {
+    basedpyright = {
+      analysis = {
+        autoImportCompletions = true,
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true,
+      }
+    }
+  }
+}
+
+require 'lspconfig'.lua_ls.setup {
+  autostart = true,
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+    },
+  },
+}
+
+require 'lspconfig'.jsonls.setup { autostart = true, capabilities = capabilities }
+require 'lspconfig'.terraform_lsp.setup { autostart = true, capabilities = capabilities }
+
 
 
 require('lspconfig').nil_ls.setup {
-    autostart = true,
-    capabilities = capabilities,
-    cmd = { 'nil' },
-    settings = {
-      ['nil'] = {
-        testSetting = 42,
-        formatting = {
-          command = { "nixpkgs-fmt" },
-        },
-      },
-    },
-  }
+  autostart = true,
+  capabilities = capabilities,
+  cmd = { 'nil' },
+  settings = {
+  },
+}
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)

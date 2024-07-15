@@ -19,12 +19,6 @@
       url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    /*
-       flake-utils = {
-      url = "github:numtide/flake-utils";
-    };
-    */
-    #nixpkgs_stable.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
   };
 
   outputs = {
@@ -33,7 +27,6 @@
     home-manager,
     nix-vscode-extensions,
     runpodctl,
-    # nixpkgs_stable,
     ...
   }:
   #flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system:

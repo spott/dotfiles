@@ -6,36 +6,46 @@
 
   programs.vscode.enable = true;
   programs.vscode.extensions = with pkgs.vscode-extensions; [
-    asvetliakov.vscode-neovim
+    # nix/direnv
     arrterian.nix-env-selector
     jnoortheen.nix-ide
+    pkgs.vscode-marketplace.mkhl.direnv
     kamadorueda.alejandra
+    
+    # editing env
+    asvetliakov.vscode-neovim
     dracula-theme.theme-dracula
     eamodio.gitlens
-    ms-python.python
-    ms-python.vscode-pylance
-    redhat.vscode-yaml
-    ms-toolsai.jupyter
-    ms-toolsai.jupyter-renderers
-    ms-toolsai.jupyter-keymap
+
+    # remote/docker
     ms-vscode-remote.remote-ssh
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-azuretools.vscode-docker
-    pkgs.vscode-marketplace.continue.continue
-    pkgs.vscode-marketplace.ms-vscode.cpptools
+    
+    # Python
     pkgs.vscode-marketplace.charliermarsh.ruff
+    ms-python.python
+    ms-python.vscode-pylance
+    ms-toolsai.jupyter
+    ms-toolsai.jupyter-renderers
+    ms-toolsai.jupyter-keymap
+
+    # rest
+    pkgs.vscode-marketplace.rangav.vscode-thunder-client
+
+    # other languages
+    pkgs.vscode-marketplace.ms-vscode.cpptools
+    pkgs.vscode-marketplace.alexcvzz.vscode-sqlite
+    redhat.vscode-yaml
+
+    # AI stuff
     github.copilot
     github.copilot-chat
-    pkgs.vscode-marketplace.rangav.vscode-thunder-client	
-    pkgs.vscode-marketplace.mattflower.aider
-    pkgs.vscode-marketplace.mkhl.direnv
-    pkgs.vscode-marketplace.alexcvzz.vscode-sqlite
-
+    pkgs.vscode-marketplace.continue.continue
     pkgs.vscode-marketplace.doublebot.doublebot
+    pkgs.vscode-marketplace.mattflower.aider
 
-    ###
     # Android stuff
-    ###
     pkgs.vscode-marketplace.mathiasfrohlich.kotlin
 
   ];
@@ -64,6 +74,7 @@
     "terminal.explorerKind" = "external";
     "terminal.external.osxExec" = "/Users/spott/.nix-profile/Applications/kitty.app";
     "terminal.integrated.defaultProfile.osx" = "zsh";
+
     "problems.showCurrentInStatus" = true;
     "[python]" = {
       "editor.defaultFormatter" = "charliermarsh.ruff";
