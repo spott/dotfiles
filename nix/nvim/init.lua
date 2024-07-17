@@ -38,7 +38,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { "python", "nix", "lua", "rust", "julia", "bash", "yaml",
     "markdown", "markdown_inline", "html", "css", "comment",
     "json", "json5", "sql", "toml", "terraform", "vim",
-    "latex", "just", "hcl", "go", "dockerfile", "csv" },
+    "latex", "hcl", "go", "dockerfile", "csv" },
 
   sync_install = false,
 

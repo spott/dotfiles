@@ -19,6 +19,11 @@
       url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -27,6 +32,7 @@
     home-manager,
     nix-vscode-extensions,
     runpodctl,
+    nix-darwin,
     ...
   }:
   #flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system:
@@ -62,10 +68,31 @@
         config = {allowUnfree = true;};
       };
   in {
-    packages = {
-      aarch64-darwin.homeConfigurations = {
-        "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgs "aarch64-darwin";
+    darwinConfigurations = {
+      "Normandy" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        pkgs = pkgs "aarch64-darwin";
+        modules = [
+          ./nixdarwin.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.spott = { imports = [
+            ./normandy.nix
+            ./common.nix
+            ./darwin-common.nix
+            ./zsh/zsh.nix
+            ./vscode.nix
+           ];
+           };
+          }
+        ];
+        };
+      };
+    homeConfigurations = {
+      "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgs "aarch64-darwin";
           modules = [
             ./normandy.nix
             ./common.nix
@@ -74,28 +101,43 @@
             ./vscode.nix
           ];
         };
-        "spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgs "aarch64-darwin";
-          modules = [
-            ./endeavor.nix
-            ./common.nix
-            ./darwin-common.nix
-            ./zsh/zsh.nix
-            ./vscode.nix
-          ];
-        };
-      };
-      x86_64-linux.homeConfigurations = {
-        "spott@devbox" = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgs "x86_64-linux";
-          modules = [
-            ./devbox.nix
-            ./common.nix
-            ./zsh/zsh.nix
-            ./vscode.nix
-          ];
-        };
-      };
     };
   };
 }
+
+
+    # packages = {
+    #   aarch64-darwin.homeConfigurations = {
+    #     "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
+    #       pkgs = pkgs "aarch64-darwin";
+    #       modules = [
+    #         ./normandy.nix
+    #         ./common.nix
+    #         ./darwin-common.nix
+    #         ./zsh/zsh.nix
+    #         ./vscode.nix
+    #       ];
+    #     };
+    #     "spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
+    #       pkgs = pkgs "aarch64-darwin";
+    #       modules = [
+    #         ./endeavor.nix
+    #         ./common.nix
+    #         ./darwin-common.nix
+    #         ./zsh/zsh.nix
+    #         ./vscode.nix
+    #       ];
+    #     };
+    #   };
+    #   x86_64-linux.homeConfigurations = {
+    #     "spott@devbox" = home-manager.lib.homeManagerConfiguration {
+    #       pkgs = pkgs "x86_64-linux";
+    #       modules = [
+    #         ./devbox.nix
+    #         ./common.nix
+    #         ./zsh/zsh.nix
+    #         ./vscode.nix
+    #       ];
+    #     };
+    #   };
+    # };

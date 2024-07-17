@@ -13,8 +13,4 @@
 # @raycast.description Opens a new kitty window for a project
 # @raycast.author Andrew Spott
 
-if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-fi
-
-kitten @ launch --title BookmarkLLM --cwd ~/code/$1 --to unix:/tmp/mykitty-19971 --type os-window
+/Users/spott/Applications/Home\ Manager\ Apps/kitty.app/Contents/MacOS/kitten @ launch --title BookmarkLLM --cwd ~/code/$1 --to unix:/tmp/mykitty-19971 --type os-window

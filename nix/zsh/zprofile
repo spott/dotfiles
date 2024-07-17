@@ -3,9 +3,13 @@ if [ -e '/opt/homebrew/bin/brew' ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Nix
+# Nix Home Manager
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+# Nix-darwin home manager
+if [ -e "/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh" ]; then
+  . "/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"
 fi
 # End Nix
 
@@ -13,7 +17,7 @@ fi
 export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 # Add local python to path
-export PATH="${PATH}:${HOME}/Library/Python/3.9/bin"
+#export PATH="${PATH}:${HOME}/Library/Python/3.9/bin"
 
 # Add .local/bin to path:
 export PATH="${PATH}:${HOME}/.local/bin"

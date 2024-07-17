@@ -53,7 +53,7 @@
   programs.vscode.userSettings = {
     "git.autofetch" = false;
     "workbench.colorTheme" = "Dracula";
-    "vscode-neovim.neovimExecutablePaths.darwin" = "/Users/spott/.nix-profile/bin/nvim";
+    "vscode-neovim.neovimExecutablePaths.darwin" = "/etc/profiles/per-user/spott/bin/nvim";
     "vscode-neovim.neovimInitVimPaths.darwin" = "/Users/spott/.config/nvim/init.lua";
 
     "editor.accessibilitySupport" = "off";
@@ -72,7 +72,7 @@
     "window.openFoldersInNewWindow" = "on";
     "explorer.fileNesting.expand" = false;
     "terminal.explorerKind" = "external";
-    "terminal.external.osxExec" = "/Users/spott/.nix-profile/Applications/kitty.app";
+    "terminal.external.osxExec" = "/Users/spott/Applications/Home Manager Apps/kitty.app";
     "terminal.integrated.defaultProfile.osx" = "zsh";
 
     "problems.showCurrentInStatus" = true;

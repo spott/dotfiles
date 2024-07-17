@@ -2,14 +2,14 @@
   pkgs,
   ...
 }: {
-  nixpkgs.config = import ./nixpkgs-config-darwin.nix;
-  xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config-darwin.nix;
+  # nixpkgs.config = import ./nixpkgs-config-darwin.nix;
+  # xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config-darwin.nix;
 
-  nix.package = pkgs.nix;
-  nix.settings = {
-    experimental-features = ["nix-command" "flakes"];
-    extra-platforms = ["x86_64-darwin" "aarch64-darwin"];
-  };
+  # nix.package = pkgs.nix;
+  # nix.settings = {
+  #   experimental-features = ["nix-command" "flakes"];
+  #   extra-platforms = ["x86_64-darwin" "aarch64-darwin"];
+  # };
 
   # #
   # # Poetry
@@ -184,26 +184,26 @@
     "map ctrl+t>w" = "detach_tab ask";
   };
 
-  programs.rio.enable = true;
-  programs.rio.settings = {
-    option-as-alt = "left";
-    theme = "dracula";
-    window.decorations = "Buttonless";
-    navigation.mode = "CollapsedTab";
-    renderer.performance = "Low";
-    renderer.disable-unfocused-render = true;
-    fonts.size = 14;
-    fonts.regular.family = "Victor Mono";
-    fonts.regular.style = "Light";
-    fonts.bold.family = "Victor Mono";
-    fonts.bold.style = "Medium";
-    fonts.italic.family = "Victor Mono";
-    fonts.italic.style = "Light Italic";
-    fonts.bold-italic.family = "Victor Mono";
-    fonts.bold-italic.style = "Medium Italic";
-    keyboard.use-kitty-keyboard-protocol = true;
-  };
-  xdg.configFile."rio/themes/dracula.toml".source = ./rio/themes/dracula.toml;
+  # programs.rio.enable = true;
+  # programs.rio.settings = {
+  #   option-as-alt = "left";
+  #   theme = "dracula";
+  #   window.decorations = "Buttonless";
+  #   navigation.mode = "CollapsedTab";
+  #   renderer.performance = "Low";
+  #   renderer.disable-unfocused-render = true;
+  #   fonts.size = 14;
+  #   fonts.regular.family = "Victor Mono";
+  #   fonts.regular.style = "Light";
+  #   fonts.bold.family = "Victor Mono";
+  #   fonts.bold.style = "Medium";
+  #   fonts.italic.family = "Victor Mono";
+  #   fonts.italic.style = "Light Italic";
+  #   fonts.bold-italic.family = "Victor Mono";
+  #   fonts.bold-italic.style = "Medium Italic";
+  #   keyboard.use-kitty-keyboard-protocol = true;
+  # };
+  # xdg.configFile."rio/themes/dracula.toml".source = ./rio/themes/dracula.toml;
 
   programs.wezterm.enable = true;
 }

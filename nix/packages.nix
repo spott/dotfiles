@@ -33,6 +33,8 @@
 
     # python development
     ruff
+    rye
+    uv
     pipenv
     (python311Full.withPackages(ps: [ps.pipx]))
     stable.parquet-tools
