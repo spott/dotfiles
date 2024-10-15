@@ -31,3 +31,7 @@
 [[ssh-keys]]
 vault = "Nexustek"
 
+[[ssh-keys]]
+item = "Github personal"
+vault = "Private"
+
