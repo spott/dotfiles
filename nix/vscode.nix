@@ -24,7 +24,7 @@
     
     # Python
     pkgs.vscode-marketplace.charliermarsh.ruff
-    ms-python.python
+    pkgs.vscode-marketplace.ms-python.python
     ms-python.vscode-pylance
     ms-toolsai.jupyter
     ms-toolsai.jupyter-renderers
@@ -34,7 +34,7 @@
     pkgs.vscode-marketplace.rangav.vscode-thunder-client
 
     # other languages
-    pkgs.vscode-marketplace.ms-vscode.cpptools
+    #pkgs.vscode-marketplace.ms-vscode.cpptools
     pkgs.vscode-marketplace.alexcvzz.vscode-sqlite
     redhat.vscode-yaml
 

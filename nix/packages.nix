@@ -38,6 +38,14 @@
     pipenv
     (python311Full.withPackages(ps: [ps.pipx]))
     stable.parquet-tools
+    
+    # docker stuff
+    lima
+    colima
+    docker-client
+    docker-compose
+    docker-buildx
+    dive
 
     # nix developmentt
     alejandra
@@ -46,6 +54,7 @@
     # development
     git
     dblab
+    just
 
     # cloud
     awscli2 #<- This was annoying and broke all help text
@@ -55,6 +64,7 @@
 
     # utils
     inetutils #telnet et al
+    pandoc
 
     # From terminaltrove:
     atac # postman replacement for the terminal

@@ -128,7 +128,9 @@ unset key
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # import onepassword plugins
-source /Users/spott/.config/op/plugins.sh
+if [[ -e ${HOME}/.config/op/plugins.sh ]]; then
+  source ${HOME}/.config/op/plugins.sh
+fi
 
 initialize_conda() {
   # >>> conda initialize >>>

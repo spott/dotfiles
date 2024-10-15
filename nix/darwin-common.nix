@@ -25,12 +25,14 @@
   #
   # SSH
   #
-  programs.ssh.includes = [ "/Users/spott/.dstack/ssh/config" ];
+  programs.ssh.includes = [ "~/.dstack/ssh/config" ];
   programs.ssh.extraConfig = "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"\nSetEnv TERM=\"xterm-color\"";
 
   #
   # Kitty
   #
+  xdg.configFile."kitty/get_layout.py".source = ./kitty/get_layout.py;
+  xdg.configFile."kitty/pass_keys.py".source = ./kitty/pass_keys.py;
   programs.kitty.enable = true;
   programs.kitty.theme = "Dracula";
   programs.kitty.settings = {

@@ -15,10 +15,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    runpodctl = {
-      url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+#    runpodctl = {
+#      url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
+#      inputs.nixpkgs.follows = "nixpkgs";
+#    };
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin";
@@ -31,7 +31,7 @@
     nixpkgs-stable,
     home-manager,
     nix-vscode-extensions,
-    runpodctl,
+    #runpodctl,
     nix-darwin,
     ...
   }:
@@ -59,7 +59,7 @@
     overlays = [
         overlay-stable
         nix-vscode-extensions.overlays.default
-        runpodctl.overlays.default
+        #runpodctl.overlays.default
       ];
       
     pkgs = system:
@@ -101,6 +101,16 @@
             ./vscode.nix
           ];
         };
+      "andrew.spott@Discovery" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgs "aarch64-darwin";
+        modules = [
+          ./discovery.nix
+          ./common.nix
+          ./darwin-common.nix
+          ./zsh/zsh.nix
+          ./vscode.nix
+        ];
+      };
     };
   };
 }

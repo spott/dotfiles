@@ -24,15 +24,6 @@ in {
       k9s
       runpodctl
 
-      lima
-      colima
-      docker-client
-      docker-compose
-      docker-buildx
-
-      # docker
-      dive
-
       # remote
       wireguard-tools
     ]
