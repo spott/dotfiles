@@ -13,4 +13,7 @@
 # @raycast.description Opens a new kitty window for a project
 # @raycast.author Andrew Spott
 
-/Users/spott/Applications/Home\ Manager\ Apps/kitty.app/Contents/MacOS/kitten @ launch --title BookmarkLLM --cwd ~/code/$1 --to unix:/tmp/mykitty-19971 --type os-window
+#socket=$(find /tmp -type f -name 'mykitty*' -exec realpath {} \;)
+socket=$(/etc/profiles/per-user/spott/bin/find /tmp/ -type s -name 'mykitty*' -exec realpath {} \;)
+
+/Users/spott/Applications/Home\ Manager\ Apps/kitty.app/Contents/MacOS/kitten @ launch --cwd ~/code/$1 --to unix:"$socket" --type os-window

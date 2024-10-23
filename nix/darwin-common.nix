@@ -32,6 +32,7 @@
   # Kitty
   #
   programs.kitty.enable = true;
+  programs.kitty.package = pkgs.kitty;
   programs.kitty.theme = "Dracula";
   programs.kitty.settings = {
     # fonts:

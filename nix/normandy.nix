@@ -23,6 +23,7 @@ in {
       kubernetes-helm
       k9s
       runpodctl
+      findutils
 
       lima
       colima

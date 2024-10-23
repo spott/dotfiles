@@ -14,8 +14,8 @@
     
     # editing env
     asvetliakov.vscode-neovim
-    dracula-theme.theme-dracula
     eamodio.gitlens
+    dracula-theme.theme-dracula
 
     # remote/docker
     ms-vscode-remote.remote-ssh
@@ -34,7 +34,7 @@
     pkgs.vscode-marketplace.rangav.vscode-thunder-client
 
     # other languages
-    pkgs.vscode-marketplace.ms-vscode.cpptools
+    #pkgs.vscode-marketplace.ms-vscode.cpptools
     pkgs.vscode-marketplace.alexcvzz.vscode-sqlite
     redhat.vscode-yaml
 
@@ -59,8 +59,8 @@
     "editor.accessibilitySupport" = "off";
     "editor.fontFamily" = "Victor Mono";
     "editor.fontLigatures" = true;
-    "editor.fontSize" = 12.5;
-    "editor.fontWeight" = "300";
+    "editor.fontSize" = 13;
+    "editor.fontWeight" = "400";
     "editor.renderWhitespace" = "trailing";
     "editor.bracketPairColorization.independentColorPoolPerBracketType" = true;
     "editor.formatOnPaste" = true;
