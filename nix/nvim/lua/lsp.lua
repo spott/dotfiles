@@ -28,6 +28,12 @@ require 'lspconfig'.basedpyright.setup {
         autoSearchPaths = true,
         diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
+        inlayHints = {
+          variableTypes = true,
+          callArgumentNames = true,
+          functionReturnTypes = true
+        },
+        typeCheckingMode = "standard"
       }
     }
   }

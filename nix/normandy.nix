@@ -35,7 +35,7 @@ in {
       dive
 
       # remote
-      wireguard-tools
+      #wireguard-tools
     ]
     ++ common.packages;
 

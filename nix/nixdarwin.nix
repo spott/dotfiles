@@ -9,6 +9,7 @@
       };
     };
   };
+  system.stateVersion = 5;
   /*
      nix.settings.binaryCaches = [
      "https://cache.nixos.org/"

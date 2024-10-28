@@ -32,8 +32,8 @@
   # Kitty
   #
   programs.kitty.enable = true;
-  programs.kitty.package = pkgs.kitty;
-  programs.kitty.theme = "Dracula";
+  programs.kitty.package = pkgs.stable.kitty;
+  programs.kitty.themeFile = "Dracula";
   programs.kitty.settings = {
     # fonts:
     "font_family" = "Victor Mono Light";

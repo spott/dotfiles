@@ -12,7 +12,7 @@
     eza # exa is unmaintained now...
     sd # sed replacement
     tldr # examples for commands
-    mosh # ssh replacement
+    #mosh # ssh replacement
     diffoscopeMinimal # to allow diffing of directories
     viu # an image viewer for the terminal
     fastfetch # system info + pretty picture (has a home-manager module)
@@ -29,6 +29,10 @@
     lua-language-server
     nil
 
+    # rust stuff
+    cargo
+    rustc
+
     # python development
     ruff
     rye
@@ -39,11 +43,13 @@
     # data stuff
     stable.parquet-tools
     sq # jq for structured data like csvs or sqlite databases
+    csvlens 
 
     # network tools:
     tcping-go
     inetutils #telnet et al
     mtr-gui # network diag tool
+    bandwhich # bandwidth by process
 
     # web dev
     httpie
@@ -93,29 +99,37 @@
     diskonaut # disk space 
     ncdu # disk space usage
 
-    # From terminaltrove:
-    age # file encryption tool
-    buku # bookmarking tool
-    csvlens 
-    calcurse # terminal calender
-    dijo # habit tracker
-    glow # markdown renderer
+    # Download:
+    monolith # singlepage downloader for web pages.
+
+    # accounting:
     hledger # accounting software
     hledger-ui # ui for accounting software
-    halp # help for commands...
-    hyperfine # benchmark tool
-    kalker # scientific calculator
-    navi # interactive cheatsheet tool
-    rizin # reverse engineering framework
+
+    # string manipulation
     sttr # for string transformations
     sd # sed replacement...
     grex # regex generation tool
+
+    # meta:
+    halp # help for commands...
+
+    # From terminaltrove:
+    age # file encryption tool
+    buku # bookmarking tool
+    calcurse # terminal calender
+    dijo # habit tracker
+    glow # markdown renderer
+    hyperfine # benchmark tool
+    navi # interactive cheatsheet tool
+    rizin # reverse engineering framework
     lemmeknow # file info tool?
     wtf # personal information dashboard for the terminal
     viddy # modern watch replacement
-    numbat # scientific calculator with units
     ouch # for compressing/decompressing
-    bandwhich # bandwidth by process
+    
+    kalker # scientific calculator
+    stable.numbat # scientific calculator with units
   ];
 
   dirHashes = {
