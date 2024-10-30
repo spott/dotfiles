@@ -114,6 +114,9 @@
     # meta:
     halp # help for commands...
 
+    viddy # modern watch replacement
+    watchman # watch filesystem objects and do things when they change.
+
     # From terminaltrove:
     age # file encryption tool
     buku # bookmarking tool
@@ -125,7 +128,6 @@
     rizin # reverse engineering framework
     lemmeknow # file info tool?
     wtf # personal information dashboard for the terminal
-    viddy # modern watch replacement
     ouch # for compressing/decompressing
     
     kalker # scientific calculator

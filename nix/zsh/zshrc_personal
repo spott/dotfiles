@@ -164,3 +164,6 @@ function hl() {
   fi
   eval $src | highlight -O rtf --syntax $1 --font "Iosevka Custom" --style solarized-dark --font-size 24 | pbcopy
 }
+
+# need to make sure this exists... it seems to be deleted on reboot.
+mkdir -p ~/Library/Caches/TemporaryItems

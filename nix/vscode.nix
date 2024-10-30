@@ -39,10 +39,10 @@
     redhat.vscode-yaml
 
     # AI stuff
-    github.copilot
-    github.copilot-chat
+    #github.copilot
+    #github.copilot-chat
     pkgs.vscode-marketplace.continue.continue
-    pkgs.vscode-marketplace.doublebot.doublebot
+    #pkgs.vscode-marketplace.doublebot.doublebot
     pkgs.vscode-marketplace.mattflower.aider
 
     # Android stuff
@@ -85,16 +85,16 @@
     "python.analysis.importFormat" = "relative";
     "python.analysis.indexing" = true;
     "python.analysis.typeCheckingMode" = "basic";
-    "python.analysis.extraPaths" = [
-      "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
-    ];
+    # "python.analysis.extraPaths" = [
+    #   "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
+    # ];
     "python.analysis.inlayHints.callArgumentNames" = "all";
     "python.analysis.inlayHints.functionReturnTypes"= true;
     "python.analysis.inlayHints.pytestParameters"= true;
     "python.analysis.inlayHints.variableTypes"= true;
-    "python.autoComplete.extraPaths" = [
-      "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
-    ];
+    # "python.autoComplete.extraPaths" = [
+    #   "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
+    # ];
     "ruff.showNotifications" = "always";
     "ruff.trace.server"= "messages";
     "python.terminal.activateEnvInCurrentTerminal" = true;
@@ -111,7 +111,7 @@
       "asvetliakov.vscode-neovim" = 1;
     };
     "explorer.confirmDragAndDrop" = false;
-    "continue.enableTabAutocomplete" = false;
+    "continue.enableTabAutocomplete" = true;
     "editor.minimap.enabled" = false;
 
     #########
@@ -133,8 +133,5 @@
     "notebook.globalToolbar" = false;
     "notebook.output.scrolling" = true;
     "notebook.consolidatedRunButton" = true;
-    
-    "doublebot.chatModel" = "Claude 3 (Opus)";
-    "github.copilot.editor.enableAutoCompletions" = true;
   };
 }
