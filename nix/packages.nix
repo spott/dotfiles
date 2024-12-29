@@ -58,6 +58,7 @@
     # nix developmentt
     alejandra
     devbox
+    cachix
 
     # AI stuff
     ollama
@@ -75,6 +76,7 @@
 
     # cloud
     awscli2 #<- This was annoying and broke all help text
+    localstack
 
     # keep nix commands up to date (if only within the home manager environment:
     nix

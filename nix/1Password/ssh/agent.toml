@@ -32,4 +32,7 @@
 vault = "Private"
 
 [[ssh-keys]]
+vault = "Nuanced"
+
+[[ssh-keys]]
 vault = "homelab"

@@ -15,9 +15,9 @@
   programs.zsh.history.size = 2000000000;
   programs.zsh.enableVteIntegration = true;
   programs.zsh.defaultKeymap = "viins";
-  programs.zsh.historySubstringSearch.enable = true;
-  programs.zsh.historySubstringSearch.searchDownKey = "^n";
-  programs.zsh.historySubstringSearch.searchUpKey = "^p";
+  # programs.zsh.historySubstringSearch.enable = true;
+  # programs.zsh.historySubstringSearch.searchDownKey = "^n";
+  # programs.zsh.historySubstringSearch.searchUpKey = "^p";
 
   programs.zsh.shellAliases = {
     cat = "bat";

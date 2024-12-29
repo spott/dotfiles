@@ -10,38 +10,39 @@
     };
   };
   system.stateVersion = 5;
-  /*
-     nix.settings.binaryCaches = [
-     "https://cache.nixos.org/"
-     ];
-     nix.binaryCachePublicKeys = [
-     "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-     ];
-   */
+  nix.settings.extra-platforms = [ "aarch64-linux" ];
+  nix.settings.substituters = [
+  "https://cache.nixos.org/"
+  "https://nix-community.cachix.org"
+  ];
+  nix.settings.trusted-public-keys = [
+  "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  ];
   nix.settings.trusted-users = [
     "@admin"
   ];
 #users.nix.configureBuildUsers = true;
 
-  nix.buildMachines = [
-  {
-    hostName = "10.42.0.107";
-    supportedFeatures = [ "kvm" ];
-    maxJobs = 10;
-    protocol = "ssh-ng";
-    speedFactor = 1;
-    sshUser = "spott";
-    system = "x86_64-linux";
-  }
-  ];
+  # nix.buildMachines = [
+  # {
+  #   hostName = "10.42.0.107";
+  #   supportedFeatures = [ "kvm" ];
+  #   maxJobs = 10;
+  #   protocol = "ssh-ng";
+  #   speedFactor = 1;
+  #   sshUser = "spott";
+  #   system = "x86_64-linux";
+  # }
+  # ];
 
-  nix.configureBuildUsers = true;
+  # nix.configureBuildUsers = true;
 
-  nix.linux-builder = {
-    enable = true;
-    systems = [ "aarch64-linux" ];
-
-  };
+  # nix.linux-builder = {
+  #   enable = true;
+  #   systems = [ "aarch64-linux" ];
+  #
+  # };
 
   nixpkgs.config = {
     allowUnfree = true;

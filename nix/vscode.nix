@@ -47,6 +47,7 @@
 
     # Android stuff
     pkgs.vscode-marketplace.mathiasfrohlich.kotlin
+    pkgs.vscode-marketplace.nefrob.vscode-just-syntax
 
   ];
 

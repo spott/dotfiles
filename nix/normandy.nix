@@ -36,6 +36,7 @@ in {
 
       # remote
       #wireguard-tools
+      skimpdf
     ]
     ++ common.packages;
 

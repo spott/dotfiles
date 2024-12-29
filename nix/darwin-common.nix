@@ -22,10 +22,16 @@
   # aerospace config
   xdg.configFile."aerospace/aerospace.toml".source = ./aerospace/aerospace.toml;
 
+  # ghostty
+  home.file.ghosttyconfig = {
+    target = "~/Library/Application\ Support/com.mitchellh.ghostty/config";
+    source = ./ghostty/config;
+  };
+
   #
   # SSH
   #
-  programs.ssh.includes = [ "/Users/spott/.dstack/ssh/config" ];
+  programs.ssh.includes = [ "~/.dstack/ssh/config" ];
   programs.ssh.extraConfig = "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"\nSetEnv TERM=\"xterm-color\"";
 
   #
