@@ -26,4 +26,22 @@ quick-terminal-animation-duration = 0.1
 auto-update = download
 auto-update-channel = tip
 
-minimum-contrast = 1.1
+minimum-contrast = 1.2
+
+# keybindings:
+
+keybind = super+w>c=close_surface
+keybind = super+w>s=new_split:right
+keybind = super+w>v=new_split:down
+keybind = super+w>j=goto_split:down
+keybind = super+w>k=goto_split:up
+keybind = super+w>h=goto_split:left
+keybind = super+w>l=goto_split:right
+keybind = super+w>z=toggle_split_zoom
+keybind = super+w>==equalize_splits
+keybind = super+w>w=close_window
+
+keybind = super+shift+k=jump_to_prompt:-1
+keybind = super+shift+j=jump_to_prompt:1
+
+
