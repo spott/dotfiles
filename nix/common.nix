@@ -157,12 +157,12 @@
   #
   # poetry
   #
-  programs.poetry.enable = true;
-  programs.poetry.settings = {
-    virtualenvs.in-project = true;
-    virtualenvs.prefer-active-python = true;
-    virtualenvs.options.always-copy = true;
-  };
+  # programs.poetry.enable = true;
+  # programs.poetry.settings = {
+  #   virtualenvs.in-project = true;
+  #   virtualenvs.prefer-active-python = true;
+  #   virtualenvs.options.always-copy = true;
+  # };
 
   #
   # git
