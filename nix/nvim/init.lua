@@ -4,11 +4,12 @@ require "paq" {
   "kylechui/nvim-surround",
   "numToStr/Comment.nvim",
 
-  { "fladson/vim-kitty",                          opt = true },
+  --{ "fladson/vim-kitty",                          opt = true },
 
   { "kyazdani42/nvim-web-devicons",               opt = true },
   { "nvim-lualine/lualine.nvim",                  opt = true },
-  { "Mofiqul/dracula.nvim",                       opt = true },
+  -- { "Mofiqul/dracula.nvim",                       opt = true },
+  { "nuvic/flexoki-nvim",                         opt = true, as = "flexoki" },
 
   { "neovim/nvim-lspconfig",                      opt = true },
 
@@ -28,7 +29,7 @@ require "paq" {
 
   { 'creativenull/efmls-configs-nvim' },
 
-  { "knubie/vim-kitty-navigator",                 build = 'cp ./*.py ~/.config/kitty/', opt = true },
+  --{ "knubie/vim-kitty-navigator",                 build = 'cp ./*.py ~/.config/kitty/', opt = true },
 }
 
 vim.g.mapleader = ','
@@ -205,11 +206,11 @@ require('Comment').setup {
 }
 
 if not vim.g.vscode then
+  print("Starting plugin loading...")
+
   vim.cmd [[
     packadd nvim-lspconfig
-    packadd vim-kitty
-    packadd vim-kitty-navigator
-    packadd dracula.nvim
+    packadd flexoki
     packadd lualine.nvim
     packadd nvim-cmp
     packadd nvim-web-devicons
@@ -220,6 +221,100 @@ if not vim.g.vscode then
     packadd cmp-async-path
     packadd cmp-nvim-lsp
   ]]
+
+  -- local ok, flexoki = pcall(require, "flexoki")
+  -- if not ok then
+  --   print("Failed to load flexoki:", flexoki)
+  -- else
+  --   print("loaded flexoki")
+  -- end
+
+  require("flexoki").setup({
+    variant = "auto", -- auto, moon, or dawn
+    dim_inactive_windows = true,
+    extend_background_behind_borders = true,
+
+    enable = {
+        terminal = true,
+    },
+
+    styles = {
+        bold = true,
+        italic = false,
+    },
+
+    -- groups = {
+    --     border = "muted",
+    --     link = "purple_two",
+    --     panel = "surface",
+    --
+    --     error = "red_one",
+    --     hint = "purple_one",
+    --     info = "cyan_one",
+    --     ok = "green_one",
+    --     warn = "orange_one",
+    --     note = "blue_one",
+    --     todo = "magenta_one",
+    --
+    --     git_add = "green_one",
+    --     git_change = "yellow_one",
+    --     git_delete = "red_one",
+    --     git_dirty = "yellow_one",
+    --     git_ignore = "muted",
+    --     git_merge = "purple_one",
+    --     git_rename = "blue_one",
+    --     git_stage = "purple_one",
+    --     git_text = "magenta_one",
+    --     git_untracked = "subtle",
+    --
+    --     h1 = "purple_two",
+    --     h2 = "cyan_two",
+    --     h3 = "magenta_two",
+    --     h4 = "orange_two",
+    --     h5 = "blue_two",
+    --     h6 = "cyan_two",
+    -- },
+    --
+    -- palette = {
+    --     -- Override the builtin palette per variant
+    --     -- moon = {
+    --     --     base = '#100f0f',
+    --     --     overlay = '#1c1b1a',
+    --     -- },
+    -- },
+    --
+    highlight_groups = {
+        Comment = { fg = "subtle", italic = true },
+        -- VertSplit = { fg = "muted", bg = "muted" },
+    },
+    --
+    -- before_highlight = function(group, highlight, palette)
+    --     -- Disable all undercurls
+    --     -- if highlight.undercurl then
+    --     --     highlight.undercurl = false
+    --     -- end
+    --     --
+    --     -- Change palette colour
+    --     -- if highlight.fg == palette.blue_two then
+    --     --     highlight.fg = palette.cyan_two
+    --     -- end
+    -- end,
+  })
+
+  --lualine
+  require('lualine').setup {
+    options = {
+      theme = 'flexoki'
+    }
+  }
+
+  vim.cmd [[colorscheme flexoki]]
+    -- require("dracula").setup({
+    --   show_end_of_buffer = true,
+    --   transparent_bg = true,
+    --   italic_comment = true
+    -- })
+
 
   require('telescope').setup {
     extensions = {
@@ -242,19 +337,10 @@ if not vim.g.vscode then
   vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
   --theme:
-  vim.cmd [[colorscheme dracula]]
-  require("dracula").setup({
-    show_end_of_buffer = true,
-    transparent_bg = true,
-    italic_comment = true
-  })
+  -- vim.cmd [[colorscheme dracula]]
 
-  --lualine
-  require('lualine').setup {
-    options = {
-      theme = 'dracula-nvim'
-    }
-  }
+
+
 
   require('obsidian').setup {
     dir = "~/ObsidianNotes/Personal/",
@@ -282,14 +368,11 @@ if not vim.g.vscode then
   })
 
   require('lsp') -- in lua/lsp.lua
-  -- vim-kitty-navigator
-  if os.getenv("TERM") == "xterm-kitty" then
-    vim.g.kitty_navigator_no_mappings = 1
-    vim.g.tmux_navigator_no_mappings = 1
 
-    vim.keymap.set('n', '<C-w>h', ':KittyNavigateLeft<CR>', { noremap = true, silent = true })
-    vim.keymap.set('n', '<C-w>j', ':KittyNavigateDown<CR>', { noremap = true, silent = true })
-    vim.keymap.set('n', '<C-w>k', ':KittyNavigateUp<CR>', { noremap = true, silent = true })
-    vim.keymap.set('n', '<C-w>l', ':KittyNavigateRight<CR>', { noremap = true, silent = true })
-  end
+  -- vim.defer_fn(function()
+  --   local ok, _ = pcall(vim.cmd, 'colorscheme flexoki')
+  --   if not ok then
+  --     vim.notify('Failed to set colorscheme', vim.log.levels.WARN)
+  --   end
+  -- end, 100)
 end
