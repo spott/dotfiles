@@ -22,7 +22,57 @@
   nix.settings.trusted-users = [
     "@admin"
   ];
-#users.nix.configureBuildUsers = true;
+
+  #nix.settings.auto-optimise-store = true;
+
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+    '';
+  
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
+  
+  # Keyboard
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToControl = true;
+
+
+  system.defaults.finder.ShowStatusBar = true;
+  system.defaults.finder.ShowPathbar = true;
+  system.defaults.finder.QuitMenuItem = true;
+  system.defaults.finder.FXEnableExtensionChangeWarning = false;
+  system.defaults.finder.FXDefaultSearchScope = "SCcf";
+  system.defaults.finder.AppleShowAllExtensions = true;
+
+  system.defaults.dock.static-only = true;
+  system.defaults.dock.show-recents = false;
+  system.defaults.dock.scroll-to-open = true;
+  system.defaults.dock.magnification = true;
+  system.defaults.dock.largesize = 20;
+  system.defaults.dock.autohide = true;
+
+  system.defaults.NSGlobalDomain.PMPrintingExpandedStateForPrint = true;
+  system.defaults.NSGlobalDomain.PMPrintingExpandedStateForPrint2 = true;
+
+  #system.defaults.NSGlobalDomain.NSTextShowsControlCharacters = true;
+  system.defaults.NSGlobalDomain.NSTableViewDefaultSizeMode = 1;
+
+  system.defaults.NSGlobalDomain.NSAutomaticQuoteSubstitutionEnabled = false;
+
+# Add ability to used TouchID for sudo authentication
+  security.pam.enableSudoTouchIdAuth = true;
+
+  # Create /etc/bashrc that loads the nix-darwin environment.
+  programs.zsh.enable = true;
+  # this is necessary to work with zimfw
+  programs.zsh.enableCompletion = false;
+
+  # Auto upgrade nix package and the daemon service.
+  services.nix-daemon.enable = true;
+
+  programs.nix-index.enable = true;
+  #users.nix.configureBuildUsers = true;
 
   # nix.buildMachines = [
   # {
@@ -44,31 +94,9 @@
   #
   # };
 
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
 
 
-# Enable experimental nix command and flakes
-# nix.package = pkgs.nixUnstable;
-# '' + lib.optionalString (pkgs.system == "aarch64-darwin") ''
-# auto-optimise-store = true
-# extra-platforms = x86_64-darwin aarch64-darwin
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-    '';
-#
 
-# Create /etc/bashrc that loads the nix-darwin environment.
-  programs.zsh.enable = true;
-  
-  # this is necessary to work with zimfw
-  programs.zsh.enableCompletion = false;
-
-# Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-
-  programs.nix-index.enable = true;
 
 # Fonts
   /*
@@ -79,12 +107,6 @@
      ];
    */
 
-# Keyboard
-  system.keyboard.enableKeyMapping = true;
-  system.keyboard.remapCapsLockToControl = true;
-
-# Add ability to used TouchID for sudo authentication
-  security.pam.enableSudoTouchIdAuth = true;
 
 # Homebrew:
 # homebrew.enable = true;
