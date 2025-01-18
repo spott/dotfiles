@@ -12,7 +12,7 @@
     eza # exa is unmaintained now...
     sd # sed replacement
     tldr # examples for commands
-    #mosh # ssh replacement
+    mosh # ssh replacement
     diffoscopeMinimal # to allow diffing of directories
     viu # an image viewer for the terminal
     fastfetch # system info + pretty picture (has a home-manager module)
@@ -102,7 +102,7 @@
     ncdu # disk space usage
 
     # Download:
-    monolith # singlepage downloader for web pages.
+    stable.monolith # singlepage downloader for web pages.
 
     # accounting:
     hledger # accounting software
