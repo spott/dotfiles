@@ -61,6 +61,9 @@
 
 # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
+  
+  # this is necessary to work with zimfw
+  programs.zsh.enableCompletion = false;
 
 # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;

@@ -39,9 +39,3 @@ export HELM_CONFIG_HOME="${XDG_CONFIG_HOME}/helm"
 export HELM_DATA_HOME="${XDG_DATA_HOME}/helm"
 export HELM_CACHE_HOME="${XDG_CACHE_HOME}/helm"
 
-if test -n "$KITTY_INSTALLATION_DIR"; then
-    export KITTY_SHELL_INTEGRATION="enabled"
-    autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
-    kitty-integration
-    unfunction kitty-integration
-fi

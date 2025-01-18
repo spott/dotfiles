@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   ...
 }: {
   programs.zsh.enable = true;
@@ -15,6 +14,7 @@
   programs.zsh.history.size = 2000000000;
   programs.zsh.enableVteIntegration = true;
   programs.zsh.defaultKeymap = "viins";
+  programs.zsh.enableCompletion = false;
   # programs.zsh.historySubstringSearch.enable = true;
   # programs.zsh.historySubstringSearch.searchDownKey = "^n";
   # programs.zsh.historySubstringSearch.searchUpKey = "^p";
@@ -29,6 +29,13 @@
     grep = "rg";
     vim = "nvim";
   };
+
+  # programs.zsh.antidote.enable = true;
+  # programs.zsh.antidote.plugins = [
+  #   jeffreytse/zsh-vi-mode
+  #   subnixr/minimal
+  #
+  # ];
 
   xdg.configFile."zsh/.zshrc_personal".source = ./zshrc_personal;
   xdg.configFile."zsh/.zimrc".source = ./zimrc;

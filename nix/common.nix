@@ -20,9 +20,14 @@
   # bat (cat replacement)
   #
   programs.bat.enable = true;
+  # programs.bat.config = {
+  #   theme = "Dracula";
+  # };
   programs.bat.config = {
-    theme = "Dracula";
+    theme-light = "Monokai Extended Light";
+    theme-dark = "Monokai Extended";
   };
+
 
   #
   # bottom (btm command, top replacement)
