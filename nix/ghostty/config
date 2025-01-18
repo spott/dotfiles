@@ -2,10 +2,10 @@
 scrollback-limit = 500000
 
 window-inherit-working-directory = true
-#window-colorspace = display-p3
+window-colorspace = display-p3
 window-save-state = always
-window-theme = system
-theme = light:flexoki-light-new,dark:flexoki-dark
+window-theme = auto
+theme = light:flexoki-light,dark:flexoki-dark
 
 font-size = 12.5
 font-feature = +ss06 +ss03 +ss01 +ss07
@@ -27,7 +27,8 @@ quick-terminal-animation-duration = 0.1
 auto-update = download
 auto-update-channel = tip
 
-minimum-contrast = 2
+# minimum constrast is currently buggy... it makes things worse with light themes
+#minimum-contrast = 2
 
 # keybindings:
 
