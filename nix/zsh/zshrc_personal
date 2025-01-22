@@ -123,7 +123,6 @@ for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search
 for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
-}}} End configuration added by Zim install
 
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -166,3 +165,5 @@ function hl() {
 
 # need to make sure this exists... it seems to be deleted on reboot.
 mkdir -p ~/Library/Caches/TemporaryItems
+
+zvm_after_init_commands+=('bindkey -M viins "^R" fzf-history-widget')

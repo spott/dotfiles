@@ -3,6 +3,8 @@
 # This is not sourced during shell startup, and it's only used to configure the
 # zimfw plugin manager.
 #
+#zstyle ':zim:zmodule' debug 'yes'
+
 
 #
 # Modules
@@ -26,12 +28,12 @@ zmodule utility
 zmodule spott/zimfw-eza
 zmodule magic-enter
 zmodule prompt-pwd
-zmodule fzf
 #zmodule zim-github-cli
 #zmodule zim-yq
 
 # https://github.com/jeffreytse/zsh-vi-mode
 zmodule jeffreytse/zsh-vi-mode
+zmodule fzf
 
 #
 # Prompt
