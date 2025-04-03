@@ -19,8 +19,6 @@
   # 1password config
   xdg.configFile."1Password/ssh/agent.toml".source = ./1Password/ssh/agent.toml;
 
-  # aerospace config
-  xdg.configFile."aerospace/aerospace.toml".source = ./aerospace/aerospace.toml;
 
   # ghostty
   home.file.ghosttyconfig = {
