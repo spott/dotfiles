@@ -35,21 +35,7 @@
     nix-darwin,
     ...
   }:
-  #flake-utils.lib.eachSystem [ flake-utils.lib.system.x86_64-linux flake-utils.lib.system.aarch64-darwin ] (system:
   let
-    # pkgs_stable = system:
-    #   import nixpkgs {
-    #     inherit system;
-    #     config = {allowUnfree= true;};
-    #     };
-    #system = "aarch64-darwin";
-    #system = "x86_64-linux";
-    # unstable-pkgs = sys:
-    #   import nixpkgs-unstable {
-    #     system = sys;
-    #     config = {allowUnfree = true;};
-    #   };
-    #   
     overlay-stable = final: prev: {
         stable = import nixpkgs-stable {
           system = prev.system;
@@ -105,39 +91,3 @@
   };
 }
 
-
-    # packages = {
-    #   aarch64-darwin.homeConfigurations = {
-    #     "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
-    #       pkgs = pkgs "aarch64-darwin";
-    #       modules = [
-    #         ./normandy.nix
-    #         ./common.nix
-    #         ./darwin-common.nix
-    #         ./zsh/zsh.nix
-    #         ./vscode.nix
-    #       ];
-    #     };
-    #     "spott@Endeavor.local" = home-manager.lib.homeManagerConfiguration {
-    #       pkgs = pkgs "aarch64-darwin";
-    #       modules = [
-    #         ./endeavor.nix
-    #         ./common.nix
-    #         ./darwin-common.nix
-    #         ./zsh/zsh.nix
-    #         ./vscode.nix
-    #       ];
-    #     };
-    #   };
-    #   x86_64-linux.homeConfigurations = {
-    #     "spott@devbox" = home-manager.lib.homeManagerConfiguration {
-    #       pkgs = pkgs "x86_64-linux";
-    #       modules = [
-    #         ./devbox.nix
-    #         ./common.nix
-    #         ./zsh/zsh.nix
-    #         ./vscode.nix
-    #       ];
-    #     };
-    #   };
-    # };

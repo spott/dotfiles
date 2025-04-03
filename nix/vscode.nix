@@ -5,7 +5,7 @@
 }: {
 
   programs.vscode.enable = true;
-  programs.vscode.extensions = with pkgs.vscode-extensions; [
+  programs.vscode.profiles.default.extensions = with pkgs.vscode-extensions; [
     # nix/direnv
     arrterian.nix-env-selector
     jnoortheen.nix-ide
@@ -51,7 +51,7 @@
 
   ];
 
-  programs.vscode.userSettings = {
+  programs.vscode.profiles.default.userSettings = {
     "git.autofetch" = false;
     "workbench.colorTheme" = "Dracula";
     "vscode-neovim.neovimExecutablePaths.darwin" = "/etc/profiles/per-user/spott/bin/nvim";

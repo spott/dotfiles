@@ -52,4 +52,11 @@ in {
   programs.ssh.matchBlocks."10.42.1.2".identityFile = ["~/.ssh/spott.moneta.pub" "~/.ssh/ansible.moneta.pub" "~/.ssh/root.moneta.pub"];
   #programs.ssh.matchBlocks."10.42.1.2".extraOptions = {"IdentityFile" = "~/.ssh/ansible.moneta.pub";};
   programs.ssh.matchBlocks."10.42.1.2".identitiesOnly = true;
+
+  programs.ssh.matchBlocks."10.42.0.107" = {
+    host = "nix-build 10.42.0.107";
+    hostname = "10.42.0.107";
+    identityFile = [ "~/.ssh/spott.sc.spott.us.pub" ];
+    identitiesOnly = true;
+  };
 }

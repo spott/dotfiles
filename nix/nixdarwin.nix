@@ -10,7 +10,7 @@
     };
   };
   system.stateVersion = 5;
-  nix.settings.extra-platforms = [ "aarch64-linux" ];
+  nix.settings.extra-platforms = [ "x86_64-darwin" ];
   nix.settings.substituters = [
   "https://cache.nixos.org/"
   "https://nix-community.cachix.org"
@@ -20,14 +20,35 @@
   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
   ];
   nix.settings.trusted-users = [
-    "@admin"
+    "@admin" "spott"
   ];
-
-  #nix.settings.auto-optimise-store = true;
+  nix.settings.builders-use-substitutes = true;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes
     '';
+  
+  nix.linux-builder = {
+    enable = true;
+    systems = [ "aarch64-linux" ];
+    ephemeral = true;
+    maxJobs = 4;
+  };
+  
+  nix.buildMachines = [
+  {
+    hostName = "10.42.0.107";
+    supportedFeatures = [ "kvm" ];
+    maxJobs = 10;
+    protocol = "ssh-ng";
+    speedFactor = 1;
+    sshUser = "spott";
+    sshKey = "/Users/spott/.ssh/spott.sc.spott.us.pub";
+    system = "x86_64-linux";
+  }
+  ];
+
+  nix.distributedBuilds = true;
   
   nixpkgs.config = {
     allowUnfree = true;
@@ -51,6 +72,14 @@
   system.defaults.dock.magnification = true;
   system.defaults.dock.largesize = 20;
   system.defaults.dock.autohide = true;
+  system.defaults.dock.wvous-bl-corner = 13;
+
+  system.defaults.dock.persistent-apps = [
+  { app = "/Applications/Launchpad.app"; }
+    #{ spacer = { small = false; }; }
+  ];
+  system.defaults.dock.persistent-others = [ "~/Downloads" ];
+
 
   system.defaults.NSGlobalDomain.PMPrintingExpandedStateForPrint = true;
   system.defaults.NSGlobalDomain.PMPrintingExpandedStateForPrint2 = true;
@@ -61,38 +90,19 @@
   system.defaults.NSGlobalDomain.NSAutomaticQuoteSubstitutionEnabled = false;
 
 # Add ability to used TouchID for sudo authentication
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
   # this is necessary to work with zimfw
   programs.zsh.enableCompletion = false;
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-
   programs.nix-index.enable = true;
   #users.nix.configureBuildUsers = true;
 
-  # nix.buildMachines = [
-  # {
-  #   hostName = "10.42.0.107";
-  #   supportedFeatures = [ "kvm" ];
-  #   maxJobs = 10;
-  #   protocol = "ssh-ng";
-  #   speedFactor = 1;
-  #   sshUser = "spott";
-  #   system = "x86_64-linux";
-  # }
-  # ];
 
   # nix.configureBuildUsers = true;
 
-  # nix.linux-builder = {
-  #   enable = true;
-  #   systems = [ "aarch64-linux" ];
-  #
-  # };
 
 
 

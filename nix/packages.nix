@@ -30,7 +30,8 @@
     nil
 
     # rust stuff
-    cargo
+    rustup
+    dprint
     rustc
 
     # python development
@@ -44,6 +45,7 @@
     stable.parquet-tools
     sq # jq for structured data like csvs or sqlite databases
     csvlens 
+    sqlite
 
     # network tools:
     tcping-go
@@ -65,6 +67,7 @@
     oterm
     aichat
     llama-cpp
+    claude-code
 
     # development
     git
@@ -73,6 +76,7 @@
     dblab
     just
     gh-dash # tui for github cli
+    cmake
 
     # cloud
     awscli2 #<- This was annoying and broke all help text
@@ -98,7 +102,6 @@
     # disk space
     dua # disk space monitor tool
     gdu # disk space monitor tool
-    diskonaut # disk space 
     ncdu # disk space usage
 
     # Download:
@@ -129,7 +132,7 @@
     navi # interactive cheatsheet tool
     rizin # reverse engineering framework
     lemmeknow # file info tool?
-    wtf # personal information dashboard for the terminal
+    wtfutil # personal information dashboard for the terminal
     ouch # for compressing/decompressing
     
     kalker # scientific calculator
