@@ -62,6 +62,11 @@ require('lspconfig').nil_ls.setup {
   capabilities = capabilities,
   cmd = { 'nil' },
   settings = {
+    ['nil'] = {
+      formatting = {
+        command = { "alejandra" },
+      },
+    },
   },
 }
 -- Global mappings.
