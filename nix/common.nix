@@ -68,11 +68,11 @@
 
   use_oprc() {
     # from https://github.com/venkytv/direnv-op/blob/main/oprc.sh
-    [[ -f .oprc ]] || return 0
-    direnv_load op run --env-file .oprc --no-masking -- direnv dump
+    env_file=''${1:-.oprc}
+    [[ -f $env_file ]] || return 0
+    direnv_load op run --env-file "$env_file" --no-masking -- direnv dump
   }
 
-  watch_file .oprc
 
   use_conda() {
     local ACTIVATE="/opt/homebrew/Caskroom/miniconda/base/bin/activate"
@@ -101,6 +101,22 @@
       aws sso login --profile=$PROFILE
       export AWS_PROFILE=$PROFILE
     fi
+  }
+
+  layout_uv() {
+    if [[ -d ".venv" ]]; then
+        VIRTUAL_ENV="$(pwd)/.venv"
+    fi
+
+    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+        log_status "No virtual environment exists. Executing \`uv venv\` to create one."
+        uv venv
+        VIRTUAL_ENV="$(pwd)/.venv"
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export UV_ACTIVE=1  # or VENV_ACTIVE=1
+    export VIRTUAL_ENV
   }
   '';
   programs.direnv.enableZshIntegration = true;
@@ -181,6 +197,7 @@
     navigate = true;
     light = false;
   };
+  programs.git.ignores = [ ".zsh_history" ];
   programs.git.extraConfig = {
     init.defaultBranch = "main";
     push.autosetupRemote = true;
