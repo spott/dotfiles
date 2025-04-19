@@ -28,6 +28,7 @@ zmodule utility
 zmodule spott/zimfw-eza
 zmodule magic-enter
 zmodule prompt-pwd
+zmodule spott/per-directory-history
 #zmodule zim-github-cli
 #zmodule zim-yq
 
