@@ -39,7 +39,6 @@
     rye
     uv
     pipenv
-    (python311Full.withPackages(ps: [ps.pipx]))
 
     # data stuff
     stable.parquet-tools

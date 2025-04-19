@@ -22,9 +22,6 @@ export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app
 # Add .local/bin to path:
 export PATH="${PATH}:${HOME}/.local/bin"
 
-# For pipx, so python doesn't break on garbage collection:
-export PIPX_DEFAULT_PYTHON="/etc/profiles/per-user/spott/bin/python3"
-
 # poetry and helm config directories should be in the linux place:
 
 export XDG_CONFIG_HOME="${HOME}/.config/"
