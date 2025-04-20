@@ -2,6 +2,7 @@
   imports = [
     ./packages/shell.nix
     ./packages/development.nix
+    ./packages/ai.nix
 
     ./nix/direnv.nix
     ./nix/git.nix
@@ -9,7 +10,6 @@
     ./nix/bat.nix
     ./nix/tmux.nix
     ./nix/ssh.nix
-    ./nix/ai.nix
     ./nvim
     ./zsh
   ];
