@@ -34,20 +34,19 @@
     runpodctl,
     nix-darwin,
     ...
-  }:
-  let
+  }: let
     overlay-stable = final: prev: {
-        stable = import nixpkgs-stable {
-          system = prev.system;
-          config.allowUnfree = true;
-        };
+      stable = import nixpkgs-stable {
+        system = prev.system;
+        config.allowUnfree = true;
       };
+    };
     overlays = [
-        overlay-stable
-        nix-vscode-extensions.overlays.default
-        runpodctl.overlays.default
-      ];
-      
+      overlay-stable
+      nix-vscode-extensions.overlays.default
+      runpodctl.overlays.default
+    ];
+
     pkgs = system:
       import nixpkgs {
         inherit system overlays;
@@ -64,30 +63,34 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.spott = { imports = [
-            ./normandy.nix
-            ./common.nix
-            ./darwin-common.nix
-            ./zsh/zsh.nix
-            ./vscode.nix
-           ];
-           };
+            home-manager.users.spott = {
+              imports = [
+                ./normandy.nix
+                # ./common.nix
+                # ./darwin-common.nix
+                # ./zsh
+                # ./nix/vscode.nix
+              ];
+            };
           }
         ];
-        };
       };
+    };
     homeConfigurations = {
       "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs "aarch64-darwin";
-          modules = [
-            ./normandy.nix
-            ./common.nix
-            ./darwin-common.nix
-            ./zsh/zsh.nix
-            ./vscode.nix
-          ];
+        modules = [
+          ./normandy.nix
+        ];
+      };
+
+      "spott@devbox.sc.spott.us" =
+        home-manager.lib.homeManagerConfiguration {
+            pkgs = pkgs "x86_64-linux";
+            modules = [
+              ./devbox.nix
+            ];
         };
     };
   };
 }
-

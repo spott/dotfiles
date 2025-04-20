@@ -138,9 +138,4 @@
     stable.numbat # scientific calculator with units
   ];
 
-  dirHashes = {
-    nix = "$HOME/.dotfiles/nix";
-    docs = "$HOME/Documents";
-    envs = "$HOME/environments";
-  };
 }

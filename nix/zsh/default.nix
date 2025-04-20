@@ -40,4 +40,13 @@
   xdg.configFile."zsh/.zshrc_personal".source = ./zshrc_personal;
   xdg.configFile."zsh/.zimrc".source = ./zimrc;
   xdg.configFile."zsh/.zprofile".source = ./zprofile;
+
+  # some of these need to be behind options:
+  programs.zsh.dirHashes = {
+    code = "$HOME/code";
+    hl = "$HOME/Homelab";
+    nix = "$HOME/.dotfiles/nix";
+    docs = "$HOME/Documents";
+    envs = "$HOME/environments";
+  };
 }
