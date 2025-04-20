@@ -84,13 +84,15 @@
         ];
       };
 
-      "spott@devbox.sc.spott.us" =
-        home-manager.lib.homeManagerConfiguration {
-            pkgs = pkgs "x86_64-linux";
-            modules = [
-              ./devbox.nix
-            ];
-        };
+      "spott@devbox.sc.spott.us" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgs "x86_64-linux";
+        modules = [
+          ./devbox.nix
+        ];
+      };
+    };
+    homeManagerModules = {
+      devbox = import ./devbox.nix;
     };
   };
 }
