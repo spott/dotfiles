@@ -17,4 +17,6 @@
   # paths it should manage.
   home.username = "spott";
   home.homeDirectory = "/home/spott";
+  home.stateVersion = "24.11";
+  programs.home-manager.enable = true;
 }
