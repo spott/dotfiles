@@ -1,7 +1,7 @@
 {pkgs,...}: {
   home.packages = with pkgs; [
     # AI stuff
-    claude-code
-    codex
+    unstable.claude-code
+    unstable.codex
   ];
 }

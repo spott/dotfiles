@@ -3,31 +3,31 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-24.11-darwin";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
 
     home-manager = {
-      url = "github:nix-community/home-manager/";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     runpodctl = {
       url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     nix-darwin = {
-      url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     nix-rosetta-builder = {
       url = "github:cpick/nix-rosetta-builder";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
   };
 
@@ -41,20 +41,20 @@
     nix-rosetta-builder,
     ...
   }: let
-    overlay-stable = final: prev: {
-      stable = import nixpkgs-stable {
+    overlay-unstable = final: prev: {
+      unstable = import nixpkgs {
         system = prev.system;
         config.allowUnfree = true;
       };
     };
     overlays = [
-      overlay-stable
+      overlay-unstable
       nix-vscode-extensions.overlays.default
       runpodctl.overlays.default
     ];
 
     pkgs = system:
-      import nixpkgs {
+      import nixpkgs-stable {
         inherit system overlays;
         config = {allowUnfree = true;};
       };

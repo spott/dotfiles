@@ -6,10 +6,10 @@
     rustc
 
     # python:
-    uv
+    unstable.uv
     pipenv
     python312Full
-    ruff
+    unstable.ruff
     
     # dev
     #jujutsu

@@ -9,7 +9,7 @@
     viu
 
     # data stuff
-    stable.parquet-tools
+    parquet-tools
     sq # jq for structured data like csvs or sqlite databases
     csvlens 
     sqlite
@@ -35,7 +35,7 @@
     ncdu # disk space usage
 
     # Download:
-    stable.monolith # singlepage downloader for web pages.
+    #unstable.monolith # singlepage downloader for web pages.
 
     # accounting:
     hledger # accounting software
@@ -67,8 +67,8 @@
     #stable.numbat # scientific calculator with units
 
     # ai stuff
-    ollama
-    llama-cpp
+    unstable.ollama
+    unstable.llama-cpp
 
     # compatability
     ncurses

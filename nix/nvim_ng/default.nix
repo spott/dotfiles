@@ -14,16 +14,16 @@
     vscode-langservers-extracted
     terraform-lsp
     efm-langserver
-    basedpyright
+    unstable.basedpyright
     lua-language-server
     alejandra
     nil
-    ruff
+    unstable.ruff
     fzf
-    ty
+    unstable.ty
   ];
 
-  programs.neovim.plugins = with pkgs.vimPlugins; [
+  programs.neovim.plugins = with pkgs.unstable.vimPlugins; [
     telescope-fzf-native-nvim
     telescope-nvim
     nvim-surround
