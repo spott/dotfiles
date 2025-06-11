@@ -24,6 +24,7 @@
     
     # Python
     pkgs.vscode-marketplace.charliermarsh.ruff
+    pkgs.vscode-marketplace.meta.pyrefly
     ms-python.python
     ms-python.vscode-pylance
     ms-toolsai.jupyter
@@ -96,8 +97,8 @@
     # "python.autoComplete.extraPaths" = [
     #   "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
     # ];
-    "ruff.showNotifications" = "always";
-    "ruff.trace.server"= "messages";
+    #"ruff.showNotifications" = "always";
+    #"ruff.trace.server"= "messages";
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
     "python.analysis.autoFormatStrings" = true;
@@ -112,8 +113,9 @@
       "asvetliakov.vscode-neovim" = 1;
     };
     "explorer.confirmDragAndDrop" = false;
-    "continue.enableTabAutocomplete" = true;
+    #"continue.enableTabAutocomplete" = true;
     "editor.minimap.enabled" = false;
+    "python.pyrefly.disableLanguageServices" = true;
 
     #########
     ## Jupyter Notebook stuff:

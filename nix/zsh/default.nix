@@ -1,10 +1,11 @@
 {
   config,
+  lib,
   ...
 }: {
   programs.zsh.enable = true;
   programs.zsh.dotDir = ".config/zsh";
-  programs.zsh.initExtraFirst = "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
+  programs.zsh.initContent = lib.mkBefore "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
   programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
   programs.zsh.history.extended = true;
   programs.zsh.history.expireDuplicatesFirst = true;
@@ -15,9 +16,6 @@
   programs.zsh.enableVteIntegration = true;
   programs.zsh.defaultKeymap = "viins";
   programs.zsh.enableCompletion = false;
-  # programs.zsh.historySubstringSearch.enable = true;
-  # programs.zsh.historySubstringSearch.searchDownKey = "^n";
-  # programs.zsh.historySubstringSearch.searchUpKey = "^p";
 
   programs.zsh.shellAliases = {
     cat = "bat";
@@ -29,13 +27,6 @@
     grep = "rg";
     vim = "nvim";
   };
-
-  # programs.zsh.antidote.enable = true;
-  # programs.zsh.antidote.plugins = [
-  #   jeffreytse/zsh-vi-mode
-  #   subnixr/minimal
-  #
-  # ];
 
   xdg.configFile."zsh/.zshrc_personal".source = ./zshrc_personal;
   xdg.configFile."zsh/.zimrc".source = ./zimrc;

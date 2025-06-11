@@ -14,7 +14,9 @@ fi
 # End Nix
 
 # add VSCode to path:
-export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+if [[ -e "/Applications/Visual Studio Code.app" ]]; then
+  export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
 
 # Add local python to path
 #export PATH="${PATH}:${HOME}/Library/Python/3.9/bin"
@@ -27,7 +29,8 @@ export PATH="${PATH}:${HOME}/.local/bin"
 export XDG_CONFIG_HOME="${HOME}/.config/"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_CACHE_HOME="${HOME}/.cache/"
-export XDG_RUNTIME_DIR="${HOME}/Library/Caches/TemporaryItems/"
+#export XDG_RUNTIME_DIR=
+#export XDG_RUNTIME_DIR="${HOME}/Library/Caches/TemporaryItems/"
 #export XDG_BIN_HOME="${HOME}/.local/bin"
 
 # export POETRY_CONFIG_DIR="${XDG_CONFIG_HOME}/pypoetry"

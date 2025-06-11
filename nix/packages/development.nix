@@ -4,5 +4,15 @@
     rustup
     dprint
     rustc
+
+    # python:
+    uv
+    pipenv
+    python312Full
+    ruff
+    
+    # dev
+    #jujutsu
+    gh-dash # tui for github cli
   ];
 }

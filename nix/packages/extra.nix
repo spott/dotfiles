@@ -5,9 +5,8 @@
     diffoscopeMinimal
     fastfetch
 
-    # python:
-    uv
-    pipenv
+    # view images in the terminal:
+    viu
 
     # data stuff
     stable.parquet-tools
@@ -20,10 +19,7 @@
     mtr-gui # network diag tool
     bandwhich # bandwidth by process
 
-    # dev
-    jujutsu
     dblab
-    gh-dash # tui for github cli
 
     # pdf utils
     poppler
@@ -56,7 +52,6 @@
     viddy # modern watch replacement
     watchman # watch filesystem objects and do things when they change.
 
-
     buku # bookmarking tool
     calcurse # terminal calender
     dijo # habit tracker
@@ -68,13 +63,14 @@
     wtfutil # personal information dashboard for the terminal
     ouch # for compressing/decompressing
     
-    kalker # scientific calculator
-    stable.numbat # scientific calculator with units
+    #kalker # scientific calculator
+    #stable.numbat # scientific calculator with units
 
     # ai stuff
     ollama
-    oterm
-    aichat
     llama-cpp
+
+    # compatability
+    ncurses
   ];
 }

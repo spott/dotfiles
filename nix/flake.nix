@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-24.11-darwin";
 
     home-manager = {
       url = "github:nix-community/home-manager/";
@@ -24,6 +24,11 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-rosetta-builder = {
+      url = "github:cpick/nix-rosetta-builder";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -33,6 +38,7 @@
     nix-vscode-extensions,
     runpodctl,
     nix-darwin,
+    nix-rosetta-builder,
     ...
   }: let
     overlay-stable = final: prev: {
@@ -58,6 +64,7 @@
         system = "aarch64-darwin";
         pkgs = pkgs "aarch64-darwin";
         modules = [
+          nix-rosetta-builder.darwinModules.default
           ./nixdarwin.nix
           home-manager.darwinModules.home-manager
           {
@@ -94,5 +101,6 @@
     homeManagerModules = {
       devbox = import ./devbox.nix;
     };
+    overlays = overlays;
   };
 }

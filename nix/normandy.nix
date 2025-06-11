@@ -7,6 +7,7 @@
     ./packages/development.nix
     ./packages/ai.nix
     ./packages/gui.nix
+    ./packages/images.nix
 
     ./nix/direnv.nix
     ./nix/git.nix
@@ -14,7 +15,7 @@
     ./nix/bat.nix
     ./nix/tmux.nix
     ./nix/ssh.nix
-    ./nvim
+    ./nvim_ng
 
     ./1Password
     ./ghostty

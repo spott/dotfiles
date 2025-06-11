@@ -127,7 +127,9 @@ unset key
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # import onepassword plugins
-source /Users/spott/.config/op/plugins.sh
+if [[ -f $XDG_CONFIG_HOME/op/plugins.sh ]]; then
+  source $XDG_CONFIG_HOME/op/plugins.sh 
+fi
 
 # initialize_conda() {
 #   # >>> conda initialize >>>
@@ -164,6 +166,6 @@ function hl() {
 }
 
 # need to make sure this exists... it seems to be deleted on reboot.
-mkdir -p ~/Library/Caches/TemporaryItems
+#mkdir -p ~/Library/Caches/TemporaryItems
 
 zvm_after_init_commands+=('bindkey -M viins "^R" fzf-history-widget')

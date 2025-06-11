@@ -27,11 +27,32 @@
     experimental-features = nix-command flakes
   '';
 
-  nix.linux-builder = {
-    enable = true;
-    systems = ["aarch64-linux"];
-    ephemeral = true;
-    maxJobs = 4;
+  # nix.linux-builder = {
+  #   enable = true;
+  #   systems = ["aarch64-linux"];
+  #   ephemeral = true;
+  #   maxJobs = 4;
+  # };
+
+  nix-rosetta-builder = {
+    cores = 8;
+    onDemand = true;
+    memory = "8GiB";
+  };
+
+  programs.ssh.extraConfig = ''
+  Host eu.nixbuild.net
+    PubkeyAcceptedKeyTypes ssh-ed25519
+    ServerAliveInterval 60
+    IPQoS throughput
+    IdentityFile /etc/nix/nixbuild
+'';
+
+  programs.ssh.knownHosts = {
+    nixbuild = {
+      hostNames = [ "eu.nixbuild.net" ];
+      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPIQCZc54poJ8vqawd8TraNryQeJnvH1eLpIDgbiqymM";
+    };
   };
 
   nix.buildMachines = [
@@ -40,10 +61,24 @@
       supportedFeatures = ["kvm"];
       maxJobs = 10;
       protocol = "ssh-ng";
-      speedFactor = 1;
+      speedFactor = 2;
       sshUser = "spott";
       sshKey = "/Users/spott/.ssh/spott.sc.spott.us.pub";
       system = "x86_64-linux";
+    }
+    {
+      hostName = "eu.nixbuild.net";
+      system = "x86_64-linux";
+      maxJobs = 100;
+      speedFactor = 1;
+      supportedFeatures = [ "benchmark" "big-parallel" ];
+    }
+    {
+      hostName = "eu.nixbuild.net";
+      system = "aarch64-linux";
+      maxJobs = 100;
+      speedFactor = 1;
+      supportedFeatures = [ "benchmark" "big-parallel" ];
     }
   ];
 
@@ -71,6 +106,8 @@
   system.defaults.dock.largesize = 20;
   system.defaults.dock.autohide = true;
   system.defaults.dock.wvous-bl-corner = 13;
+
+  system.primaryUser = "spott";
 
   system.defaults.dock.persistent-apps = [
     {app = "/Applications/Launchpad.app";}
@@ -109,17 +146,34 @@
   */
 
   # Homebrew:
-  # homebrew.enable = true;
-  # homebrew.casks = [
-  #   "1password-cli"
-  #   "dash"
-  #   "iterm2"
-  #   "obsidian"
-  # ];
-  # homebrew.taps = [
-  #   "1password/tap"
-  #   "homebrew/bundle"
-  #   "homebrew/cask"
-  #   "homebrew/core"
-  # ];
+  homebrew.enable = true;
+  homebrew.casks = [
+    "zotero"
+    "windows-app"
+    "viscosity"
+    "raycast"
+    "quicklook-json"
+    "qlstephen"
+    "qlmarkdown"
+    "qlcolorcode"
+    "orbstack"
+    "orcaslicer"
+    "obsidian"
+    "kicad"
+    "macwhisper"
+    "key-codes"
+    "iina"
+    "gnucash"
+    "ghostty"
+    "firefox"
+    "discord"
+    "diffusionbee"
+    "dash"
+    "anki"
+  ];
+  homebrew.taps = [
+    #"1password/tap"
+    "homebrew/bundle"
+    "homebrew/services"
+  ];
 }

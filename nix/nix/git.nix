@@ -24,5 +24,6 @@
     merge.conflictstyle = "diff3";
     diff.colorMoved = "default";
   };
+  programs.git.lfs.enable = true;
 
 }
