@@ -1,7 +1,7 @@
 {
-  config,
-  pkgs,
-  ...
+config,
+pkgs,
+...
 }: {
 
   programs.vscode.enable = true;
@@ -11,7 +11,7 @@
     jnoortheen.nix-ide
     pkgs.vscode-marketplace.mkhl.direnv
     kamadorueda.alejandra
-    
+
     # editing env
     asvetliakov.vscode-neovim
     eamodio.gitlens
@@ -21,7 +21,7 @@
     ms-vscode-remote.remote-ssh
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-azuretools.vscode-docker
-    
+
     # Python
     pkgs.vscode-marketplace.charliermarsh.ruff
     pkgs.vscode-marketplace.meta.pyrefly
@@ -50,13 +50,23 @@
     pkgs.vscode-marketplace.mathiasfrohlich.kotlin
     pkgs.vscode-marketplace.nefrob.vscode-just-syntax
 
+    # color themes
+    pkgs.vscode-marketplace.raillyhugo.one-hunter
+
   ];
 
   programs.vscode.profiles.default.userSettings = {
-    "git.autofetch" = false;
-    "workbench.colorTheme" = "Dracula";
-    "vscode-neovim.neovimExecutablePaths.darwin" = "/etc/profiles/per-user/spott/bin/nvim";
-    "vscode-neovim.neovimInitVimPaths.darwin" = "/Users/spott/.config/nvim/init.lua";
+    "[python]" = {
+      "editor.defaultFormatter" = "charliermarsh.ruff";
+      "editor.formatOnSave" = true;
+    };
+    "[nix]" = {
+      "editor.defaultFormatter"= "kamadorueda.alejandra";
+      "editor.formatOnPaste"= true;
+      "editor.formatOnSave"= true;
+    };
+    "breadcrumbs.enabled"= false;
+
 
     "editor.accessibilitySupport" = "off";
     "editor.fontFamily" = "Victor Mono";
@@ -68,31 +78,37 @@
     "editor.formatOnPaste" = true;
     "editor.formatOnSave" = true;
     #"editor.minimap.autohide" = true;
-    "workbench.preferredDarkColorTheme" = "Dracula";
-    "workbench.editor.highlightModifiedTabs" = true;
-    "workbench.settings.useSplitJSON" = true;
-    "window.openFoldersInNewWindow" = "on";
+
     "explorer.fileNesting.expand" = false;
+    
+    "git.autofetch" = false;
+    "github.gitProtocol" = "ssh";
+
+    #"workbench.colorTheme" = "Dracula";
+    #"workbench.colorTheme" = "Flexoki Dark";
+    "vscode-neovim.neovimExecutablePaths.darwin" = "/etc/profiles/per-user/spott/bin/nvim";
+    "vscode-neovim.neovimInitVimPaths.darwin" = "/Users/spott/.config/nvim/init.lua";
+
+    "workbench.preferredDarkColorTheme" = "Flexoki Dark";
+    "workbench.preferredLightColorTheme" = "Flexoki Light";
+    "workbench.editor.highlightModifiedTabs" = true;
+    #"workbench.settings.useSplitJSON" = true;
+    "window.openFoldersInNewWindow" = "on";
+
+
     "terminal.explorerKind" = "external";
-    "terminal.external.osxExec" = "/Users/spott/Applications/Home Manager Apps/kitty.app";
+    "terminal.external.osxExec" = "/Applications/Ghostty.app";
     "terminal.integrated.defaultProfile.osx" = "zsh";
 
     "problems.showCurrentInStatus" = true;
-    "[python]" = {
-      "editor.defaultFormatter" = "charliermarsh.ruff";
-      "editor.formatOnSave" = true;
-    };
     "python.analysis.diagnosticMode" = "workspace";
     "python.analysis.autoImportCompletions" = true;
     "python.analysis.importFormat" = "relative";
     "python.analysis.indexing" = true;
     "python.analysis.typeCheckingMode" = "basic";
-    # "python.analysis.extraPaths" = [
-    #   "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
-    # ];
     "python.analysis.inlayHints.callArgumentNames" = "all";
-    "python.analysis.inlayHints.functionReturnTypes"= true;
-    "python.analysis.inlayHints.pytestParameters"= true;
+    "python.analysis.inlayHints.functionReturnTypes" = true;
+    "python.analysis.inlayHints.pytestParameters" = true;
     "python.analysis.inlayHints.variableTypes"= true;
     # "python.autoComplete.extraPaths" = [
     #   "/Users/spott/.vscode/extensions/continue.continue-0.9.4-darwin-arm64"
@@ -102,13 +118,7 @@
     "python.terminal.activateEnvInCurrentTerminal" = true;
     "python.testing.pytestEnabled" = true;
     "python.analysis.autoFormatStrings" = true;
-    "github.gitProtocol" = "ssh";
     "nix.enableLanguageServer" = true;
-    "[nix]" = {
-      "editor.defaultFormatter"= "kamadorueda.alejandra";
-      "editor.formatOnPaste"= true;
-      "editor.formatOnSave"= true;
-    };
     "extensions.experimental.affinity" = {
       "asvetliakov.vscode-neovim" = 1;
     };
@@ -128,10 +138,9 @@
     # from https://github.com/microsoft/vscode/issues/175295
     "editor.lineHeight"= 17;
     "notebook.insertToolbarLocation" = "notebookToolbar";
-    "breadcrumbs.enabled"= false;
     "notebook.showCellStatusBar" = "hidden";
     "notebook.cellToolbarLocation" = {
-        "jupyter-notebook" = "hidden";
+      "jupyter-notebook" = "hidden";
     };
     "notebook.globalToolbar" = false;
     "notebook.output.scrolling" = true;

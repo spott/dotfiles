@@ -21,5 +21,8 @@
     git-lfs
     just
     cmake
+
+    # fancy output
+    glow
   ];
 }

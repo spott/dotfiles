@@ -168,4 +168,16 @@ function hl() {
 # need to make sure this exists... it seems to be deleted on reboot.
 #mkdir -p ~/Library/Caches/TemporaryItems
 
+# concatenate files with headers:
+function concat-with-headers() {
+  for f in "$@"; do
+    print
+    print -r -- "==== $f ===="
+    print
+    cat -- "$f"
+  done
+}
+# now just run:  concat-with-headers file1 file2 ...
+
+
 zvm_after_init_commands+=('bindkey -M viins "^R" fzf-history-widget')
