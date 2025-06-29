@@ -3,5 +3,6 @@
     # AI stuff
     unstable.claude-code
     unstable.codex
+    unstable.gemini-cli
   ];
 }
