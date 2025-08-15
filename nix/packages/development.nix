@@ -10,6 +10,8 @@
     pipenv
     python312Full
     unstable.ruff
+    unstable.ty
+    unstable.pyrefly
     
     # dev
     #jujutsu

@@ -1,9 +1,11 @@
-{...}: {
+{pkgs,...}: {
   # Nix configuration ------------------------------------------------------------------------------
   users = {
     users = {
       spott = {
         home = "/Users/spott";
+        shell = pkgs.zsh;
+        ignoreShellProgramCheck = true;
       };
     };
   };
@@ -134,6 +136,7 @@
   programs.nix-index.enable = true;
   #users.nix.configureBuildUsers = true;
 
+  environment.shells = [pkgs.zsh];
   # nix.configureBuildUsers = true;
 
   # Fonts

@@ -72,5 +72,9 @@
 
     # compatability
     ncurses
+
+    # document conversion
+    pandoc
+    tectonic-unwrapped
   ];
 }

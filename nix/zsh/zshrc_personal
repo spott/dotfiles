@@ -179,5 +179,18 @@ function concat-with-headers() {
 }
 # now just run:  concat-with-headers file1 file2 ...
 
+# this doesn't print duplex yet.
+mdprint () {
+  local file="$1"                    # markdown file
+  local printer="${2:-$(lpstat -d | awk '{print $NF}')}"   # optional 2nd arg
+  pandoc "$file" --from=gfm -V geometry:margin=1.5in --pdf-engine=tectonic -t pdf -o - \
+    | lp -d "$printer" -o Duplex=DuplexNoTumble -
+}
+
+# generate a pdf from a markdown file
+mdtopdf () {
+  local file="$1"                    # markdown file
+  pandoc "$file" --from=gfm -V geometry:margin=1.5in -V monobreak=true --pdf-engine=tectonic -t pdf -o "${file%.*}.pdf"
+}
 
 zvm_after_init_commands+=('bindkey -M viins "^R" fzf-history-widget')

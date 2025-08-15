@@ -13,5 +13,9 @@
     bind-key -T copy-mode-vi u send-keys -X  halfpage-up
     bind-key -T copy-mode-vi d send-keys -X  halfpage-down
     bind-key -T prefix b copy-mode
-  '';
+    set -gu default-command
+    set -g default-shell ${pkgs.zsh}/bin/zsh
+    set -g mouse on
+
+  ''; # set -g default-command "${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace -l ${pkgs.zsh}/bin/zsh"
 }

@@ -33,13 +33,14 @@
     cmp-async-path
     cmp-nvim-lsp
     nvim-cmp
-    obsidian-nvim
+    #obsidian-nvim
     plenary-nvim
     nvim-treesitter.withAllGrammars
     nvim-treesitter-textobjects
     nvim-ts-context-commentstring
     efmls-configs-nvim
     comment-nvim
+    vim-ReplaceWithRegister
 
     (pkgs.vimUtils.buildVimPlugin
       {
