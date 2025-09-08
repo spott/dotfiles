@@ -15,7 +15,7 @@
     ./nix/bat.nix
     ./nix/tmux.nix
     ./nix/ssh.nix
-    ./nvim_ng
+    ./nvim
 
     ./1Password
     ./ghostty

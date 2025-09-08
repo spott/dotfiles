@@ -1,8 +1,12 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local lspconfig = require("lspconfig")
+-- local lspconfig = require("lspconfig")
 local util = require("lspconfig.util")
 
-lspconfig.efm.setup {
+vim.lsp.enable('efm')
+vim.lsp.enable('ty')
+vim.lsp.enable('ruff')
+
+vim.lsp.config('efm', {
   autostart = true,
   init_options = { documentFormatting = true },
   settings = {
@@ -18,54 +22,86 @@ lspconfig.efm.setup {
       },
     }
   }
-}
+})
 
-lspconfig.ty.setup {
-  cmd = { "ty", "server" },
-  filetypes={"python"},
-  root_dir = util.root_pattern("pyproject.toml",".git"),
-}
+-- lspconfig.basedpyright.setup {
+--   autostart = true,
+--   capabilities = capabilities,
+--   settings = {
+--     basedpyright = {
+--       analysis = {
+--         autoImportCompletions = true,
+--         autoSearchPaths = true,
+--         diagnosticMode = "openFilesOnly",
+--         useLibraryCodeForTypes = true,
+--         inlayHints = {
+--           variableTypes = true,
+--           callArgumentNames = true,
+--           functionReturnTypes = true
+--         },
+--         typeCheckingMode = "standard"
+--       }
+--     }
+--   }
+-- }
 
-lspconfig.basedpyright.setup {
-  autostart = true,
-  capabilities = capabilities,
-  settings = {
-    basedpyright = {
-      analysis = {
-        autoImportCompletions = true,
-        autoSearchPaths = true,
-        diagnosticMode = "openFilesOnly",
-        useLibraryCodeForTypes = true,
-        inlayHints = {
-          variableTypes = true,
-          callArgumentNames = true,
-          functionReturnTypes = true
+vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most
+        -- likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Tell the language server how to find Lua modules same way as Neovim
+        -- (see `:h lua-module-load`)
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
         },
-        typeCheckingMode = "standard"
-      }
-    }
-  }
-}
-
-lspconfig.lua_ls.setup {
-  autostart = true,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
       },
-    },
-  },
-}
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+          -- Depending on the usage, you might want to add additional paths
+          -- here.
+          -- '${3rd}/luv/library'
+          -- '${3rd}/busted/library'
+        }
+        -- Or pull in all of 'runtimepath'.
+        -- NOTE: this is a lot slower and will cause issues when working on
+        -- your own configuration.
+        -- See https://github.com/neovim/nvim-lspconfig/issues/3189
+        -- library = {
+        --   vim.api.nvim_get_runtime_file('', true),
+        -- }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
+})
 
-lspconfig.jsonls.setup { autostart = true, capabilities = capabilities }
-lspconfig.terraform_lsp.setup { autostart = true, capabilities = capabilities }
+vim.lsp.enable("jsonls")
+vim.lsp.enable("terraform_lsp")
+-- lspconfig.jsonls.setup { autostart = true, capabilities = capabilities }
+-- lspconfig.terraform_lsp.setup { autostart = true, capabilities = capabilities }
 
 
-
-lspconfig.nil_ls.setup {
+vim.lsp.enable("nil_ls")
+vim.lsp.config("nil_ls", {
   autostart = true,
   capabilities = capabilities,
   cmd = { 'nil' },
@@ -76,7 +112,9 @@ lspconfig.nil_ls.setup {
       },
     },
   },
-}
+})
+
+
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
@@ -114,21 +152,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
-
--- local lsp_mappings = {
---     { 'gD', vim.lsp.buf.declaration },
---     { 'gd', vim.lsp.buf.definition },
---     { 'gi', vim.lsp.buf.implementation },
---     { 'gr', vim.lsp.buf.references },
---     -- { '[d', vim.diagnostic.goto_prev },
---     -- { ']d', vim.diagnostic.goto_next },
---     -- { ' ' , vim.lsp.buf.hover },
---     -- { ' s', vim.lsp.buf.signature_help },
---     -- { ' d', vim.diagnostic.open_float },
---     -- { ' q', vim.diagnostic.setloclist },
---     -- { '\\r', vim.lsp.buf.rename },
---     -- { '\\a', vim.lsp.buf.code_action },
---   }
--- for i, map in pairs(lsp_mappings) do
---   vim.keymap.set('n', map[1], function() map[2]() end)
--- end

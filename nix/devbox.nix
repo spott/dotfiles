@@ -10,7 +10,7 @@
     #./nix/bat.nix
     ./nix/tmux.nix
     ./nix/ssh.nix
-    ./nvim_ng
+    ./nvim
     ./zsh
     ./1Password
   ];
