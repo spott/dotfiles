@@ -12,6 +12,8 @@
   programs.tmux.extraConfig = ''
     bind-key -T copy-mode-vi u send-keys -X  halfpage-up
     bind-key -T copy-mode-vi d send-keys -X  halfpage-down
+    bind-key -T copy-mode-vi v send -X begin-selection
+    bind-key -T copy-mode-vi y send -X copy-selection-and-cancel
     bind-key -T prefix b copy-mode
     set -gu default-command
     set -g default-shell ${pkgs.zsh}/bin/zsh

@@ -36,6 +36,8 @@ zmodule spott/per-directory-history
 zmodule jeffreytse/zsh-vi-mode
 zmodule fzf
 
+zmodule spott/walltime
+
 #
 # Prompt
 #

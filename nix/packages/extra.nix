@@ -5,11 +5,14 @@
     diffoscopeMinimal
     fastfetch
 
+    # fork of youtube-dl
+    yt-dlp
+
     # view images in the terminal:
     viu
 
     # data stuff
-    parquet-tools
+    #parquet-tools
     sq # jq for structured data like csvs or sqlite databases
     csvlens 
     sqlite

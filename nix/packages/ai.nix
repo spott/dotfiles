@@ -4,5 +4,6 @@
     unstable.claude-code
     unstable.codex
     unstable.gemini-cli
+    unstable.qwen-code
   ];
 }
