@@ -36,11 +36,11 @@
   #   maxJobs = 4;
   # };
 
-  nix-rosetta-builder = {
-    cores = 8;
-    onDemand = true;
-    memory = "8GiB";
-  };
+  # nix-rosetta-builder = {
+  #   cores = 8;
+  #   onDemand = true;
+  #   memory = "8GiB";
+  # };
 
   programs.ssh.extraConfig = ''
   Host eu.nixbuild.net

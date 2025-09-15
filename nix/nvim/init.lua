@@ -327,6 +327,7 @@ if not vim.g.vscode then
   })
 
   require('lsp') -- in lua/lsp.lua
+  require('ai') -- in lua/ai.lua
 
   -- vim.defer_fn(function()
   --   local ok, _ = pcall(vim.cmd, 'colorscheme flexoki')

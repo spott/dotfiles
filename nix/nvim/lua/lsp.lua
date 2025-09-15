@@ -1,29 +1,114 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- local lspconfig = require("lspconfig")
-local util = require("lspconfig.util")
 
-vim.lsp.enable('efm')
-vim.lsp.enable('ty')
-vim.lsp.enable('ruff')
+local py_root_markers = {
+  { "pyproject.toml", "setup.cfg", "setup.py", "requirements.txt", "ruff.toml", "uv.lock", "poetry.lock" },
+  ".git",
+}
+
+vim.lsp.config('ty', {
+  filetypes = { "python" },
+  single_file_support = true,
+  settings = {
+    ty = {
+      inlayHints = {
+        variableTypes = true,
+        cellArgumentNames = true,
+      },
+      experimental = {
+        rename = true,
+      },
+      diagnosticMode = 'workspace',
+    },
+  },
+  capabilities = capabilities,
+  autostart = true,
+  cmd = { 'ty', 'server' },
+  root_markers = py_root_markers,
+})
+
+vim.lsp.config('ruff', {
+  filetypes = { "python" },
+  single_file_support = true,
+  settings = {
+    ruff = {
+      diagnosticMode = 'workspace',
+    },
+  },
+  capabilities = capabilities,
+  autostart = true,
+  cmd = { 'ruff', 'server' },
+  root_markers = py_root_markers,
+})
+
+
+local pylsp_bin = vim.env.PYLSP_BIN or "pylsp"
+vim.lsp.config("pylsp", {
+  single_file_support = true,
+  autostart = true,
+  filetypes = { "python" },
+  capabilities = capabilities,
+  --cmd = { 'pylsp' },
+  cmd = { pylsp_bin, '-vv', '--log-file', vim.fn.stdpath('cache') .. '/pylsp.log' },
+  root_markers = py_root_markers,
+  settings = {
+    pylsp = {
+      plugins = {
+        -- use Ruff for lint/fix; drop overlapping linters
+        pycodestyle = { enabled = false },
+        mccabe      = { enabled = false },
+        pyflakes    = { enabled = false },
+        pylint      = { enabled = false },
+        autopep8    = { enabled = false },
+
+
+        -- Ruff inside pylsp:
+        ruff = {
+          enabled = false,
+          -- format = { enabled = true },  -- provides formatting via Ruff
+          -- organizeImports = true,
+        },
+
+        -- Rope refactors (provided by pylsp-rope)
+        pylsp_rope = {
+          rename = true, -- enable rope rename
+        },
+        -- make sure competing rename providers are off
+        jedi_rename = { enabled = false },
+        rope_rename = { enabled = false },
+        rope_autoimport = { enabled = false, completions = { enabled = false }, code_actions = { enabled = false } },
+        preload = { enabled = false },
+        yapf = { enabled = false },
+        flake8 = { enabled = false },
+
+
+        -- Jedi stays for defs/hover/completion when ty doesn't know something yet
+        jedi_completion = { enabled = false, fuzzy = true },
+        jedi_definition = { enabled = false },
+        jedi_hover      = { enabled = false },
+        jedi_symbols    = { enabled = false },
+      }
+    }
+  }
+})
 
 vim.lsp.config('efm', {
   autostart = true,
   init_options = { documentFormatting = true },
+  filetypes = { "nix" },
   settings = {
     rootMarkers = { ".git/" },
     languages = {
-      python = {
-        require('efmls-configs.formatters.ruff'),
-        require('efmls-configs.formatters.ruff_sort'),
-        require('efmls-configs.linters.ruff'),
-      },
+      -- python = {
+      --   require('efmls-configs.formatters.ruff'),
+      --   require('efmls-configs.formatters.ruff_sort'),
+      --   require('efmls-configs.linters.ruff'),
+      -- },
       nix = {
         require('efmls-configs.formatters.alejandra'),
       },
     }
   }
 })
-
 -- lspconfig.basedpyright.setup {
 --   autostart = true,
 --   capabilities = capabilities,
@@ -45,13 +130,14 @@ vim.lsp.config('efm', {
 --   }
 -- }
 
+
 vim.lsp.config('lua_ls', {
   on_init = function(client)
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
       if
-        path ~= vim.fn.stdpath('config')
-        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+          path ~= vim.fn.stdpath('config')
+          and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
       then
         return
       end
@@ -94,16 +180,10 @@ vim.lsp.config('lua_ls', {
   }
 })
 
-vim.lsp.enable("jsonls")
-vim.lsp.enable("terraform_lsp")
--- lspconfig.jsonls.setup { autostart = true, capabilities = capabilities }
--- lspconfig.terraform_lsp.setup { autostart = true, capabilities = capabilities }
-
-
-vim.lsp.enable("nil_ls")
 vim.lsp.config("nil_ls", {
   autostart = true,
   capabilities = capabilities,
+  filetypes = { "nix" },
   cmd = { 'nil' },
   settings = {
     ['nil'] = {
@@ -113,6 +193,15 @@ vim.lsp.config("nil_ls", {
     },
   },
 })
+
+vim.lsp.enable("lua_ls")
+vim.lsp.enable("jsonls")
+vim.lsp.enable("terraform_lsp")
+vim.lsp.enable('efm')
+vim.lsp.enable('ty')
+vim.lsp.enable('ruff')
+vim.lsp.enable('pylsp')
+vim.lsp.enable("nil_ls")
 
 
 -- Global mappings.
@@ -127,6 +216,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
+
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
@@ -150,5 +240,39 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<space>f', function()
       vim.lsp.buf.format { async = true }
     end, opts)
+
+
+    -- Fast “Organize Imports” (Ruff)
+    vim.keymap.set('n', '<space>oi', function()
+      vim.lsp.buf.code_action({
+        apply = true,
+        context = { only = { "source.organizeImports" }, diagnostics = {} },
+      })
+    end, { buffer = ev.buf, desc = "Organize imports (Ruff)" })
+
+    -- Fast “Fix All” (Ruff)
+    vim.keymap.set('n', '<space>fa', function()
+      vim.lsp.buf.code_action({
+        apply = true,
+        context = { only = { "source.fixAll" }, diagnostics = {} },
+      })
+    end, { buffer = ev.buf, desc = "Fix all (Ruff)" })
+
+    -- Rope refactors: narrowed pickers on a VISUAL selection
+    vim.keymap.set('x', '<leader>rv', function()
+      vim.lsp.buf.code_action({
+        context = { only = { "refactor.extract" }, diagnostics = {} },
+      })
+    end, { buffer = ev.buf, desc = "Refactor: extract (rope)" })
+
+    vim.keymap.set('x', '<leader>ri', function()
+      vim.lsp.buf.code_action({
+        context = { only = { "refactor.inline" }, diagnostics = {} },
+      })
+    end, { buffer = ev.buf, desc = "Refactor: inline (rope)" })
+
+    -- Rename stays direct (rope-backed via pylsp_rope)
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename,
+      { buffer = ev.buf, desc = "Rename symbol" })
   end,
 })

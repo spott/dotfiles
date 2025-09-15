@@ -1,7 +1,18 @@
-{pkgs, ...}: {
-  #
-  # neovim
-  #
+{pkgs, ...}:
+#
+# neovim
+#
+# pylsp env
+let
+  pylspEnv = pkgs.python312.withPackages (ps: [
+    ps.python-lsp-server
+    ps.pylsp-rope
+    ps.rope
+  ]);
+
+  dapPy = pkgs.python312.withPackages (ps: [ ps.debugpy ]);
+in {
+
   programs.neovim.enable = true;
   programs.neovim.defaultEditor = true;
   programs.neovim.withNodeJs = true;
@@ -21,7 +32,16 @@
     unstable.ruff
     fzf
     unstable.ty
+    python312Packages.rope
+    python312Packages.debugpy
+    uv
+    pylspEnv
   ];
+
+  home.sessionVariables = {
+    PYLSP_BIN = "${pylspEnv}/bin/pylsp";
+    DAP_PYTHON = "${dapPy}/bin/python";
+  };
 
   programs.neovim.plugins = with pkgs.unstable.vimPlugins; [
     telescope-fzf-native-nvim
@@ -42,6 +62,20 @@
     comment-nvim
     vim-ReplaceWithRegister
 
+    nvim-dap
+    nvim-dap-python
+    nvim-dap-ui
+    nvim-dap-virtual-text
+
+    # Testing
+    neotest
+    neotest-python
+    nvim-nio
+
+    codecompanion-nvim
+    supermaven-nvim
+    copilot-lua
+
     (pkgs.vimUtils.buildVimPlugin
       {
         pname = "flexoki-nvim";
@@ -57,4 +91,8 @@
 
   xdg.configFile."nvim/init.lua".source = ./init.lua;
   xdg.configFile."nvim/lua/lsp.lua".source = ./lua/lsp.lua;
+  xdg.configFile."nvim/lua/ai.lua".source = ./lua/ai.lua;
+
+  xdg.configFile."nvim/lua/dap.lua".source = ./lua/dap.lua;
+  xdg.configFile."nvim/lua/tests.lua".source = ./lua/tests.lua;
 }

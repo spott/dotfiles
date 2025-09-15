@@ -64,7 +64,7 @@
         system = "aarch64-darwin";
         pkgs = pkgs "aarch64-darwin";
         modules = [
-          nix-rosetta-builder.darwinModules.default
+          # nix-rosetta-builder.darwinModules.default
           ./nixdarwin.nix
           home-manager.darwinModules.home-manager
           {
@@ -73,10 +73,6 @@
             home-manager.users.spott = {
               imports = [
                 ./normandy.nix
-                # ./common.nix
-                # ./darwin-common.nix
-                # ./zsh
-                # ./nix/vscode.nix
               ];
             };
           }
