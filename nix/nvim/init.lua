@@ -1,4 +1,7 @@
-vim.g.mapleader = ','
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
+vim.o.timeoutlen = 300
 
 -- treesitter config
 require('nvim-treesitter.configs').setup {
@@ -168,7 +171,7 @@ require('Comment').setup {
 }
 
 if not vim.g.vscode then
-  print("Starting plugin loading...")
+  --print("Starting plugin loading...")
 
   vim.cmd [[
     packadd nvim-lspconfig
@@ -176,12 +179,23 @@ if not vim.g.vscode then
     packadd lualine.nvim
     packadd nvim-cmp
     packadd nvim-web-devicons
-    packadd obsidian.nvim
     packadd plenary.nvim
     packadd telescope.nvim
     packadd telescope-fzf-native.nvim
     packadd cmp-async-path
     packadd cmp-nvim-lsp
+
+    packadd nvim-dap
+    packadd nvim-dap-python
+    packadd nvim-dap-ui
+    packadd nvim-dap-virtual-text
+    packadd nvim-nio
+  
+    packadd triptych.nvim
+
+    packadd neotest
+    packadd neotest-python
+
   ]]
 
   -- local ok, flexoki = pcall(require, "flexoki")
@@ -286,7 +300,7 @@ if not vim.g.vscode then
         override_file_sorter = true,    -- override the file sorter
         case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
         -- the default case_mode is "smart_case"
-      }
+      },
     }
   }
   require('telescope').load_extension('fzf')
@@ -297,16 +311,23 @@ if not vim.g.vscode then
   vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
   vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
   vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+  vim.keymap.set('n', '<leader>bb', builtin.builtin, {})
+  vim.keymap.set('n', '<leader>km', builtin.keymaps, {})
+  vim.keymap.set('n', '<leader>kk', builtin.commands, {})
+  vim.keymap.set('n', '<leader>lt', builtin.treesitter, {})
 
-  --theme:
-  -- vim.cmd [[colorscheme dracula]]
+  vim.keymap.set('n', '<leader>gs', builtin.git_status, {})
 
-  -- require('obsidian').setup {
-  --   dir = "~/ObsidianNotes/Personal/",
-  --   completion = {
-  --     nvim_cmp = true,
-  --   }
-  -- }
+
+  local neogit = require('neogit')
+  neogit.setup {
+    graph_style = "kitty",
+  }
+  -- vim.keymap.set('n', '<leader>gg', neogit.open(), {})
+  -- vim.keymap.set('n', '<leader>gc', neogit.open({ "commit" }), {})
+
+  vim.keymap.set('n', '<leader>bn', ':bnext<CR>', { silent = true, desc = 'Next buffer' })
+  vim.keymap.set('n', '<leader>bp', ':bprevious<CR>', { silent = true, desc = 'Previous buffer' })
 
   vim.o.completeopt = "menuone,noinsert,noselect"
 
@@ -326,8 +347,14 @@ if not vim.g.vscode then
     }),
   })
 
+  require('triptych').setup({})
+  vim.keymap.set('n', '<leader>ft', ':Triptych<CR>', { silent = true, desc = 'Toggle Triptych' })
+
   require('lsp') -- in lua/lsp.lua
   require('ai') -- in lua/ai.lua
+  require('dap_config') -- in lua/dap_config.lua
+  require('tests') -- in lua/tests.lua
+
 
   -- vim.defer_fn(function()
   --   local ok, _ = pcall(vim.cmd, 'colorscheme flexoki')

@@ -10,7 +10,7 @@ let
     ps.rope
   ]);
 
-  dapPy = pkgs.python312.withPackages (ps: [ ps.debugpy ]);
+  dapPy = pkgs.unstable.python312.withPackages (ps: [ ps.debugpy ps.pytest ]);
 in {
 
   programs.neovim.enable = true;
@@ -31,6 +31,7 @@ in {
     nil
     unstable.ruff
     fzf
+    ripgrep
     unstable.ty
     python312Packages.rope
     python312Packages.debugpy
@@ -40,28 +41,55 @@ in {
 
   home.sessionVariables = {
     PYLSP_BIN = "${pylspEnv}/bin/pylsp";
-    DAP_PYTHON = "${dapPy}/bin/python";
+    DAP_PYTHON = "${dapPy}/bin/debugpy-adapter";
   };
 
   programs.neovim.plugins = with pkgs.unstable.vimPlugins; [
-    telescope-fzf-native-nvim
-    telescope-nvim
+    # actions
     nvim-surround
-    nvim-web-devicons
-    lualine-nvim
-    nvim-lspconfig
-    cmp-async-path
-    cmp-nvim-lsp
-    nvim-cmp
-    #obsidian-nvim
-    plenary-nvim
-    nvim-treesitter.withAllGrammars
-    nvim-treesitter-textobjects
-    nvim-ts-context-commentstring
-    efmls-configs-nvim
     comment-nvim
     vim-ReplaceWithRegister
 
+    # treesitter
+    nvim-treesitter.withAllGrammars
+    nvim-treesitter-textobjects
+    nvim-ts-context-commentstring
+
+    # telescope (fuzzy finder)
+    telescope-fzf-native-nvim
+    telescope-nvim
+
+    # completion
+    cmp-async-path
+    nvim-cmp
+
+    # common dependencies
+    plenary-nvim
+
+    # formatting
+    efmls-configs-nvim
+
+    # icons
+    nvim-web-devicons
+
+    # statusline
+    lualine-nvim
+
+    # git
+    neogit
+    diffview-nvim
+
+    # LSP
+    cmp-nvim-lsp
+    nvim-lspconfig
+
+    # file manager
+    triptych-nvim
+
+    # lsp file operations
+    nvim-lsp-file-operations
+
+    # debugging
     nvim-dap
     nvim-dap-python
     nvim-dap-ui
@@ -72,6 +100,7 @@ in {
     neotest-python
     nvim-nio
 
+    # AI
     codecompanion-nvim
     supermaven-nvim
     copilot-lua
@@ -93,6 +122,6 @@ in {
   xdg.configFile."nvim/lua/lsp.lua".source = ./lua/lsp.lua;
   xdg.configFile."nvim/lua/ai.lua".source = ./lua/ai.lua;
 
-  xdg.configFile."nvim/lua/dap.lua".source = ./lua/dap.lua;
+  xdg.configFile."nvim/lua/dap_config.lua".source = ./lua/dap_config.lua;
   xdg.configFile."nvim/lua/tests.lua".source = ./lua/tests.lua;
 }
