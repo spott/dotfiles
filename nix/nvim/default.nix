@@ -105,9 +105,20 @@ in {
     supermaven-nvim
     copilot-lua
 
+    # (pkgs.vimUtils.buildVimPlugin
+    #   {
+    #     pname = "flexoki";
+    #     version = "c3e2251e813d29d885a7cbbe9808a7af234d845d";
+    #     src = pkgs.fetchFromGitHub {
+    #       owner = "kepano";
+    #       repo = "flexoki-neovim";
+    #       rev = "c3e2251e813d29d885a7cbbe9808a7af234d845d";
+    #       sha256 = "sha256-TlBP99MBAT/H0Uut1MF8SnIDoeetcdHLKrWal2oO2Ug=";
+    #     };
+    #   })
     (pkgs.vimUtils.buildVimPlugin
       {
-        pname = "flexoki-nvim";
+        pname = "flexoki";
         version = "079554c242a86be5d1a95598c7c6368d6eedd7a3";
         src = pkgs.fetchFromGitHub {
           owner = "nuvic";

@@ -175,7 +175,7 @@ if not vim.g.vscode then
 
   vim.cmd [[
     packadd nvim-lspconfig
-    packadd flexoki-nvim
+    packadd flexoki
     packadd lualine.nvim
     packadd nvim-cmp
     packadd nvim-web-devicons
@@ -197,6 +197,11 @@ if not vim.g.vscode then
     packadd neotest-python
 
   ]]
+
+  -- require('flexoki').setup({
+  --   variant = "auto",
+  --   --dark_variant = "dark",
+  -- })
 
   -- local ok, flexoki = pcall(require, "flexoki")
   -- if not ok then
