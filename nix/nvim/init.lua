@@ -175,7 +175,7 @@ if not vim.g.vscode then
 
   vim.cmd [[
     packadd nvim-lspconfig
-    packadd flexoki.nvim
+    packadd flexoki-nvim
     packadd lualine.nvim
     packadd nvim-cmp
     packadd nvim-web-devicons
