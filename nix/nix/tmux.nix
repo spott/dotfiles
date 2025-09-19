@@ -8,10 +8,10 @@
   programs.tmux.newSession = true;
   programs.tmux.mouse = true;
   programs.tmux.aggressiveResize = true;
+  programs.tmux.terminal = "tmux-256color";
   programs.tmux.plugins = with pkgs; [
     tmuxPlugins.sensible
   ];
-  programs.tmux.term = "tmux-256color";
   programs.tmux.extraConfig = ''
     bind-key -T copy-mode-vi u send-keys -X  halfpage-up
     bind-key -T copy-mode-vi d send-keys -X  halfpage-down
