@@ -3,6 +3,10 @@ vim.g.maplocalleader = ' '
 vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
 vim.o.timeoutlen = 300
 
+if vim.fn.has("termguicolors") == 1 then
+  vim.opt.termguicolors = true
+end
+
 -- treesitter config
 require('nvim-treesitter.configs').setup {
 

@@ -19,5 +19,10 @@
     set -g default-shell ${pkgs.zsh}/bin/zsh
     set -g mouse on
 
+    # colors:
+    set -g default-terminal "tmux-256color"
+    set -as terminal-overrides ",*:Tc"
+    set -as terminal-features ",*:RGB"
+
   ''; # set -g default-command "${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace -l ${pkgs.zsh}/bin/zsh"
 }
