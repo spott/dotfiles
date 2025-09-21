@@ -29,17 +29,18 @@
     experimental-features = nix-command flakes
   '';
 
-  # nix.linux-builder = {
-  #   enable = true;
-  #   systems = ["aarch64-linux"];
-  #   ephemeral = true;
-  #   maxJobs = 4;
-  # };
+  nix.linux-builder = {
+    enable = true;
+    systems = ["aarch64-linux"];
+    ephemeral = true;
+    maxJobs = 4;
+  };
 
   # nix-rosetta-builder = {
   #   cores = 8;
   #   onDemand = true;
   #   memory = "8GiB";
+  #   #speedFactor = 2;
   # };
 
   programs.ssh.extraConfig = ''
