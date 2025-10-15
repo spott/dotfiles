@@ -24,5 +24,8 @@
 
     # fancy output
     glow
+
+    # for ssh
+    mosh
   ];
 }

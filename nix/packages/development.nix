@@ -14,7 +14,10 @@
     unstable.pyrefly
     
     # dev
-    #jujutsu
+    unstable.jujutsu
     gh-dash # tui for github cli
+
+    # lines of code:
+    cloc
   ];
 }

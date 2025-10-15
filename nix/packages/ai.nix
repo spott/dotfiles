@@ -5,5 +5,6 @@
     unstable.codex
     unstable.gemini-cli
     unstable.qwen-code
+    unstable.opencode
   ];
 }
