@@ -145,5 +145,6 @@ pkgs,
     "notebook.globalToolbar" = false;
     "notebook.output.scrolling" = true;
     "notebook.consolidatedRunButton" = true;
+    "diffEditor.experimental.showMoves" = true;
   };
 }
