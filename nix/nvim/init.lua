@@ -1,11 +1,14 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 500
 
 if vim.fn.has("termguicolors") == 1 then
   vim.opt.termguicolors = true
 end
+
+vim.keymap.set('i', '<C-e>', '<End>')
+vim.keymap.set('i', '<C-a>', '<Home>')
 
 -- treesitter config
 require('nvim-treesitter.configs').setup {

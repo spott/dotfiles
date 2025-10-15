@@ -127,7 +127,7 @@ vim.keymap.set('n', '<leader>df', function()
       program = file,
       cwd = cwd,
       justMyCode = false,
-      --console = 'integratedTerminal',
+      console = 'integratedTerminal',
     })
     return
   end
@@ -145,6 +145,38 @@ vim.keymap.set('n', '<leader>df', function()
   end
   vim.notify('No DAP launch configuration for filetype: ' .. ft, vim.log.levels.WARN)
 end, { noremap = true, silent = true, desc = 'DAP: run file here (<leader>df)' })
+
+vim.keymap.set('n', '<leader>dJ', function()
+  local file = vim.fn.expand('%:p')
+  local cwd  = vim.fn.fnamemodify(file, ':h')
+  local ft   = vim.bo.filetype
+
+  if ft == 'python' then
+    dap.run({
+      type = 'python',
+      request = 'launch',
+      name = 'Debug current file (cwd=file dir)',
+      program = file,
+      cwd = cwd,
+      justMyCode = true,
+      console = 'integratedTerminal',
+    })
+    return
+  end
+
+  -- Generic best-effort: reuse the first 'launch' config for this ft.
+  local cfgs = dap.configurations[ft] or {}
+  for _, cfg in ipairs(cfgs) do
+    if cfg.request == 'launch' then
+      local run_cfg = vim.deepcopy(cfg)
+      run_cfg.program = run_cfg.program or file
+      run_cfg.cwd     = run_cfg.cwd     or cwd
+      dap.run(run_cfg)
+      return
+    end
+  end
+  vim.notify('No DAP launch configuration for filetype: ' .. ft, vim.log.levels.WARN)
+end, { noremap = true, silent = true, desc = 'DAP: run file here and turn off just my code (<leader>dJ)' })
 
 -- ---- <leader>dx: Kill ALL DAP sessions ----
 vim.keymap.set('n', '<leader>dx', function()

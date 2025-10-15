@@ -127,6 +127,19 @@ in {
           sha256 = "vjjAulQVFS+OmpWzLkliqpan3GXlvatdaCnI96bjxC0=";
         };
       })
+
+    # (pkgs.vimUtils.buildVimPlugin
+    #   This probably won't work, as ropevim is in maintenance mode
+    #   {
+    #     pname = "ropevim";
+    #     version = "0.8.1";
+    #     src = pkgs.fetchFromGitHub {
+    #       owner = "python-rope";
+    #       repo = "ropevim";
+    #       rev = "0.8.1";
+    #       sha256 = "";
+    #     };
+    #   })
   ];
 
   xdg.configFile."nvim/init.lua".source = ./init.lua;

@@ -9,9 +9,9 @@ neotest.setup({
 
       runner = 'pytest',
       -- Good defaults; tune as you like:
-      args = { },            -- terse == '-q'
+      args = { '-q' },            -- terse == '-q'
       dap = { justMyCode = false }, -- better stepping through third-party code
-      pytest_discover_instances = true,
+      pytest_discover_instances = false,
     }),
   },
   quickfix = { enabled = false }, -- use neotest output + summary instead
