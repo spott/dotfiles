@@ -194,3 +194,26 @@ mdtopdf () {
 }
 
 zvm_after_init_commands+=('bindkey -M viins "^R" fzf-history-widget')
+
+
+# use synthetic.new with claude code:
+synclaude() {
+  local token
+  token="$(op read 'op://dev/Synthetic/api_key')" || return
+  ANTHROPIC_BASE_URL="https://api.synthetic.new/anthropic" \
+  ANTHROPIC_AUTH_TOKEN="$token" \
+  ANTHROPIC_DEFAULT_OPUS_MODEL="hf:zai-org/GLM-4.6" \
+  ANTHROPIC_DEFAULT_SONNET_MODEL="hf:zai-org/GLM-4.6" \
+  ANTHROPIC_DEFAULT_HAIKU_MODEL="hf:zai-org/GLM-4.6" \
+  CLAUDE_CODE_SUBAGENT_MODEL="hf:zai-org/GLM-4.6" \
+  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+  claude "$@"
+}
+
+synthetic-quota() {
+  local token
+  token="$(op read 'op://dev/Synthetic/api_key')" || return
+  curl -s https://api.synthetic.new/v2/quotas \
+  -H "Authorization: Bearer $token" \
+  | jq --color-output .
+}
