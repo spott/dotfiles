@@ -36,6 +36,13 @@
     maxJobs = 4;
   };
 
+  environment.etc."resolver/sc.spott.us" = {
+    text = ''
+      nameserver 10.42.10.2
+    '';
+    #mode = "0644";
+  };
+
   # nix-rosetta-builder = {
   #   cores = 8;
   #   onDemand = true;
