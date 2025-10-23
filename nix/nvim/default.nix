@@ -146,6 +146,7 @@ in {
   xdg.configFile."nvim/lua/lsp.lua".source = ./lua/lsp.lua;
   xdg.configFile."nvim/lua/ai.lua".source = ./lua/ai.lua;
 
+  xdg.configFile."nvim/lua/statusline.lua".source = ./lua/statusline.lua;
   xdg.configFile."nvim/lua/dap_config.lua".source = ./lua/dap_config.lua;
   xdg.configFile."nvim/lua/tests.lua".source = ./lua/tests.lua;
 }

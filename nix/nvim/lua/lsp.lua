@@ -15,7 +15,8 @@ vim.lsp.config('ty', {
         cellArgumentNames = true,
       },
       experimental = {
-        rename = false,
+        rename = true,
+        autoimport = true,
       },
       diagnosticMode = 'workspace',
     },
@@ -70,7 +71,7 @@ vim.lsp.config("pylsp", {
 
         -- Rope refactors (provided by pylsp-rope)
         pylsp_rope = {
-          rename = true, -- enable rope rename
+          rename = false, -- disable rope rename
         },
         -- make sure competing rename providers are off
         jedi_rename = { enabled = false },
