@@ -38,16 +38,24 @@ auto-update-channel = tip
 keybind = ctrl+left_bracket=text:\x1b
 
 keybind = super+w>c=close_surface
+keybind = super+w>w=close_window
+
 keybind = super+w>s=new_split:down
 keybind = super+w>v=new_split:right
+keybind = super+shift+w>h=new_split:left
+keybind = super+shift+w>l=new_split:right
+keybind = super+shift+w>j=new_split:down
+keybind = super+shift+w>k=new_split:up
+
 keybind = super+w>j=goto_split:bottom
 keybind = super+w>k=goto_split:top
 keybind = super+w>h=goto_split:left
 keybind = super+w>l=goto_split:right
+
 keybind = super+w>z=toggle_split_zoom
-#keybind = super+w>e=equalize_splits
 keybind = super+w>equal=equalize_splits
-keybind = super+w>w=close_window
+
+keybind = super+w>z=toggle_split_zoom
 
 keybind = super+shift+k=jump_to_prompt:-1
 keybind = super+shift+j=jump_to_prompt:1
