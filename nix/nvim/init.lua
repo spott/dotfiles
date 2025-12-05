@@ -13,6 +13,10 @@ end
 vim.keymap.set('i', '<C-e>', '<End>')
 vim.keymap.set('i', '<C-a>', '<Home>')
 
+-- preventing flickering blinking cursor
+-- vim.o.showmode = false         -- avoid extra mode messages too
+-- vim.opt.guicursor:append('a:blinkon0')
+
 -- treesitter config
 require('nvim-treesitter.configs').setup {
 
@@ -298,6 +302,10 @@ if not vim.g.vscode then
   --     theme = 'flexoki'
   --   }
   -- }
+  --nnoremap <silent> <leader>gg :LazyGit<CR>
+  require('telescope').load_extension('lazygit')
+  vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { desc = 'Open LazyGit' })
+
   require('statusline') -- in lua/statusline.lua
 
   vim.cmd [[colorscheme flexoki]]
@@ -335,10 +343,10 @@ if not vim.g.vscode then
   vim.keymap.set('n', '<leader>gs', builtin.git_status, {})
 
 
-  local neogit = require('neogit')
-  neogit.setup {
-    graph_style = "kitty",
-  }
+  -- local neogit = require('neogit')
+  -- neogit.setup {
+  --   graph_style = "kitty",
+  -- }
   -- vim.keymap.set('n', '<leader>gg', neogit.open(), {})
   -- vim.keymap.set('n', '<leader>gc', neogit.open({ "commit" }), {})
 

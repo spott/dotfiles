@@ -218,6 +218,59 @@ vim.keymap.set('n', '<leader>ql', builtin.loclist, {})
 vim.keymap.set('n', '<leader>qf', builtin.quickfix, {})
 vim.keymap.set('n', '<leader>lr', builtin.lsp_references, {})
 
+-- jump to definition with a picker:
+local function lsp_jump_with_picker_from_src(method, keep_focus)
+  local src_win = vim.api.nvim_get_current_win()
+  local src_buf = vim.api.nvim_get_current_buf()
+
+  local ok_picker, picker = pcall(require, 'window-picker')
+  if not ok_picker then return end
+
+  local target_win = picker.pick_window({ include_current_win = false })
+  if not target_win or not vim.api.nvim_win_is_valid(target_win) then return end
+
+  -- Find a client on the source buffer that supports the method
+  local client = nil
+  for _, c in pairs(vim.lsp.get_clients({ bufnr = src_buf })) do
+    if c.supports_method(method) then client = c; break end
+  end
+  if not client then
+    vim.notify('No LSP client supports ' .. method, vim.log.levels.WARN)
+    return
+  end
+
+  -- Build params from the *source* window/cursor (correct position!)
+  local enc = client.offset_encoding or 'utf-16'
+  local params = vim.lsp.util.make_position_params(src_win, enc)
+
+  vim.lsp.buf_request(src_buf, method, params, function(err, result, ctx)
+    if err then
+      vim.notify('LSP error: ' .. (err.message or tostring(err)), vim.log.levels.ERROR)
+      return
+    end
+    if not result or (vim.tbl_islist(result) and vim.tbl_isempty(result)) then
+      vim.notify('No location found', vim.log.levels.INFO)
+      return
+    end
+
+    -- Normalize single vs list
+    local location = result
+    if vim.tbl_islist(result) then
+      location = result[1]
+    end
+
+    -- Jump in the picked window
+    local to_prev = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(target_win)
+    vim.lsp.util.jump_to_location(location, enc, true)
+
+    -- Optionally return focus
+    if keep_focus ~= false then
+      vim.api.nvim_set_current_win(to_prev == target_win and src_win or to_prev)
+    end
+  end)
+end
+
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -229,8 +282,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', '<leader>gd', function() lsp_jump_with_picker_from_src(vim.lsp.buf.definition, true) end, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)

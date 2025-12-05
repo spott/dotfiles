@@ -7,7 +7,7 @@ local function project_root()
     local root = client.config and client.config.root_dir
     if root and root ~= '' then return root end
   end
-  -- Else Git toplevel
+  -- Else Git toplevel (one-shot, NOT in draw path)
   local ok, toplevel = pcall(function()
     local dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':h')
     return vim.fn.systemlist('git -C ' .. vim.fn.shellescape(dir) .. ' rev-parse --show-toplevel')[1]
@@ -52,103 +52,66 @@ local function winwide(min)
   return function() return vim.fn.winwidth(0) >= (min or 80) end
 end
 
--- Grab fg from a highlight group if possible (fallback to hex)
-local function hl_fg(name, fallback)
+-- -------- Theme-aware colors (resilient) --------
+local function hl_safe(name)
   local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
-  if ok and hl and hl.fg then
-    return string.format('#%06x', hl.fg)
+  return ok and hl or {}
+end
+
+local function hex_or_nil(n) return n and string.format('#%06x', n) or nil end
+
+-- Try several groups for fg/bg; fall back smartly
+local function pick_fg(groups, fallback)
+  for _, g in ipairs(groups) do
+    local c = hex_or_nil(hl_safe(g).fg)
+    if c then return c end
   end
   return fallback
 end
 
--- A small palette that tries to respect your colorscheme via hl groups
+local function pick_bg()
+  return pick_fg({ 'StatusLine' }, nil) -- actually asking for bg below
+end
+
+-- bg (prefer StatusLine, else Normal, else white/black)
+local function get_bg()
+  local s = hl_safe('StatusLine').bg or hl_safe('Normal').bg
+  if s then return string.format('#%06x', s) end
+  return (vim.o.background == 'light') and '#ffffff' or '#000000'
+end
+
+-- simple contrast booster (darken on light bg, lighten on dark bg)
+local function boost_contrast(fg, bg)
+  if not fg or not bg then return fg end
+  local function to_rgb(h) return tonumber(h:sub(2,3),16), tonumber(h:sub(4,5),16), tonumber(h:sub(6,7),16) end
+  local fr,fgc,fb = to_rgb(fg); local br,bg_,bb = to_rgb(bg)
+  local bg_is_light = (0.2126*br + 0.7152*bg_ + 0.0722*bb) > 127
+  local factor = bg_is_light and 0.75 or 1.25  -- darken a bit on light bg; lighten on dark
+  local nr = math.max(0, math.min(255, math.floor(fr*factor)))
+  local ng = math.max(0, math.min(255, math.floor(fgc*factor)))
+  local nb = math.max(0, math.min(255, math.floor(fb*factor)))
+  return string.format('#%02x%02x%02x', nr, ng, nb)
+end
+
+local BG = get_bg()
+
 local COLORS = {
-  clean  = hl_fg('DiffAdd',        '#8ec07c'),
-  dirtyF = hl_fg('DiagnosticError','#fb4934'), -- file dirty (icon)
-  dirtyR = hl_fg('DiagnosticWarn', '#fabd2f'), -- repo dirty (branch name)
-  fnameM = hl_fg('String',         '#a7c080'), -- clean filename
-  fnameD = hl_fg('DiagnosticError','#e67e80'), -- modified buffer
+  -- Clean “OK” tone (try GitSignsAdd/DiffAdd/String/Identifier)
+  clean  = boost_contrast(pick_fg({ 'GitSignsAdd', 'DiffAdd', 'String', 'Identifier' }, '#2e7d32'), BG),
+
+  -- Strong red for errors/dirty file
+  dirtyF = boost_contrast(pick_fg({ 'DiagnosticError', 'ErrorMsg', 'Error', 'DiffDelete' }, '#b00020'), BG),
+
+  -- Amber/yellow for repo dirty
+  dirtyR = boost_contrast(pick_fg({ 'DiagnosticWarn', 'WarningMsg', 'Todo' }, '#b36b00'), BG),
+
+  -- Filename (clean): prefer StatusLine fg or Normal fg
+  fnameM = boost_contrast(pick_fg({ 'StatusLine', 'Normal', 'Title' }, '#1e293b'), BG),
+
+  -- Filename (modified): reuse dirty red
+  fnameD = boost_contrast(pick_fg({ 'DiagnosticError', 'ErrorMsg', 'Error' }, '#b00020'), BG),
 }
-
--- Git helpers (fast when gitsigns is available)
-local has_gitsigns, gitsigns = pcall(require, 'gitsigns')
-local file_dirty_cache = { path = nil, ts = 0, dirty = false }
-local repo_dirty_cache = { root = nil, ts = 0, dirty = false }
-local CACHE_TTL = 1.0 -- seconds
-
-local function buf_abs_path()
-  local p = vim.api.nvim_buf_get_name(0)
-  return p ~= '' and p or nil
-end
-
-local function git_root_for_buf()
-  local path = buf_abs_path()
-  if not path then return nil end
-  local dir = vim.fn.fnamemodify(path, ':h')
-  local top = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(dir) .. ' rev-parse --show-toplevel')[1]
-  if top and top ~= '' and vim.v.shell_error == 0 then return top end
-  return nil
-end
-
--- Is current file dirty vs HEAD?
-local function is_file_dirty()
-  local path = buf_abs_path()
-  if not path then return false end
-
-  -- cache
-  local now = uv.now() / 1000
-  if file_dirty_cache.path == path and (now - file_dirty_cache.ts) < CACHE_TTL then
-    return file_dirty_cache.dirty
-  end
-
-  local dirty = false
-  if has_gitsigns and vim.b.gitsigns_status_dict then
-    local d = vim.b.gitsigns_status_dict
-    local added = tonumber(d.added or 0) or 0
-    local changed = tonumber(d.changed or 0) or 0
-    local removed = tonumber(d.removed or 0) or 0
-    dirty = (added + changed + removed) > 0
-  else
-    local root = git_root_for_buf()
-    if root then
-      local rel = vim.fn.fnamemodify(path, ':~:.')
-      local out = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(root)
-        .. ' status --porcelain -- ' .. vim.fn.shellescape(path))
-      dirty = out and #out > 0
-    end
-  end
-
-  file_dirty_cache = { path = path, ts = now, dirty = dirty }
-  return dirty
-end
-
--- Is repo dirty (any file changed)?
-local function is_repo_dirty()
-  local root = git_root_for_buf()
-  if not root then return false end
-
-  local now = uv.now() / 1000
-  if repo_dirty_cache.root == root and (now - repo_dirty_cache.ts) < CACHE_TTL then
-    return repo_dirty_cache.dirty
-  end
-
-  local dirty = false
-  if has_gitsigns and gitsigns.get_repo_status then
-    -- Some gitsigns versions expose repo info; fall back to porcelain anyway
-    local out = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(root) .. ' status --porcelain -uno')
-    dirty = out and #out > 0
-  else
-    local out = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(root) .. ' status --porcelain -uno')
-    dirty = out and #out > 0
-  end
-
-  repo_dirty_cache = { root = root, ts = now, dirty = dirty }
-  return dirty
-end
-
--- separators: arrows when wide, none when tight
-local section_seps = (vim.o.columns >= 100) and { left = '', right = '' } or { left = '', right = '' }
-local comp_seps    = (vim.o.columns >= 100) and { left = '', right = '' } or { left = '', right = '' }
+-- -----------------------------------------------
 
 -- devicons (optional)
 local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
@@ -158,40 +121,117 @@ local function file_icon()
   local icon = devicons.get_icon(vim.fn.expand('%:t'), nil, { default = true })
   return icon or ''
 end
--- ===========================================
 
+-- ================= Dirtiness (async + cached, zero work in draw) =============
+local has_gitsigns, _gitsigns = pcall(require, 'gitsigns')
+
+-- File dirty vs HEAD:
+--   * If gitsigns is present => use its per-buffer counts (instant)
+--   * Else => use unsaved buffer state (no shelling on draw)
+local function file_dirty_vs_head()
+  if has_gitsigns and vim.b.gitsigns_status_dict then
+    local d = vim.b.gitsigns_status_dict
+    local a = tonumber(d.added or 0)   or 0
+    local c = tonumber(d.changed or 0) or 0
+    local r = tonumber(d.removed or 0) or 0
+    return (a + c + r) > 0
+  end
+  return vim.bo.modified or false
+end
+
+-- Repo dirty cached per root, updated asynchronously via jobstart
+local CURRENT_ROOT = nil
+local RepoCache = {} -- [root] = { dirty=bool, running=bool, last=ms }
+
+-- determine/remember current root on safe events (not in draw path)
+local function update_current_root()
+  CURRENT_ROOT = project_root()
+end
+
+-- schedule async scan; safe to call often: guarded by 'running' flag
+local function schedule_repo_scan(root)
+  if not root then return end
+  local entry = RepoCache[root] or {}
+  if entry.running then return end
+  entry.running = true
+  RepoCache[root] = entry
+  vim.fn.jobstart({ 'git', '-C', root, 'status', '--porcelain', '-uno' }, {
+    stdout_buffered = true,
+    on_stdout = function(_, data)
+      local dirty = false
+      if data then
+        for _, l in ipairs(data) do
+          if l and l ~= '' then dirty = true; break end
+        end
+      end
+      entry.dirty = dirty
+    end,
+    on_exit = function()
+      entry.running = false
+      entry.last = (uv.now and uv.now() or 0)
+      local ok, lualine = pcall(require, 'lualine')
+      if ok then lualine.refresh() end
+    end,
+  })
+end
+
+-- read-only in draw path; may opportunistically trigger a scan
+local function repo_is_dirty()
+  local root = CURRENT_ROOT
+  if not root then return false end
+  local entry = RepoCache[root]
+  if not entry then
+    -- Kick off first scan; assume clean until we know
+    schedule_repo_scan(root)
+    return false
+  end
+  return entry.dirty or false
+end
+
+-- Keep repo status fresh on meaningful events
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'FocusGained' }, {
+  callback = function()
+    update_current_root()
+    if CURRENT_ROOT then schedule_repo_scan(CURRENT_ROOT) end
+  end,
+})
+
+-- ================= separators (static; no idle thrash) =======================
+local section_seps = (vim.o.columns >= 100) and { left = '', right = '' } or { left = '', right = '' }
+local comp_seps    = (vim.o.columns >= 100) and { left = '|', right = '|' } or { left = '', right = '' }
+
+-- ===========================================
 require('lualine').setup({
   options = {
     theme = 'flexoki',
     globalstatus = false,
     section_separators = section_seps,
     component_separators = comp_seps,
-    -- refresh = { statusline = 100 },
+    -- No aggressive refresh; let lualine decide
   },
 
-  -- LEFT: [N/I/V]  [ icon colored by FILE dirty]  [branch name colored by REPO dirty]  [file icon] [smart path colored by buffer modified]
+  -- LEFT: [N/I/V]  [ icon colored by FILE dirty]  [branch name colored by REPO dirty]  [smart path colored by buffer modified]
   sections = {
     lualine_a = {
       { 'mode', fmt = tiny_mode, padding = { left = 1, right = 1 } },
     },
 
-    -- Branch bits live in lualine_b
     lualine_b = {
-      -- Branch ICON (colored by single-file dirty)
+      -- Branch ICON (colored by single-file dirty; zero-cost)
       {
         function() return '' end,
         color = function()
-          return { fg = is_file_dirty() and COLORS.dirtyF or COLORS.clean, gui = 'bold' }
+          return { fg = file_dirty_vs_head() and COLORS.dirtyF or COLORS.clean, gui = 'bold' }
         end,
         padding = { left = 1, right = 0 },
         cond = winwide(50),
       },
-      -- Branch NAME (colored by repo dirty)
+      -- Branch NAME (colored by repo dirty; async-cached)
       {
         'branch',
-        icon = '', -- no icon; we render it separately
+        icon = '',
         color = function()
-          return { fg = is_repo_dirty() and COLORS.dirtyR or COLORS.clean, gui = 'bold' }
+          return { fg = repo_is_dirty() and COLORS.dirtyR or COLORS.clean, gui = 'bold' }
         end,
         padding = { left = 1, right = 1 },
         cond = winwide(50),
@@ -199,7 +239,6 @@ require('lualine').setup({
     },
 
     lualine_c = {
-      --{ file_icon, cond = have_icons, padding = { left = 1, right = 0 } },
       {
         function() return top_dir_plus_file() end,
         color = function()
@@ -215,7 +254,7 @@ require('lualine').setup({
       { 'filetype', icon_only = true, colored = true, padding = { left = 1, right = 0 }, cond = winwide(60) },
       {
         function()
-          local enc = (vim.bo.fenc ~= '' and vim.bo.fenc) or vim.o.enc
+          local enc = (vim.bo.fenc ~= '' and vim.o.fenc) or vim.o.enc
           return enc
         end,
         cond = not_utf8,
@@ -234,7 +273,8 @@ require('lualine').setup({
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
-      { file_icon, cond = have_icons, padding = { left = 1, right = 0 } },
+      -- If you want the icon, uncomment the next line:
+      -- { function() return file_icon() end, cond = have_icons, padding = { left = 1, right = 0 } },
       {
         function() return top_dir_plus_file() end,
         color = function()
@@ -249,11 +289,7 @@ require('lualine').setup({
   },
 })
 
--- Optional: refresh caches when you save or change buffers (keeps colors snappy)
-vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter', 'FocusGained' }, {
-  callback = function()
-    file_dirty_cache.ts = 0
-    repo_dirty_cache.ts = 0
-  end,
-})
+-- Optional: if you want to absolutely stop cursor "blink reset" at idle:
+-- vim.o.showmode = false
+-- vim.opt.guicursor:append('a:blinkon0')
 

@@ -20,10 +20,11 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
-    pylsp-rope = {
-      url = "path:/Users/spott/code/others_code/pylsp-rope";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
+    # This is disabled for now, as it's not working
+    # pylsp-rope = {
+    #   url = "path:/Users/spott/code/others_code/pylsp-rope";
+    #   inputs.nixpkgs.follows = "nixpkgs-stable";
+    # };
 
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
@@ -43,7 +44,7 @@
     nix-vscode-extensions,
     runpodctl,
     nix-darwin,
-    pylsp-rope,
+    #pylsp-rope,
     nix-rosetta-builder,
     ...
   }: let
@@ -55,7 +56,7 @@
     };
     overlays = [
       overlay-unstable
-      pylsp-rope.overlays.default
+        #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
       runpodctl.overlays.default
     ];

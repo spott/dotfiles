@@ -36,6 +36,7 @@ in {
     python312Packages.rope
     python312Packages.debugpy
     uv
+    lazygit
     pylspEnv
   ];
 
@@ -59,6 +60,9 @@ in {
     telescope-fzf-native-nvim
     telescope-nvim
 
+    # window management
+    nvim-window-picker
+
     # completion
     cmp-async-path
     nvim-cmp
@@ -78,6 +82,7 @@ in {
     # git
     neogit
     diffview-nvim
+    lazygit-nvim
 
     # LSP
     cmp-nvim-lsp
