@@ -39,6 +39,7 @@
 
     # Download:
     #unstable.monolith # singlepage downloader for web pages.
+    aria2
 
     # accounting:
     hledger # accounting software
