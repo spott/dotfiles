@@ -159,25 +159,7 @@
         "nix-rosetta-builder": "nix-rosetta-builder",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-stable": "nixpkgs-stable",
-        "runpodctl": "runpodctl"
-      }
-    },
-    "runpodctl": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs-stable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1696463832,
-        "narHash": "sha256-C1q204jrIazL/onB54CK/8Tc25ho8H8rs5hd8KEcKOo=",
-        "path": "/Users/spott/Documents/code/my_code/flakes/runpod",
-        "type": "path"
-      },
-      "original": {
-        "path": "/Users/spott/Documents/code/my_code/flakes/runpod",
-        "type": "path"
+        "nixpkgs-stable": "nixpkgs-stable"
       }
     }
   },

@@ -4,7 +4,7 @@
     ansible
     kubectl
     kubernetes-helm
-    runpodctl
+    #runpodctl
 
     # cloud
     unstable.awscli2 #<- This was annoying and broke all help text

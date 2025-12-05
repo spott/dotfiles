@@ -15,10 +15,10 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
-    runpodctl = {
-      url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
+    # runpodctl = {
+    #   url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
+    #   inputs.nixpkgs.follows = "nixpkgs-stable";
+    # };
 
     # This is disabled for now, as it's not working
     # pylsp-rope = {
@@ -42,7 +42,7 @@
     nixpkgs-stable,
     home-manager,
     nix-vscode-extensions,
-    runpodctl,
+    #runpodctl,
     nix-darwin,
     #pylsp-rope,
     nix-rosetta-builder,
@@ -58,7 +58,7 @@
       overlay-unstable
         #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
-      runpodctl.overlays.default
+        #runpodctl.overlays.default
     ];
 
     pkgs = system:
