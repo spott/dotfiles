@@ -10,12 +10,21 @@ if vim.fn.has("termguicolors") == 1 then
   vim.opt.termguicolors = true
 end
 
+-- a few emacs-like keybindings
 vim.keymap.set('i', '<C-e>', '<End>')
 vim.keymap.set('i', '<C-a>', '<Home>')
+vim.keymap.set('i', '<C-f>', '<C-o>l', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-b>', '<C-o>h', { noremap = true, silent = true })
 
--- preventing flickering blinking cursor
--- vim.o.showmode = false         -- avoid extra mode messages too
--- vim.opt.guicursor:append('a:blinkon0')
+--vim.keymap.set('x', '
+
+-- enable diff vs. original file
+-- after importing a file using R, run :DiffOrig to get the diff from the original file.
+vim.cmd([[
+  command! DiffOrig vert new | setlocal buftype=nofile | read ++edit # | 0d_
+        \ | diffthis | wincmd p | diffthis
+]])
+
 
 -- treesitter config
 require('nvim-treesitter.configs').setup {

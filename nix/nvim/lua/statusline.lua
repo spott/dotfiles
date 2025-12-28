@@ -16,31 +16,88 @@ local function project_root()
   return uv.cwd()
 end
 
+local function smart_path_tail(rel)
+  -- Always keep last two path components; keep more from the left if there is room
+  local parts = {}
+  for seg in rel:gmatch('[^/]+') do
+    parts[#parts + 1] = seg
+  end
+
+  -- 0/1/2 components: nothing fancy needed
+  if #parts <= 2 then
+    return rel
+  end
+
+  -- Rough max length based on window width (tune the constant if you like)
+  local win = vim.fn.winwidth(0)
+  local max_len = math.max(20, win - 30)
+
+  -- Start with last two components
+  local res = { parts[#parts - 1], parts[#parts] }
+  local len = #res[1] + 1 + #res[2] -- "dir/file"
+
+  -- Try to prepend earlier components while there is room
+  local i = #parts - 2
+  while i >= 1 do
+    local seg = parts[i]
+    local new_len = #seg + 1 + len -- "seg/...existing..."
+    local extra = 2                -- room for "…/"
+    if new_len + extra > max_len then
+      break
+    end
+    table.insert(res, 1, seg)
+    len = new_len
+    i = i - 1
+  end
+
+  if i >= 1 then
+    -- We had to drop some leading components
+    return '…/' .. table.concat(res, '/')
+  else
+    -- We kept everything
+    return table.concat(res, '/')
+  end
+end
+
 local function top_dir_plus_file()
   local full = vim.api.nvim_buf_get_name(0)
-  if full == '' then return '[No Name]' end
+  if full == '' then
+    return '[No Name]'
+  end
+
   local root = project_root()
   local rel
   if root and full:sub(1, #root) == root then
-    rel = full:sub(#root + 2)
+    rel = full:sub(#root + 2) -- strip "<root>/"
   else
+    -- Outside project root: just use filename, nothing to shorten
     rel = vim.fn.fnamemodify(full, ':t')
   end
-  local parts = {}
-  for seg in rel:gmatch('[^/]+') do parts[#parts+1] = seg end
-  if #parts >= 2 then return parts[1] .. '/' .. parts[#parts] end
-  return parts[#parts]
+
+  return smart_path_tail(rel)
 end
 
 local function tiny_mode(m)
   m = (m or ''):upper()
   local map = {
-    NORMAL='N', INSERT='I', VISUAL='V', ['V-LINE']='V', ['V-BLOCK']='V',
-    SELECT='S', ['S-LINE']='S', ['S-BLOCK']='S',
-    REPLACE='R', ['V-REPLACE']='R',
-    COMMAND='C', EX='X', MORE='M', CONFIRM='?', SHELL='!', TERM='T'
+    NORMAL = 'N',
+    INSERT = 'I',
+    VISUAL = 'V',
+    ['V-LINE'] = 'V',
+    ['V-BLOCK'] = 'V',
+    SELECT = 'S',
+    ['S-LINE'] = 'S',
+    ['S-BLOCK'] = 'S',
+    REPLACE = 'R',
+    ['V-REPLACE'] = 'R',
+    COMMAND = 'C',
+    EX = 'X',
+    MORE = 'M',
+    CONFIRM = '?',
+    SHELL = '!',
+    TERM = 'T'
   }
-  return map[m] or (m:sub(1,1) ~= '' and m:sub(1,1) or '?')
+  return map[m] or (m:sub(1, 1) ~= '' and m:sub(1, 1) or '?')
 end
 
 local function not_utf8()
@@ -83,13 +140,13 @@ end
 -- simple contrast booster (darken on light bg, lighten on dark bg)
 local function boost_contrast(fg, bg)
   if not fg or not bg then return fg end
-  local function to_rgb(h) return tonumber(h:sub(2,3),16), tonumber(h:sub(4,5),16), tonumber(h:sub(6,7),16) end
-  local fr,fgc,fb = to_rgb(fg); local br,bg_,bb = to_rgb(bg)
-  local bg_is_light = (0.2126*br + 0.7152*bg_ + 0.0722*bb) > 127
-  local factor = bg_is_light and 0.75 or 1.25  -- darken a bit on light bg; lighten on dark
-  local nr = math.max(0, math.min(255, math.floor(fr*factor)))
-  local ng = math.max(0, math.min(255, math.floor(fgc*factor)))
-  local nb = math.max(0, math.min(255, math.floor(fb*factor)))
+  local function to_rgb(h) return tonumber(h:sub(2, 3), 16), tonumber(h:sub(4, 5), 16), tonumber(h:sub(6, 7), 16) end
+  local fr, fgc, fb = to_rgb(fg); local br, bg_, bb = to_rgb(bg)
+  local bg_is_light = (0.2126 * br + 0.7152 * bg_ + 0.0722 * bb) > 127
+  local factor = bg_is_light and 0.75 or 1.25 -- darken a bit on light bg; lighten on dark
+  local nr = math.max(0, math.min(255, math.floor(fr * factor)))
+  local ng = math.max(0, math.min(255, math.floor(fgc * factor)))
+  local nb = math.max(0, math.min(255, math.floor(fb * factor)))
   return string.format('#%02x%02x%02x', nr, ng, nb)
 end
 
@@ -97,21 +154,52 @@ local BG = get_bg()
 
 local COLORS = {
   -- Clean “OK” tone (try GitSignsAdd/DiffAdd/String/Identifier)
-  clean  = boost_contrast(pick_fg({ 'GitSignsAdd', 'DiffAdd', 'String', 'Identifier' }, '#2e7d32'), BG),
+  clean         = boost_contrast(pick_fg({ 'GitSignsAdd', 'DiffAdd', 'String', 'Identifier' }, '#2e7d32'), BG),
 
   -- Strong red for errors/dirty file
-  dirtyF = boost_contrast(pick_fg({ 'DiagnosticError', 'ErrorMsg', 'Error', 'DiffDelete' }, '#b00020'), BG),
+  dirtyF        = boost_contrast(pick_fg({ 'DiagnosticError', 'ErrorMsg', 'Error', 'DiffDelete' }, '#b00020'), BG),
 
   -- Amber/yellow for repo dirty
-  dirtyR = boost_contrast(pick_fg({ 'DiagnosticWarn', 'WarningMsg', 'Todo' }, '#b36b00'), BG),
+  dirtyR        = boost_contrast(pick_fg({ 'DiagnosticWarn', 'WarningMsg', 'Todo' }, '#b36b00'), BG),
 
   -- Filename (clean): prefer StatusLine fg or Normal fg
-  fnameM = boost_contrast(pick_fg({ 'StatusLine', 'Normal', 'Title' }, '#1e293b'), BG),
+  fnameM        = boost_contrast(pick_fg({ 'StatusLine', 'Normal', 'Title' }, '#1e293b'), BG),
 
   -- Filename (modified): reuse dirty red
-  fnameD = boost_contrast(pick_fg({ 'DiagnosticError', 'ErrorMsg', 'Error' }, '#b00020'), BG),
+  fnameD        = boost_contrast(pick_fg({ 'DiagnosticError', 'ErrorMsg', 'Error' }, '#b00020'), BG),
+
+  -- "Black" when clean: prefer Normal fg, else hard black
+  fnameNC_clean = boost_contrast(
+    pick_fg({ 'StatusLineNC', 'Normal' }, '#000000'),
+    BG
+  ),
+  -- Muted red when modified: darker fallback than active dirty red
+  fnameNC_dirty = boost_contrast(
+    pick_fg({ 'DiagnosticWarn', 'DiffText' }, '#7f1d1d'),
+    BG
+  ),
 }
 -- -----------------------------------------------
+
+local function stl_bufnr()
+  local winid = vim.g.statusline_winid
+  if winid and winid ~= 0 then
+    return vim.api.nvim_win_get_buf(winid)
+  end
+  return vim.api.nvim_get_current_buf()
+end
+
+local function stl_modified()
+  local bufnr = stl_bufnr()
+  local ok, modified = pcall(function()
+    return vim.bo[bufnr].modified
+  end)
+  if ok then
+    return modified
+  end
+  return vim.bo.modified
+end
+
 
 -- devicons (optional)
 local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
@@ -131,7 +219,7 @@ local has_gitsigns, _gitsigns = pcall(require, 'gitsigns')
 local function file_dirty_vs_head()
   if has_gitsigns and vim.b.gitsigns_status_dict then
     local d = vim.b.gitsigns_status_dict
-    local a = tonumber(d.added or 0)   or 0
+    local a = tonumber(d.added or 0) or 0
     local c = tonumber(d.changed or 0) or 0
     local r = tonumber(d.removed or 0) or 0
     return (a + c + r) > 0
@@ -161,7 +249,9 @@ local function schedule_repo_scan(root)
       local dirty = false
       if data then
         for _, l in ipairs(data) do
-          if l and l ~= '' then dirty = true; break end
+          if l and l ~= '' then
+            dirty = true; break
+          end
         end
       end
       entry.dirty = dirty
@@ -251,7 +341,7 @@ require('lualine').setup({
     -- RIGHT: [diagnostics] [filetype icon-only] [encoding if not utf-8] [line:col]
     lualine_x = {
       { 'diagnostics', cond = winwide(70), padding = 0 },
-      { 'filetype', icon_only = true, colored = true, padding = { left = 1, right = 0 }, cond = winwide(60) },
+      { 'filetype',    icon_only = true,   colored = true, padding = { left = 1, right = 0 }, cond = winwide(60) },
       {
         function()
           local enc = (vim.bo.fenc ~= '' and vim.o.fenc) or vim.o.enc
@@ -278,7 +368,11 @@ require('lualine').setup({
       {
         function() return top_dir_plus_file() end,
         color = function()
-          return { fg = (vim.bo.modified and COLORS.fnameD or COLORS.fnameM), gui = 'bold' }
+          if stl_modified() then
+            return { fg = COLORS.fnameNC_dirty, gui = 'bold' }
+          else
+            return { fg = COLORS.fnameNC_clean, gui = 'bold' }
+          end
         end,
         padding = { left = 1, right = 1 },
       },
@@ -292,4 +386,3 @@ require('lualine').setup({
 -- Optional: if you want to absolutely stop cursor "blink reset" at idle:
 -- vim.o.showmode = false
 -- vim.opt.guicursor:append('a:blinkon0')
-
