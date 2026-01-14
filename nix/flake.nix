@@ -66,6 +66,7 @@
         inherit system overlays;
         config = {allowUnfree = true;};
       };
+
   in {
     darwinConfigurations = {
       "Normandy" = nix-darwin.lib.darwinSystem {

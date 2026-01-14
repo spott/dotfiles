@@ -59,6 +59,20 @@ local py = vim.env.DAP_PYTHON or 'python3'
 dap_python.setup(py)
 dap_python.test_runner = 'pytest'   -- integrate with pytest
 
+-- ---- Child debugpy attach config ----
+local CHILD_HOST = "127.0.0.1"
+local CHILD_PORT = 5679
+
+dap.configurations.python = dap.configurations.python or {}
+
+table.insert(dap.configurations.python, {
+  type = "python",
+  request = "attach",
+  name = "Attach to child (debugpy)",
+  connect = { host = CHILD_HOST, port = CHILD_PORT },
+  justMyCode = false,
+})
+
 -- Handy keymaps (kept close to DAP so they don’t depend on LspAttach)
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true, desc = '' }
@@ -187,6 +201,57 @@ vim.keymap.set('n', '<leader>dx', function()
   end
   -- UI will auto-close via your existing listeners
 end, { noremap = true, silent = true, desc = 'DAP: kill all sessions (<leader>dx)' })
+
+
+-- ---- <leader>dF: Launch parent and auto-attach child ----
+vim.keymap.set("n", "<leader>dF", function()
+  local file = vim.fn.expand("%:p")
+  local cwd  = vim.fn.fnamemodify(file, ":h")
+
+  local parent_cfg = {
+    type = "python",
+    request = "launch",
+    name = "Parent (auto-attach child)",
+    program = file,
+    cwd = cwd,
+    justMyCode = false,
+    console = "integratedTerminal",
+  }
+
+  local child_cfg = {
+    type = "python",
+    request = "attach",
+    name = "Child (debugpy)",
+    connect = { host = "127.0.0.1", port = 5679 },
+    justMyCode = false,
+  }
+
+  local key = "auto_attach_child_once"
+  dap.listeners.after.event_initialized[key] = function(session)
+    if session and session.config and session.config.name == parent_cfg.name then
+      dap.listeners.after.event_initialized[key] = nil
+      -- If you used --wait-for-client, schedule is enough.
+      vim.schedule(function()
+        dap.run(child_cfg)
+      end)
+      -- If your child isn't waiting, you might prefer a tiny delay:
+      -- vim.defer_fn(function() dap.run(child_cfg) end, 100)
+    end
+  end
+
+  dap.run(parent_cfg)
+end, { noremap = true, silent = true, desc = "DAP: launch parent and auto-attach child" })
+
+-- ---- <leader>da: Attach to child debugpy ----
+vim.keymap.set("n", "<leader>da", function()
+  dap.run({
+    type = "python",
+    request = "attach",
+    name = "Attach to child (debugpy)",
+    connect = { host = "127.0.0.1", port = 5679 },
+    justMyCode = false,
+  })
+end, { noremap = true, silent = true, desc = "DAP: attach to child debugpy" })
 
 -- dap.up/down: navigate DAP frames --
 local function set_frame_nav_maps()

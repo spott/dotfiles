@@ -1,4 +1,21 @@
 {pkgs,...}: {
+  imports = [
+    ./sandbox/darwin.nix
+  ];
+
+  # Sandbox user configuration
+  sandbox = {
+    enable = true;
+    primaryUser = "spott";
+    users = [
+      {
+        name = "ai";
+        # Add your SSH public key from 1Password here:
+        # sshPublicKey = "ssh-ed25519 AAAA...";
+        sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEeWZXJFqGzNZhGbODh6ucaqimqE8AKYowtQ2kpzAnAh";
+      }
+    ];
+  };
   # Nix configuration ------------------------------------------------------------------------------
   users = {
     users = {

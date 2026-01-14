@@ -3,6 +3,14 @@
   # SSH
   #
   programs.ssh.enable = true;
+
+  # Sandbox users
+  programs.ssh.matchBlocks."sandbox-ai" = {
+    host = "sandbox-ai";
+    hostname = "localhost";
+    user = "sandbox-ai";
+    # 1Password agent handles key via IdentityAgent
+  };
   programs.ssh.controlMaster = "auto";
   programs.ssh.controlPersist = "30m";
   programs.ssh.controlPath = "~/.cache/ssh/master-%r@%n:%p";
