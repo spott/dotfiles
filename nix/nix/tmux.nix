@@ -26,6 +26,9 @@
     # this might be too agressive, we will see.
     set-window-option -g aggressive-resize on
 
+    # this resizes the window to the size of the client immediately
+    bind-key R run-shell -F 'tmux resize-window -t "#{window_id}" -x "#{client_width}" -y "#{client_height}"'
+
     # colors:
     set -as terminal-overrides ",*:Tc"
     set -as terminal-features ",*:RGB"
