@@ -52,7 +52,7 @@ in {
     vim-ReplaceWithRegister
 
     # treesitter
-    nvim-treesitter.withAllGrammars
+    nvim-treesitter-legacy.withAllGrammars
     nvim-treesitter-textobjects
     nvim-ts-context-commentstring
 
