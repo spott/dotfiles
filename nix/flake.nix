@@ -3,10 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -27,7 +27,7 @@
     # };
 
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -42,9 +42,7 @@
     nixpkgs-stable,
     home-manager,
     nix-vscode-extensions,
-    #runpodctl,
     nix-darwin,
-    #pylsp-rope,
     nix-rosetta-builder,
     ...
   }: let
@@ -54,8 +52,15 @@
         config.allowUnfree = true;
       };
     };
+    # https://github.com/NixOS/nixpkgs/issues/488689
+    overlay-inetutils-darwin = final: prev: prev.lib.optionalAttrs prev.stdenv.isDarwin {
+      inetutils = prev.inetutils.overrideAttrs (old: {
+        hardeningDisable = (old.hardeningDisable or []) ++ ["format"];
+      });
+    };
     overlays = [
       overlay-unstable
+      overlay-inetutils-darwin
         #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
         #runpodctl.overlays.default

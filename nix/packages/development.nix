@@ -8,7 +8,7 @@
     # python:
     unstable.uv
     pipenv
-    python312Full
+    python312
     unstable.ruff
     unstable.ty
     unstable.pyrefly

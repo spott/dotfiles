@@ -11,9 +11,12 @@
     user = "sandbox-ai";
     # 1Password agent handles key via IdentityAgent
   };
-  programs.ssh.controlMaster = "auto";
-  programs.ssh.controlPersist = "30m";
-  programs.ssh.controlPath = "~/.cache/ssh/master-%r@%n:%p";
+  programs.ssh.enableDefaultConfig = false;
+  programs.ssh.matchBlocks."*" = {
+    controlMaster = "auto";
+    controlPersist = "30m";
+    controlPath = "~/.cache/ssh/master-%r@%n:%p";
+  };
 
   # dstack
   programs.ssh.includes = ["~/.dstack/ssh/config" "~/.orbstack/ssh/config"];

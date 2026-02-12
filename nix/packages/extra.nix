@@ -22,7 +22,7 @@
     mtr-gui # network diag tool
     bandwhich # bandwidth by process
 
-    dblab
+    #dblab
 
     # pdf utils
     poppler

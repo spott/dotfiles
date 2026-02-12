@@ -6,7 +6,7 @@
 }: {
   programs.zsh.enable = true;
   programs.zsh.package = pkgs.zsh;
-  programs.zsh.dotDir = ".config/zsh";
+  programs.zsh.dotDir = "${config.xdg.configHome}/zsh";
   programs.zsh.initContent = lib.mkBefore "source \"${config.home.homeDirectory}/.config/zsh/.zshrc_personal\"";
   programs.zsh.history.path = "\$ZDOTDIR/.zsh_history";
   programs.zsh.history.extended = true;

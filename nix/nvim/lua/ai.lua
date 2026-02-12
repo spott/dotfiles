@@ -17,4 +17,13 @@ require("supermaven-nvim").setup({
   -- end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
 })
 
-
+vim.keymap.set('n', '<leader>sm', function()
+  local api = require("supermaven-nvim.api")
+  if api.is_running() then
+    api.stop()
+    vim.notify("Supermaven disabled", vim.log.levels.INFO)
+  else
+    api.start()
+    vim.notify("Supermaven enabled", vim.log.levels.INFO)
+  end
+end, { desc = "Toggle Supermaven", silent = true })

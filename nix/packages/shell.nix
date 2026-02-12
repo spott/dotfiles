@@ -3,7 +3,7 @@
     bat # need to install this, as home-manager on nixos doesn't seem to install packages if you enable them?
     delta
     bottom
-    du-dust
+    dust
     fd
     duf
     dogdns
