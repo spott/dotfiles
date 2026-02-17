@@ -14,6 +14,9 @@ vim.lsp.config('ty', {
         variableTypes = true,
         cellArgumentNames = true,
       },
+      completions = {
+        autoimport = true,
+      },
       experimental = {
         rename = true,
         autoimport = true,
@@ -42,55 +45,55 @@ vim.lsp.config('ruff', {
 })
 
 
-local pylsp_bin = vim.env.PYLSP_BIN or "pylsp"
-vim.lsp.config("pylsp", {
-  single_file_support = true,
-  autostart = true,
-  filetypes = { "python" },
-  capabilities = capabilities,
-  --cmd = { 'pylsp' },
-  cmd = { pylsp_bin, '-vv', '--log-file', vim.fn.stdpath('cache') .. '/pylsp.log' },
-  root_markers = py_root_markers,
-  settings = {
-    pylsp = {
-      plugins = {
-        -- use Ruff for lint/fix; drop overlapping linters
-        pycodestyle = { enabled = false },
-        mccabe      = { enabled = false },
-        pyflakes    = { enabled = false },
-        pylint      = { enabled = false },
-        autopep8    = { enabled = false },
-
-
-        -- Ruff inside pylsp:
-        ruff = {
-          enabled = false,
-          -- format = { enabled = true },  -- provides formatting via Ruff
-          -- organizeImports = true,
-        },
-
-        -- Rope refactors (provided by pylsp-rope)
-        pylsp_rope = {
-          rename = false, -- disable rope rename
-        },
-        -- make sure competing rename providers are off
-        jedi_rename = { enabled = false },
-        rope_rename = { enabled = false },
-        rope_autoimport = { enabled = false, completions = { enabled = false }, code_actions = { enabled = false } },
-        preload = { enabled = false },
-        yapf = { enabled = false },
-        flake8 = { enabled = false },
-
-
-        -- Jedi stays for defs/hover/completion when ty doesn't know something yet
-        jedi_completion = { enabled = false, fuzzy = true },
-        jedi_definition = { enabled = false },
-        jedi_hover      = { enabled = false },
-        jedi_symbols    = { enabled = false },
-      }
-    }
-  }
-})
+-- local pylsp_bin = vim.env.PYLSP_BIN or "pylsp"
+-- vim.lsp.config("pylsp", {
+--   single_file_support = true,
+--   autostart = true,
+--   filetypes = { "python" },
+--   capabilities = capabilities,
+--   --cmd = { 'pylsp' },
+--   cmd = { pylsp_bin, '-vv', '--log-file', vim.fn.stdpath('cache') .. '/pylsp.log' },
+--   root_markers = py_root_markers,
+--   settings = {
+--     pylsp = {
+--       plugins = {
+--         -- use Ruff for lint/fix; drop overlapping linters
+--         pycodestyle = { enabled = false },
+--         mccabe      = { enabled = false },
+--         pyflakes    = { enabled = false },
+--         pylint      = { enabled = false },
+--         autopep8    = { enabled = false },
+--
+--
+--         -- Ruff inside pylsp:
+--         ruff = {
+--           enabled = false,
+--           -- format = { enabled = true },  -- provides formatting via Ruff
+--           -- organizeImports = true,
+--         },
+--
+--         -- Rope refactors (provided by pylsp-rope)
+--         pylsp_rope = {
+--           rename = false, -- disable rope rename
+--         },
+--         -- make sure competing rename providers are off
+--         jedi_rename = { enabled = false },
+--         rope_rename = { enabled = false },
+--         rope_autoimport = { enabled = false, completions = { enabled = false }, code_actions = { enabled = false } },
+--         preload = { enabled = false },
+--         yapf = { enabled = false },
+--         flake8 = { enabled = false },
+--
+--
+--         -- Jedi stays for defs/hover/completion when ty doesn't know something yet
+--         jedi_completion = { enabled = false, fuzzy = true },
+--         jedi_definition = { enabled = false },
+--         jedi_hover      = { enabled = false },
+--         jedi_symbols    = { enabled = false },
+--       }
+--     }
+--   }
+-- })
 
 vim.lsp.config('efm', {
   autostart = true,
@@ -202,7 +205,7 @@ vim.lsp.enable("terraform_lsp")
 vim.lsp.enable('efm')
 vim.lsp.enable('ty')
 vim.lsp.enable('ruff')
-vim.lsp.enable('pylsp')
+-- vim.lsp.enable('pylsp')
 vim.lsp.enable("nil_ls")
 
 
