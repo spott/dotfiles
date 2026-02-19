@@ -16,8 +16,6 @@ vim.keymap.set('i', '<C-a>', '<Home>')
 vim.keymap.set('i', '<C-f>', '<C-o>l', { noremap = true, silent = true })
 vim.keymap.set('i', '<C-b>', '<C-o>h', { noremap = true, silent = true })
 
---vim.keymap.set('x', '
-
 -- enable diff vs. original file
 -- after importing a file using R, run :DiffOrig to get the diff from the original file.
 vim.cmd([[
@@ -26,106 +24,118 @@ vim.cmd([[
 ]])
 
 
--- treesitter config
-require('nvim-treesitter.configs').setup {
+-- ==========================================================================
+-- Treesitter (main branch)
+-- ==========================================================================
+-- The new nvim-treesitter main branch does not use require('nvim-treesitter.configs').setup.
+-- Highlighting, folding, and indentation are enabled via Neovim's native APIs.
+-- Parsers are installed by Nix via withAllGrammars, so no :TSInstall needed.
 
-  sync_install = false,
+-- Enable treesitter highlighting for all filetypes with a parser
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('treesitter_start', { clear = true }),
+  callback = function(ev)
+    pcall(vim.treesitter.start, ev.buf)
+    -- experimental treesitter-based indentation (replaces indent = { enable = true })
+    vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+})
 
-  auto_install = false,
+-- fold using treesitter (now via Neovim core)
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99 -- folds don't show up initially
 
-  highlight = {
-    enable = true,
+
+-- ==========================================================================
+-- Treesitter textobjects (main branch)
+-- ==========================================================================
+-- The textobjects plugin is now standalone — no longer nested inside
+-- nvim-treesitter.configs. Keymaps must be set explicitly.
+
+require("nvim-treesitter-textobjects").setup {
+  select = {
+    lookahead = true,
+    selection_modes = {
+      ['@parameter.outer'] = 'v',  -- charwise
+      ['@function.outer'] = 'V',   -- linewise
+      ['@class.outer'] = 'V',      -- linewise
+    },
+    include_surrounding_whitespace = true,
   },
-  indent = {
-    enable = true
+  move = {
+    set_jumps = true,
   },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ["af"] = { query = "@function.outer", desc = "select the entire function including sig and declaration" },
-        ["if"] = { query = "@function.inner", desc = "select the inner part of a function (excluding sig and declaration)" },
-        ["ac"] = { query = "@class.outer", desc = "select the whole class region" },
-        ["ic"] = { query = "@class.inner", desc = "select the inner part of the class region" },
-        ["as"] = { query = "@scope", query_group = "locals", desc = "select language scope" },
-      },
-      selection_modes = {
-        ['@parameter.outer'] = 'v', -- charwise
-        ['@function.outer'] = 'V',  -- linewise
-        ['@class.outer'] = 'V', -- blockwise
-      },
-
-      include_surrounding_whitespace = true,
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ["<leader>a"] = "@parameter.inner",
-      },
-      swap_previous = {
-        ["<leader>A"] = "@parameter.inner",
-      },
-    },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        ["]m"] = { query = "@function.outer", desc = "after the function" },
-        ["]]"] = { query = "@class.outer", desc = "Next class start" },
-        --
-        -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
-        -- ["]o"] = { query = "@loop.*", desc = "next,
-        -- -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
-        --
-        -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
-        -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
-        ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-        ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-      },
-      goto_next_end = {
-        ["]M"] = "@function.outer",
-        ["]["] = "@class.outer",
-      },
-      goto_previous_start = {
-        ["[m"] = "@function.outer",
-        ["[["] = "@class.outer",
-      },
-      goto_previous_end = {
-        ["[M"] = "@function.outer",
-        ["[]"] = "@class.outer",
-      },
-      -- Below will go to either the start or the end, whichever is closer.
-      -- Use if you want more granular movements
-      -- Make it even more gradual by adding multiple queries and regex.
-      -- goto_next = {
-      --   ["]d"] = "@conditional.outer",
-      -- },
-      -- goto_previous = {
-      --   ["[d"] = "@conditional.outer",
-      -- }
-    },
-
-  }
 }
 
+-- Select keymaps
+local ts_select = require("nvim-treesitter-textobjects.select")
+vim.keymap.set({ "x", "o" }, "af", function()
+  ts_select.select_textobject("@function.outer", "textobjects")
+end, { desc = "select the entire function including sig and declaration" })
+vim.keymap.set({ "x", "o" }, "if", function()
+  ts_select.select_textobject("@function.inner", "textobjects")
+end, { desc = "select the inner part of a function" })
+vim.keymap.set({ "x", "o" }, "ac", function()
+  ts_select.select_textobject("@class.outer", "textobjects")
+end, { desc = "select the whole class region" })
+vim.keymap.set({ "x", "o" }, "ic", function()
+  ts_select.select_textobject("@class.inner", "textobjects")
+end, { desc = "select the inner part of the class region" })
+vim.keymap.set({ "x", "o" }, "as", function()
+  ts_select.select_textobject("@scope", "locals")
+end, { desc = "select language scope" })
 
--- fold using nvim treesitter
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldlevel = 99 --this makes the folds not show up initially
+-- Move keymaps
+local ts_move = require("nvim-treesitter-textobjects.move")
+vim.keymap.set({ "n", "x", "o" }, "]m", function()
+  ts_move.goto_next_start("@function.outer", "textobjects")
+end, { desc = "Next function start" })
+vim.keymap.set({ "n", "x", "o" }, "]M", function()
+  ts_move.goto_next_end("@function.outer", "textobjects")
+end, { desc = "Next function end" })
+vim.keymap.set({ "n", "x", "o" }, "]]", function()
+  ts_move.goto_next_start("@class.outer", "textobjects")
+end, { desc = "Next class start" })
+vim.keymap.set({ "n", "x", "o" }, "][", function()
+  ts_move.goto_next_end("@class.outer", "textobjects")
+end, { desc = "Next class end" })
+vim.keymap.set({ "n", "x", "o" }, "[m", function()
+  ts_move.goto_previous_start("@function.outer", "textobjects")
+end, { desc = "Prev function start" })
+vim.keymap.set({ "n", "x", "o" }, "[M", function()
+  ts_move.goto_previous_end("@function.outer", "textobjects")
+end, { desc = "Prev function end" })
+vim.keymap.set({ "n", "x", "o" }, "[[", function()
+  ts_move.goto_previous_start("@class.outer", "textobjects")
+end, { desc = "Prev class start" })
+vim.keymap.set({ "n", "x", "o" }, "[]", function()
+  ts_move.goto_previous_end("@class.outer", "textobjects")
+end, { desc = "Prev class end" })
+vim.keymap.set({ "n", "x", "o" }, "]s", function()
+  ts_move.goto_next_start("@scope", "locals")
+end, { desc = "Next scope" })
+vim.keymap.set({ "n", "x", "o" }, "]z", function()
+  ts_move.goto_next_start("@fold", "folds")
+end, { desc = "Next fold" })
 
--- search stuff
+-- Swap keymaps
+local ts_swap = require("nvim-treesitter-textobjects.swap")
+vim.keymap.set("n", "<leader>a", function()
+  ts_swap.swap_next("@parameter.inner", "textobjects")
+end, { desc = "Swap with next parameter" })
+vim.keymap.set("n", "<leader>A", function()
+  ts_swap.swap_previous("@parameter.inner", "textobjects")
+end, { desc = "Swap with previous parameter" })
+
+-- NOTE: incremental_selection (gnn/grn/grc/grm) was removed in the rewrite.
+-- Textobjects (af/if/ac/ic above) serve a similar purpose.
+-- If you miss it, consider https://github.com/sustech-data/wildfire.nvim
+
+
+-- ==========================================================================
+-- Search stuff
+-- ==========================================================================
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.hlsearch = true
@@ -194,7 +204,6 @@ require('Comment').setup {
 }
 
 if not vim.g.vscode then
-  --print("Starting plugin loading...")
 
   vim.cmd [[
     packadd nvim-lspconfig
@@ -213,25 +222,13 @@ if not vim.g.vscode then
     packadd nvim-dap-ui
     packadd nvim-dap-virtual-text
     packadd nvim-nio
-  
+
     packadd triptych.nvim
 
     packadd neotest
     packadd neotest-python
 
   ]]
-
-  -- require('flexoki').setup({
-  --   variant = "auto",
-  --   --dark_variant = "dark",
-  -- })
-
-  -- local ok, flexoki = pcall(require, "flexoki")
-  -- if not ok then
-  --   print("Failed to load flexoki:", flexoki)
-  -- else
-  --   print("loaded flexoki")
-  -- end
 
   require("flexoki").setup({
     variant = "auto", -- auto, moon, or dawn
@@ -247,82 +244,17 @@ if not vim.g.vscode then
         italic = false,
     },
 
-    -- groups = {
-    --     border = "muted",
-    --     link = "purple_two",
-    --     panel = "surface",
-    --
-    --     error = "red_one",
-    --     hint = "purple_one",
-    --     info = "cyan_one",
-    --     ok = "green_one",
-    --     warn = "orange_one",
-    --     note = "blue_one",
-    --     todo = "magenta_one",
-    --
-    --     git_add = "green_one",
-    --     git_change = "yellow_one",
-    --     git_delete = "red_one",
-    --     git_dirty = "yellow_one",
-    --     git_ignore = "muted",
-    --     git_merge = "purple_one",
-    --     git_rename = "blue_one",
-    --     git_stage = "purple_one",
-    --     git_text = "magenta_one",
-    --     git_untracked = "subtle",
-    --
-    --     h1 = "purple_two",
-    --     h2 = "cyan_two",
-    --     h3 = "magenta_two",
-    --     h4 = "orange_two",
-    --     h5 = "blue_two",
-    --     h6 = "cyan_two",
-    -- },
-    --
-    -- palette = {
-    --     -- Override the builtin palette per variant
-    --     -- moon = {
-    --     --     base = '#100f0f',
-    --     --     overlay = '#1c1b1a',
-    --     -- },
-    -- },
-    --
     highlight_groups = {
         Comment = { fg = "subtle", italic = true },
-        -- VertSplit = { fg = "muted", bg = "muted" },
     },
-    --
-    -- before_highlight = function(group, highlight, palette)
-    --     -- Disable all undercurls
-    --     -- if highlight.undercurl then
-    --     --     highlight.undercurl = false
-    --     -- end
-    --     --
-    --     -- Change palette colour
-    --     -- if highlight.fg == palette.blue_two then
-    --     --     highlight.fg = palette.cyan_two
-    --     -- end
-    -- end,
   })
 
-  --lualine
-  -- require('lualine').setup {
-  --   options = {
-  --     theme = 'flexoki'
-  --   }
-  -- }
-  --nnoremap <silent> <leader>gg :LazyGit<CR>
   require('telescope').load_extension('lazygit')
   vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { desc = 'Open LazyGit' })
 
   require('statusline') -- in lua/statusline.lua
 
   vim.cmd [[colorscheme flexoki]]
-    -- require("dracula").setup({
-    --   show_end_of_buffer = true,
-    --   transparent_bg = true,
-    --   italic_comment = true
-    -- })
 
 
   require('telescope').setup {
@@ -332,7 +264,6 @@ if not vim.g.vscode then
         override_generic_sorter = true, -- override the generic sorter
         override_file_sorter = true,    -- override the file sorter
         case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
-        -- the default case_mode is "smart_case"
       },
     }
   }
@@ -351,14 +282,6 @@ if not vim.g.vscode then
 
   vim.keymap.set('n', '<leader>gs', builtin.git_status, {})
 
-
-  -- local neogit = require('neogit')
-  -- neogit.setup {
-  --   graph_style = "kitty",
-  -- }
-  -- vim.keymap.set('n', '<leader>gg', neogit.open(), {})
-  -- vim.keymap.set('n', '<leader>gc', neogit.open({ "commit" }), {})
-
   vim.keymap.set('n', '<leader>bn', ':bnext<CR>', { silent = true, desc = 'Next buffer' })
   vim.keymap.set('n', '<leader>bp', ':bprevious<CR>', { silent = true, desc = 'Previous buffer' })
 
@@ -372,7 +295,7 @@ if not vim.g.vscode then
       ['<C-f>'] = cmp.mapping.scroll_docs(4),
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
     }),
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
@@ -388,11 +311,4 @@ if not vim.g.vscode then
   require('dap_config') -- in lua/dap_config.lua
   require('tests') -- in lua/tests.lua
 
-
-  -- vim.defer_fn(function()
-  --   local ok, _ = pcall(vim.cmd, 'colorscheme flexoki')
-  --   if not ok then
-  --     vim.notify('Failed to set colorscheme', vim.log.levels.WARN)
-  --   end
-  -- end, 100)
 end

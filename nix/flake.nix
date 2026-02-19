@@ -15,6 +15,12 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+    # this is necessary now because nvim-treesitter on nixpkgs is kinda broken
+    nvim-treesitter-main = {
+      url = "github:iofq/nvim-treesitter-main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # runpodctl = {
     #   url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
     #   inputs.nixpkgs.follows = "nixpkgs-stable";
@@ -44,26 +50,45 @@
     nix-vscode-extensions,
     nix-darwin,
     nix-rosetta-builder,
+    nvim-treesitter-main,
     ...
   }: let
     overlay-unstable = final: prev: {
       unstable = import nixpkgs {
         system = prev.system;
         config.allowUnfree = true;
+        overlays = [
+          nvim-treesitter-main.overlays.default
+          (final: prev: {
+            vimPlugins = prev.vimPlugins.extend (
+              f: p: {
+                nvim-treesitter = p.nvim-treesitter.withAllGrammars; # or withPlugins...
+                # also redefine nvim-treesitter-textobjects (any other plugins that depend on nvim-treesitter)
+                nvim-treesitter-textobjects = p.nvim-treesitter-textobjects.overrideAttrs {
+                  dependencies = [f.nvim-treesitter];
+                };
+                neotest = p.neotest.overrideAttrs {
+                  dependencies = [f.nvim-treesitter];
+                };
+              }
+            );
+          })
+        ];
       };
     };
     # https://github.com/NixOS/nixpkgs/issues/488689
-    overlay-inetutils-darwin = final: prev: prev.lib.optionalAttrs prev.stdenv.isDarwin {
-      inetutils = prev.inetutils.overrideAttrs (old: {
-        hardeningDisable = (old.hardeningDisable or []) ++ ["format"];
-      });
-    };
+    overlay-inetutils-darwin = final: prev:
+      prev.lib.optionalAttrs prev.stdenv.isDarwin {
+        inetutils = prev.inetutils.overrideAttrs (old: {
+          hardeningDisable = (old.hardeningDisable or []) ++ ["format"];
+        });
+      };
     overlays = [
       overlay-unstable
       overlay-inetutils-darwin
-        #pylsp-rope.overlays.default
+      #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
-        #runpodctl.overlays.default
+      #runpodctl.overlays.default
     ];
 
     pkgs = system:
@@ -71,7 +96,6 @@
         inherit system overlays;
         config = {allowUnfree = true;};
       };
-
   in {
     darwinConfigurations = {
       "Normandy" = nix-darwin.lib.darwinSystem {
