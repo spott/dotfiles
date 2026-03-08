@@ -63,6 +63,7 @@
         system = prev.system;
         config.allowUnfree = true;
         overlays = [
+          claude-code-nix.overlays.default
           nvim-treesitter-main.overlays.default
           (final: prev: {
             vimPlugins = prev.vimPlugins.extend (
