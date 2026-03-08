@@ -140,7 +140,12 @@
       };
     };
     homeManagerModules = {
-      devbox = import ./devbox.nix;
+      devbox = {pkgs, ...}: {
+        imports = [
+          (import ./devbox.nix)
+        ];
+        dotfiles.claude-code.package = claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      };
     };
     overlays = overlays;
   };

@@ -7,12 +7,17 @@ in {
       default = false;
       description = "Whether to skip the dangerous mode permission prompt.";
     };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.claude-code;
+      description = "The claude-code package to install.";
+    };
   };
 
   config = {
     programs.claude-code = {
       enable = true;
-      package = pkgs.unstable.claude-code-node;
+      package = cfg.package;
 
       settings = {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
