@@ -42,5 +42,7 @@ in {
         "research" = ./claude-code/commands/research.md;
       };
     };
+
+    home.file.".claude/settings.json".force = true;
   };
 }
