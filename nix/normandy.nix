@@ -9,6 +9,7 @@
     ./packages/gui.nix
     ./packages/images.nix
 
+    ./nix/claude-code.nix
     ./nix/direnv.nix
     ./nix/git.nix
     ./nix/fzf.nix

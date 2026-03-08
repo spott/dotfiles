@@ -4,6 +4,7 @@
     ./packages/development.nix
     ./packages/ai.nix
 
+    ./nix/claude-code.nix
     ./nix/direnv.nix
     ./nix/git.nix
     ./nix/fzf.nix
@@ -28,4 +29,5 @@
   manual.html.enable = false;
 
   dotfiles._1password.sshAgentConfig = false;
+  dotfiles.claude-code.allowDangerousMode = true;
 }

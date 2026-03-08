@@ -32,6 +32,10 @@
     #   inputs.nixpkgs.follows = "nixpkgs-stable";
     # };
 
+    claude-code-nix = {
+      url = "github:sadjow/claude-code-nix";
+    };
+
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
@@ -48,6 +52,7 @@
     nixpkgs-stable,
     home-manager,
     nix-vscode-extensions,
+    claude-code-nix,
     nix-darwin,
     nix-rosetta-builder,
     nvim-treesitter-main,
@@ -88,6 +93,7 @@
       overlay-inetutils-darwin
       #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
+      claude-code-nix.overlays.default
       #runpodctl.overlays.default
     ];
 
