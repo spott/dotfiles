@@ -12,7 +12,7 @@ in {
   config = {
     programs.claude-code = {
       enable = true;
-      package = pkgs.unstable.claude-code;
+      package = pkgs.unstable.claude-code-node;
 
       settings = {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
