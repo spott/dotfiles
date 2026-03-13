@@ -24,6 +24,10 @@ fi
 # Add .local/bin to path:
 export PATH="${PATH}:${HOME}/.local/bin"
 
+if [[ -e "/Applications/Obsidian.app" ]]; then
+  export PATH="${PATH}:/Applications/Obsidian.app/Contents/MacOS/"
+fi
+
 # poetry and helm config directories should be in the linux place:
 
 export XDG_CONFIG_HOME="${HOME}/.config/"
