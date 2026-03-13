@@ -48,6 +48,9 @@ in {
       };
     };
 
+    programs.zsh.shellAliases.claude = "LD_LIBRARY_PATH= command claude";
+
+    # force the settings file to be overwritten
     home.file.".claude/settings.json".force = true;
   };
 }
