@@ -41,6 +41,7 @@
     "spott"
   ];
   nix.settings.builders-use-substitutes = true;
+  nix.settings.always-allow-substitutes = true;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes
@@ -51,7 +52,14 @@
     systems = ["aarch64-linux"];
     ephemeral = true;
     maxJobs = 4;
+    # config.virtualisation.darwin-builder = {
+    #     diskSize = 40 * 1024;  # 40 GB
+    #     cores = 4;
+    #     memorySize = 4 * 1024;  # 4 GB RAM
+    #   };
   };
+
+
 
   environment.etc."resolver/sc.spott.us" = {
     text = ''
@@ -97,16 +105,18 @@
       hostName = "eu.nixbuild.net";
       system = "x86_64-linux";
       maxJobs = 100;
+      protocol = "ssh-ng";
       speedFactor = 1;
       supportedFeatures = [ "benchmark" "big-parallel" ];
     }
-    {
-      hostName = "eu.nixbuild.net";
-      system = "aarch64-linux";
-      maxJobs = 100;
-      speedFactor = 1;
-      supportedFeatures = [ "benchmark" "big-parallel" ];
-    }
+    # {
+    #   hostName = "eu.nixbuild.net";
+    #   system = "aarch64-linux";
+    #   maxJobs = 100;
+    #   protocol = "ssh-ng";
+    #   speedFactor = 1;
+    #   supportedFeatures = [ "benchmark" "big-parallel" ];
+    # }
   ];
 
   nix.distributedBuilds = true;
