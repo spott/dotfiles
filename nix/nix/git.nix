@@ -18,6 +18,7 @@
     push.autosetupRemote = true;
     merge.conflictstyle = "diff3";
     diff.colorMoved = "default";
+    rerere.enabled = true;
   };
   programs.git.lfs.enable = true;
   programs.delta.enable = true;
