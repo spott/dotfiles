@@ -5,6 +5,9 @@
     diffoscopeMinimal
     fastfetch
 
+    # calculator
+    libqalculate
+
     # fork of youtube-dl
     yt-dlp
 
