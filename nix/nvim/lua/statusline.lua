@@ -201,6 +201,17 @@ local function stl_modified()
 end
 
 
+-- navic (winbar breadcrumbs)
+local has_navic, navic = pcall(require, 'nvim-navic')
+if has_navic then
+  navic.setup({
+    highlight = true,
+    separator = ' > ',
+    depth_limit = 5,
+    lsp = { auto_attach = false }, -- we attach manually in lsp.lua
+  })
+end
+
 -- devicons (optional)
 local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
 local function have_icons() return has_devicons end
@@ -380,6 +391,32 @@ require('lualine').setup({
     lualine_x = { { 'location', padding = 0 } },
     lualine_y = {},
     lualine_z = {},
+  },
+
+  winbar = {
+    lualine_c = {
+      {
+        function() return has_navic and navic.get_location() or '' end,
+        cond = function() return has_navic and navic.is_available() end,
+        padding = { left = 1, right = 1 },
+      },
+    },
+  },
+
+  inactive_winbar = {
+    lualine_c = {
+      {
+        function() return top_dir_plus_file() end,
+        color = function()
+          if stl_modified() then
+            return { fg = COLORS.fnameNC_dirty, gui = 'bold' }
+          else
+            return { fg = COLORS.fnameNC_clean, gui = 'bold' }
+          end
+        end,
+        padding = { left = 1, right = 1 },
+      },
+    },
   },
 })
 

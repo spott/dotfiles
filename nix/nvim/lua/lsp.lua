@@ -282,6 +282,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
+    -- winbar breadcrumb via nvim-navic (gated by capability)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client.server_capabilities.documentSymbolProvider then
+      local ok, navic = pcall(require, 'nvim-navic')
+      if ok then
+        navic.attach(client, ev.buf)
+      end
+    end
+
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }

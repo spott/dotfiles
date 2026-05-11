@@ -78,6 +78,7 @@ in {
 
     # statusline
     lualine-nvim
+    nvim-navic
 
     # git
     neogit
