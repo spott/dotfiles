@@ -212,6 +212,53 @@ if has_navic then
   })
 end
 
+-- Filetypes where the winbar should never appear
+local winbar_skip_ft = {
+  ['dap-repl']           = true,
+  ['dapui_scopes']       = true,
+  ['dapui_breakpoints']  = true,
+  ['dapui_stacks']       = true,
+  ['dapui_watches']      = true,
+  ['dapui_console']      = true,
+}
+
+local function compute_winbar(bufnr)
+  if not has_navic then return '' end
+  if winbar_skip_ft[vim.bo[bufnr].filetype] then return '' end
+  if navic.is_available(bufnr) then
+    return "%{%v:lua.require'nvim-navic'.get_location()%}"
+  end
+  return ''
+end
+
+local function refresh_winbar(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  if not vim.api.nvim_buf_is_valid(bufnr) then return end
+  local value = compute_winbar(bufnr)
+  for _, win in ipairs(vim.fn.win_findbuf(bufnr)) do
+    if vim.api.nvim_win_is_valid(win) then
+      vim.wo[win].winbar = value
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd(
+  { 'LspAttach', 'LspDetach', 'BufWinEnter', 'FileType' },
+  {
+    group = vim.api.nvim_create_augroup('NavicWinbar', { clear = true }),
+    callback = function(ev) refresh_winbar(ev.buf) end,
+  }
+)
+
+-- Re-check shortly after LspAttach: navic populates symbols asynchronously,
+-- so is_available() may still be false at attach time.
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = 'NavicWinbar',
+  callback = function(ev)
+    vim.defer_fn(function() refresh_winbar(ev.buf) end, 500)
+  end,
+})
+
 -- devicons (optional)
 local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
 local function have_icons() return has_devicons end
@@ -391,32 +438,6 @@ require('lualine').setup({
     lualine_x = { { 'location', padding = 0 } },
     lualine_y = {},
     lualine_z = {},
-  },
-
-  winbar = {
-    lualine_c = {
-      {
-        function() return has_navic and navic.get_location() or '' end,
-        cond = function() return has_navic and navic.is_available() end,
-        padding = { left = 1, right = 1 },
-      },
-    },
-  },
-
-  inactive_winbar = {
-    lualine_c = {
-      {
-        function() return top_dir_plus_file() end,
-        color = function()
-          if stl_modified() then
-            return { fg = COLORS.fnameNC_dirty, gui = 'bold' }
-          else
-            return { fg = COLORS.fnameNC_clean, gui = 'bold' }
-          end
-        end,
-        padding = { left = 1, right = 1 },
-      },
-    },
   },
 })
 
