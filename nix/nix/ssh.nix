@@ -44,6 +44,12 @@
     user = "emode";
   };
 
+  programs.ssh.matchBlocks."github.com" = {
+    host = "github.com";
+    user = "git";
+    controlMaster = "no";
+  };
+
   # for git:
   #programs.ssh.matchBlocks."github.com".identitiesOnly = true;
   # programs.ssh.matchBlocks."github.com".extraOptions = {
