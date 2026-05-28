@@ -71,6 +71,7 @@ table.insert(dap.configurations.python, {
   name = "Attach to child (debugpy)",
   connect = { host = CHILD_HOST, port = CHILD_PORT },
   justMyCode = false,
+  redirectOutput = true,
 })
 
 -- Handy keymaps (kept close to DAP so they don’t depend on LspAttach)
@@ -89,10 +90,34 @@ map('n', '<leader>dl', dap.run_last,         vim.tbl_extend('force', opts, { des
 map('n', '<leader>dr', dap.repl.open,        vim.tbl_extend('force', opts, { desc = 'DAP REPL' }))
 map('n', '<leader>du', dapui.toggle,         vim.tbl_extend('force', opts, { desc = 'DAP UI Toggle' }))
 
+-- Toggle "eager variable evaluation": disables inline virtual text and the
+-- dapui sidebar so the adapter isn't asked to render scopes/locals/globals
+-- on every stop. Useful when stepping through numpy-heavy code where every
+-- variable's __repr__ is expensive.
+local _eager_vars = true
+map('n', '<leader>dV', function()
+  _eager_vars = not _eager_vars
+  local vtext = require('nvim-dap-virtual-text')
+  if _eager_vars then
+    vtext.enable()
+    dapui.open()
+    vim.notify('DAP: eager variables ON (virtual text + scopes pane)', vim.log.levels.INFO)
+  else
+    vtext.disable()
+    dapui.close()
+    vim.notify('DAP: eager variables OFF — use <leader>du to reopen UI on demand', vim.log.levels.INFO)
+  end
+end, vim.tbl_extend('force', opts, { desc = 'DAP: toggle eager variable evaluation' }))
+
 -- Convenience: debug current test (method/class) via dap-python
 map('n', '<leader>dtm', dap_python.test_method, vim.tbl_extend('force', opts, { desc = 'Debug test (method)' }))
 map('n', '<leader>dtc', dap_python.test_class,  vim.tbl_extend('force', opts, { desc = 'Debug tests (class/file)' }))
 map('v', '<leader>dts', dap_python.debug_selection, vim.tbl_extend('force', opts, { desc = 'Debug selection' }))
+
+map('v', '<leader>de', function()
+  local lines = vim.fn.getline(vim.fn.line("'<"), vim.fn.line("'>"))
+  require('dap').repl.execute(table.concat(lines, '\n'))
+end, vim.tbl_extend('force', opts, { desc = 'DAP: eval selection in REPL' }))
 
 -- Tip from nvim-dap README: Down=over, Right=into, Left=out, Up=restart frame
 -- We'll install them on session start and remove them when the session ends.
@@ -224,6 +249,7 @@ vim.keymap.set("n", "<leader>dF", function()
     name = "Child (debugpy)",
     connect = { host = "127.0.0.1", port = 5679 },
     justMyCode = false,
+    redirectOutput = true,
   }
 
   local key = "auto_attach_child_once"

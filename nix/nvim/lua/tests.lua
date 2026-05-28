@@ -10,7 +10,11 @@ neotest.setup({
       runner = 'pytest',
       -- Good defaults; tune as you like:
       args = { '-q' },            -- terse == '-q'
-      dap = { justMyCode = false }, -- better stepping through third-party code
+      dap = {
+        justMyCode = false,           -- step through third-party code
+        console = 'integratedTerminal', -- send stdout/stderr to dapui console terminal
+        redirectOutput = true,        -- belt+suspenders: also stream output as DAP events (visible in REPL) for sessions that can't use the terminal
+      },
       pytest_discover_instances = false,
     }),
   },
