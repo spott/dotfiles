@@ -17,6 +17,7 @@
     unstable.jujutsu
     gh-dash # tui for github cli
     lazygit # tui for git
+    tuicr # tui for per-commit review
 
     # lines of code:
     cloc

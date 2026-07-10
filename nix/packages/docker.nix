@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    docker-client
+    unstable.docker-client
     docker-compose
     docker-buildx
     dive

@@ -162,9 +162,28 @@ local function restart_python_lsps()
       client:stop(true)
     end
   end
-  vim.defer_fn(function()
+  -- Re-enable only once every client has fully exited. client:stop() is async,
+  -- so a fixed defer races it: if an old client is still in the list when
+  -- enable() runs, the restart dedups against it and either reuses the dying
+  -- client or starts nothing, leaving the buffer needing a manual :LspRestart.
+  -- Poll get_clients() instead, with a 2s ceiling as a backstop.
+  local start = vim.uv.now()
+  local timer = assert(vim.uv.new_timer())
+  timer:start(0, 25, vim.schedule_wrap(function()
+    local running = false
+    for _, name in ipairs(names) do
+      if #vim.lsp.get_clients({ name = name }) > 0 then
+        running = true
+        break
+      end
+    end
+    if running and vim.uv.now() - start < 2000 then
+      return
+    end
+    timer:stop()
+    timer:close()
     vim.lsp.enable(names, true)
-  end, 150)
+  end))
 end
 
 Hooks.register(Hooks.type.SWITCH, function(path, prev_path)

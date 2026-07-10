@@ -36,6 +36,11 @@
       url = "github:sadjow/claude-code-nix";
     };
 
+    tuicr = {
+      url = "github:spott/tuicr/per-commit-review-workflow";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
@@ -56,6 +61,7 @@
     nix-darwin,
     nix-rosetta-builder,
     nvim-treesitter-main,
+    tuicr,
     ...
   }: let
     overlay-unstable = final: prev: {
@@ -89,9 +95,13 @@
           hardeningDisable = (old.hardeningDisable or []) ++ ["format"];
         });
       };
+    overlay-tuicr = final: prev: {
+      tuicr = tuicr.packages.${prev.stdenv.hostPlatform.system}.default;
+    };
     overlays = [
       overlay-unstable
       overlay-inetutils-darwin
+      overlay-tuicr
       #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
       claude-code-nix.overlays.default

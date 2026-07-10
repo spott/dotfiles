@@ -84,6 +84,7 @@ in {
     neogit
     diffview-nvim
     lazygit-nvim
+    git-worktree-nvim
 
     # LSP
     cmp-nvim-lsp
@@ -155,4 +156,5 @@ in {
   xdg.configFile."nvim/lua/statusline.lua".source = ./lua/statusline.lua;
   xdg.configFile."nvim/lua/dap_config.lua".source = ./lua/dap_config.lua;
   xdg.configFile."nvim/lua/tests.lua".source = ./lua/tests.lua;
+  xdg.configFile."nvim/lua/worktree.lua".source = ./lua/worktree.lua;
 }

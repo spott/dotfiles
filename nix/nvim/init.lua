@@ -224,6 +224,7 @@ if not vim.g.vscode then
     packadd nvim-nio
 
     packadd triptych.nvim
+    packadd git-worktree.nvim
 
     packadd neotest
     packadd neotest-python
@@ -307,6 +308,7 @@ if not vim.g.vscode then
   vim.keymap.set('n', '<leader>ft', ':Triptych<CR>', { silent = true, desc = 'Toggle Triptych' })
 
   require('lsp') -- in lua/lsp.lua
+  require('worktree') -- in lua/worktree.lua
   require('ai') -- in lua/ai.lua
   require('dap_config') -- in lua/dap_config.lua
   require('tests') -- in lua/tests.lua
