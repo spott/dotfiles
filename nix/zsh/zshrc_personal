@@ -128,8 +128,33 @@ unset key
 
 # import onepassword plugins
 if [[ -f $XDG_CONFIG_HOME/op/plugins.sh ]]; then
-  source $XDG_CONFIG_HOME/op/plugins.sh 
+  source $XDG_CONFIG_HOME/op/plugins.sh
 fi
+
+#
+# git worktree indicator (right prompt)
+#
+# Detect when the cwd is inside a *linked* git worktree (git worktree add). In the main
+# worktree `git rev-parse --git-dir` and `--git-common-dir` are equal; inside a linked
+# worktree they differ, and the git-dir's tail is the worktree's name. Computed once per
+# prompt in precmd (like git-info), not on every vi-mode keymap redraw.
+typeset -g _mnml_worktree=''
+_mnml_set_worktree() {
+  _mnml_worktree=''
+  local out gitdir commondir
+  out=$(command git rev-parse --git-dir --git-common-dir 2>/dev/null) || return
+  gitdir=${out%%$'\n'*}
+  commondir=${out##*$'\n'}
+  # Resolve both to absolute paths before comparing: in a subdir of the main worktree
+  # git returns an absolute --git-dir but a relative --git-common-dir (same dir), which
+  # would otherwise read as a spurious worktree.
+  [[ ${gitdir:A} != ${commondir:A} ]] && _mnml_worktree=" %F{yellow}⑂${gitdir:t}%f"
+}
+autoload -Uz add-zsh-hook && add-zsh-hook precmd _mnml_set_worktree
+
+# Re-declare RPS1 to append the worktree indicator to minimal's right prompt.
+# (Original from the minimal theme: '%F{244}$(prompt-pwd)${(e)git_info[rprompt]}%f')
+RPS1='%F{244}$(prompt-pwd)${(e)git_info[rprompt]}%f${_mnml_worktree}'
 
 # initialize_conda() {
 #   # >>> conda initialize >>>
