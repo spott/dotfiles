@@ -24,6 +24,7 @@
     tcping-go
     mtr-gui # network diag tool
     bandwhich # bandwidth by process
+    unstable.whosthere # look at the local lan and see what is up
 
     #dblab
 
@@ -83,5 +84,9 @@
     # document conversion
     pandoc
     tectonic-unwrapped
+
+    # fun:
+    smassh # typing practice
+
   ];
 }
