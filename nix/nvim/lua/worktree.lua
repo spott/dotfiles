@@ -170,6 +170,12 @@ local function restart_python_lsps()
   local start = vim.uv.now()
   local timer = assert(vim.uv.new_timer())
   timer:start(0, 25, vim.schedule_wrap(function()
+    -- schedule_wrap can queue several callbacks before stop() takes effect
+    -- (e.g. while a hit-enter prompt blocks the main loop), so late arrivals
+    -- must not touch the already-closing handle.
+    if timer:is_closing() then
+      return
+    end
     local running = false
     for _, name in ipairs(names) do
       if #vim.lsp.get_clients({ name = name }) > 0 then
@@ -200,6 +206,31 @@ Hooks.register(Hooks.type.DELETE, function(deleted_path)
     require('git-worktree').switch_worktree(root)
   end
 end)
+
+-- Activate the checkout's Python env on startup and on directory changes, not
+-- only on plugin-driven worktree switches. Opening nvim directly in a checkout
+-- (no switch) otherwise leaves nvim's env unactivated: nvim-dap-python still
+-- autodetects .venv/bin/python as the interpreter, but .venv/bin is absent from
+-- PATH, so the venv's console scripts (e.g. `emode`) aren't found when the
+-- debuggee shells out. apply_python_env rebuilds from the captured original env
+-- and is idempotent, so overlapping with the SWITCH hook's own cd is harmless.
+local function ensure_python_env()
+  local cwd = vim.uv.cwd()
+  if not cwd then
+    return
+  end
+  cwd = vim.fs.normalize(cwd)
+  -- Silent no-op outside a git repo, so :cd into non-project dirs doesn't warn.
+  if not main_root(cwd) then
+    return
+  end
+  apply_python_env(cwd)
+end
+
+vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
+  group = vim.api.nvim_create_augroup('worktree_python_env', { clear = true }),
+  callback = ensure_python_env,
+})
 
 local M = {}
 
