@@ -272,7 +272,31 @@ if not vim.g.vscode then
 
   -- telescope keybindings
   local builtin = require('telescope.builtin')
-  vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+
+  -- Extra directories added at runtime to <leader>ff's search (in-memory, per
+  -- session). <leader>fa appends one (with path completion); <leader>fA clears.
+  local extra_find_dirs = {}
+  vim.keymap.set('n', '<leader>ff', function()
+    local dirs = { vim.fn.getcwd() }
+    vim.list_extend(dirs, extra_find_dirs)
+    builtin.find_files({ search_dirs = dirs })
+  end, { desc = 'Find files (cwd + added dirs)' })
+  vim.keymap.set('n', '<leader>fa', function()
+    vim.ui.input({ prompt = 'Add search dir: ', completion = 'dir' }, function(dir)
+      if not dir or dir == '' then return end
+      dir = vim.fn.fnamemodify(vim.fn.expand(dir), ':p')
+      if vim.fn.isdirectory(dir) == 0 then
+        vim.notify('Not a directory: ' .. dir, vim.log.levels.WARN)
+        return
+      end
+      table.insert(extra_find_dirs, dir)
+      vim.notify(('<leader>ff now also searches %s (%d extra)'):format(dir, #extra_find_dirs))
+    end)
+  end, { desc = 'Add a dir to <leader>ff search' })
+  vim.keymap.set('n', '<leader>fA', function()
+    extra_find_dirs = {}
+    vim.notify('<leader>ff extra search dirs cleared')
+  end, { desc = 'Clear <leader>ff extra search dirs' })
   vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
   vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
   vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
