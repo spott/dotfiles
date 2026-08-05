@@ -84,6 +84,16 @@
           claude-code-nix.overlays.default
           nvim-treesitter-main.overlays.default
           (final: prev: {
+            python312 = prev.python312.override {
+              packageOverrides = pyFinal: pyPrev: {
+                debugpy = pyPrev.debugpy.overrideAttrs (_: {
+                  # Skip debugpy's test suite and its large check-only dependencies.
+                  doInstallCheck = false;
+                });
+              };
+            };
+          })
+          (final: prev: {
             vimPlugins = prev.vimPlugins.extend (
               f: p: {
                 nvim-treesitter = p.nvim-treesitter.withAllGrammars; # or withPlugins...

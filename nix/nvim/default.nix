@@ -34,7 +34,7 @@ in {
     ripgrep
     unstable.ty
     python312Packages.rope
-    python312Packages.debugpy
+    dapPy
     uv
     lazygit
     pylspEnv
