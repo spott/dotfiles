@@ -1,4 +1,4 @@
-{pkgs,...}: {
+{pkgs,lib,...}: {
   imports = [
     ./sandbox/darwin.nix
   ];
@@ -47,17 +47,13 @@
     experimental-features = nix-command flakes
   '';
 
-  nix.linux-builder = {
-    enable = true;
-    systems = ["aarch64-linux"];
-    ephemeral = true;
-    maxJobs = 4;
-    # config.virtualisation.darwin-builder = {
-    #     diskSize = 40 * 1024;  # 40 GB
-    #     cores = 4;
-    #     memorySize = 4 * 1024;  # 4 GB RAM
-    #   };
-  };
+  # Replaced by nix-rosetta-builder below, which can power the VM off when idle.
+  # nix.linux-builder has no on-demand option: its launchd job is hardcoded
+  # KeepAlive=true, so it holds its full memorySize from boot until shutdown.
+  #
+  # Re-enable temporarily if the rosetta VM image ever needs rebuilding while the
+  # VM itself can't start -- nixbuild.net has no `kvm`, so this is the only way out.
+  nix.linux-builder.enable = false;
 
 
 
@@ -68,12 +64,18 @@
     #mode = "0644";
   };
 
-  # nix-rosetta-builder = {
-  #   cores = 8;
-  #   onDemand = true;
-  #   memory = "8GiB";
-  #   #speedFactor = 2;
-  # };
+  nix-rosetta-builder = {
+    cores = 6;
+    memory = "8GiB";
+    diskSize = "60GiB";
+    # Powers off after the linger period, then restarts via launchd socket
+    # activation on the next linux build (costs a few seconds of boot).
+    onDemand = true;
+    onDemandLingerMinutes = 10;
+    # Higher than the nixbuild.net entries below so linux builds stay local
+    # (and off metered nixbuild CPU-hours) whenever the VM is available.
+    speedFactor = 2;
+  };
 
   programs.ssh.extraConfig = ''
   Host eu.nixbuild.net
@@ -109,14 +111,17 @@
       speedFactor = 1;
       supportedFeatures = [ "benchmark" "big-parallel" ];
     }
-    # {
-    #   hostName = "eu.nixbuild.net";
-    #   system = "aarch64-linux";
-    #   maxJobs = 100;
-    #   protocol = "ssh-ng";
-    #   speedFactor = 1;
-    #   supportedFeatures = [ "benchmark" "big-parallel" ];
-    # }
+    # Fallback for aarch64-linux when the rosetta VM is unavailable (e.g. away from
+    # home, or mid-bootstrap). Note: nixbuild.net does NOT provide the "kvm" feature,
+    # so it cannot build nixos-disk-image -- including rosetta-builder's own VM image.
+    {
+      hostName = "eu.nixbuild.net";
+      system = "aarch64-linux";
+      maxJobs = 100;
+      protocol = "ssh-ng";
+      speedFactor = 1;
+      supportedFeatures = [ "benchmark" "big-parallel" ];
+    }
   ];
 
   nix.distributedBuilds = true;
