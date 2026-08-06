@@ -6,6 +6,7 @@
     ./packages/extra.nix
     ./packages/development.nix
     ./packages/ai.nix
+    ./pi
     ./packages/gui.nix
     ./packages/images.nix
 

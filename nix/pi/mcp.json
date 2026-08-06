@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "obsidian": {
+      "url": "https://mcp-obsidian.spott.us/mcp",
+      "auth": "oauth",
+      "oauth": {
+        "scope": "mcp"
+      }
+    }
+  }
+}

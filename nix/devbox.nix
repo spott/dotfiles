@@ -3,6 +3,7 @@
     ./packages/shell.nix
     ./packages/development.nix
     ./packages/ai.nix
+    ./pi
 
     ./nix/claude-code.nix
     ./nix/direnv.nix
