@@ -14,6 +14,11 @@ in {
     force = true;
   };
 
+  home.file.".pi/agent/extensions/system-prompt.ts" = {
+    source = ./extensions/system-prompt.ts;
+    force = true;
+  };
+
   xdg.configFile."mcp/mcp.json" = {
     source = ./mcp.json;
     force = true;
