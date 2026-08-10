@@ -5,6 +5,7 @@
   ...
 }: let
   mcpAdapter = "npm:pi-mcp-adapter@2.20.1";
+  taskCompaction = "git:github.com/spott/pi-task-compaction@6d7ed3eec58b2f8da4360e6445c5a01bf95da0d0";
 in {
   # Pi uses npm to install packages declared in settings.json.
   home.packages = [pkgs.nodejs];
@@ -25,12 +26,11 @@ in {
   };
 
   # Preserve settings that Pi owns while declaratively ensuring that the
-  # pinned MCP adapter is present. Keeping settings.json mutable allows Pi to
+  # pinned packages are present. Keeping settings.json mutable allows Pi to
   # save model, theme, and changelog preferences normally.
   home.activation.piPackages = lib.hm.dag.entryAfter ["writeBoundary"] ''
     settings_path="${config.home.homeDirectory}/.pi/agent/settings.json"
     settings_dir="$(dirname "$settings_path")"
-    desired_package='${mcpAdapter}'
 
     mkdir -p "$settings_dir"
     if [[ ! -e "$settings_path" ]]; then
@@ -39,18 +39,24 @@ in {
     fi
 
     tmp="$(mktemp "$settings_dir/settings.json.XXXXXX")"
-    ${pkgs.jq}/bin/jq --arg desired "$desired_package" '
+    ${pkgs.jq}/bin/jq \
+      --arg mcp_adapter '${mcpAdapter}' \
+      --arg task_compaction '${taskCompaction}' '
       .packages = (
         [(.packages // [])[]
           | select(
               if type == "string" then
                 . != "npm:pi-mcp-adapter" and
-                (startswith("npm:pi-mcp-adapter@") | not)
+                (startswith("npm:pi-mcp-adapter@") | not) and
+                . != "git:github.com/spott/pi-task-compaction" and
+                (startswith("git:github.com/spott/pi-task-compaction@") | not) and
+                . != "https://github.com/spott/pi-task-compaction" and
+                (startswith("https://github.com/spott/pi-task-compaction@") | not)
               else
                 true
               end
             )
-        ] + [$desired]
+        ] + [$mcp_adapter, $task_compaction]
       )
     ' "$settings_path" > "$tmp"
 
