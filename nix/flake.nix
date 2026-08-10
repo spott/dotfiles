@@ -61,9 +61,30 @@
       url = "github:spott/nix-rosetta-builder/lima-2.x";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
+
+    # Zsh plugins are non-flake sources. flake.lock owns their revisions; the
+    # repository-local Home Manager module only links and loads them.
+    zsh-plugin-completion = {url = "github:zimfw/completion"; flake = false;};
+    zsh-plugin-duration-info = {url = "github:zimfw/duration-info"; flake = false;};
+    zsh-plugin-environment = {url = "github:zimfw/environment"; flake = false;};
+    zsh-plugin-git-info = {url = "github:zimfw/git-info"; flake = false;};
+    zsh-plugin-input = {url = "github:zimfw/input"; flake = false;};
+    zsh-plugin-magic-enter = {url = "github:zimfw/magic-enter"; flake = false;};
+    zsh-plugin-minimal = {url = "github:zimfw/minimal"; flake = false;};
+    zsh-plugin-per-directory-history = {url = "github:spott/per-directory-history"; flake = false;};
+    zsh-plugin-prompt-pwd = {url = "github:zimfw/prompt-pwd"; flake = false;};
+    zsh-plugin-termtitle = {url = "github:zimfw/termtitle"; flake = false;};
+    zsh-plugin-utility = {url = "github:zimfw/utility"; flake = false;};
+    zsh-plugin-walltime = {url = "github:spott/walltime"; flake = false;};
+    zsh-plugin-zimfw-eza = {url = "github:spott/zimfw-eza"; flake = false;};
+    zsh-plugin-zsh-autosuggestions = {url = "github:zsh-users/zsh-autosuggestions"; flake = false;};
+    zsh-plugin-zsh-completions = {url = "github:zsh-users/zsh-completions"; flake = false;};
+    zsh-plugin-zsh-history-substring-search = {url = "github:zsh-users/zsh-history-substring-search"; flake = false;};
+    zsh-plugin-zsh-syntax-highlighting = {url = "github:zsh-users/zsh-syntax-highlighting"; flake = false;};
+    zsh-plugin-zsh-vi-mode = {url = "github:jeffreytse/zsh-vi-mode"; flake = false;};
   };
 
-  outputs = {
+  outputs = inputs @ {
     nixpkgs,
     nixpkgs-stable,
     nixpkgs-lima,
@@ -76,6 +97,27 @@
     tuicr,
     ...
   }: let
+    zshSources = {
+      completion = inputs.zsh-plugin-completion;
+      duration-info = inputs.zsh-plugin-duration-info;
+      environment = inputs.zsh-plugin-environment;
+      git-info = inputs.zsh-plugin-git-info;
+      input = inputs.zsh-plugin-input;
+      magic-enter = inputs.zsh-plugin-magic-enter;
+      minimal = inputs.zsh-plugin-minimal;
+      per-directory-history = inputs.zsh-plugin-per-directory-history;
+      prompt-pwd = inputs.zsh-plugin-prompt-pwd;
+      termtitle = inputs.zsh-plugin-termtitle;
+      utility = inputs.zsh-plugin-utility;
+      walltime = inputs.zsh-plugin-walltime;
+      zimfw-eza = inputs.zsh-plugin-zimfw-eza;
+      zsh-autosuggestions = inputs.zsh-plugin-zsh-autosuggestions;
+      zsh-completions = inputs.zsh-plugin-zsh-completions;
+      zsh-history-substring-search = inputs.zsh-plugin-zsh-history-substring-search;
+      zsh-syntax-highlighting = inputs.zsh-plugin-zsh-syntax-highlighting;
+      zsh-vi-mode = inputs.zsh-plugin-zsh-vi-mode;
+    };
+
     overlay-unstable = final: prev: {
       unstable = import nixpkgs {
         system = prev.system;
@@ -158,6 +200,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {inherit zshSources;};
             home-manager.users.spott = {
               imports = [
                 ./normandy.nix
@@ -173,6 +216,7 @@
         modules = [
           ./normandy.nix
         ];
+        extraSpecialArgs = {inherit zshSources;};
       };
 
       "spott@devbox.sc.spott.us" = home-manager.lib.homeManagerConfiguration {
@@ -180,6 +224,7 @@
         modules = [
           ./devbox.nix
         ];
+        extraSpecialArgs = {inherit zshSources;};
       };
     };
     homeManagerModules = {
@@ -187,6 +232,7 @@
         imports = [
           (import ./devbox.nix)
         ];
+        _module.args = {inherit zshSources;};
         dotfiles.claude-code.package = claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
       };
     };

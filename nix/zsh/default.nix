@@ -2,8 +2,18 @@
   config,
   lib,
   pkgs,
+  zshSources,
   ...
 }: {
+  imports = [
+    ./module.nix
+  ];
+
+  spott.zsh.pluginSet = {
+    enable = true;
+    plugins = import ./plugins.nix {inherit zshSources;};
+  };
+
   programs.zsh.enable = true;
   programs.zsh.package = pkgs.zsh;
   programs.zsh.dotDir = "${config.xdg.configHome}/zsh";
@@ -31,7 +41,7 @@
   };
 
   xdg.configFile."zsh/.zshrc_personal".source = ./zshrc_personal;
-  xdg.configFile."zsh/.zimrc".source = ./zimrc;
+  xdg.configFile."zsh/fzf.zsh".source = ./fzf.zsh;
   xdg.configFile."zsh/.zprofile".source = ./zprofile;
 
   # some of these need to be behind options:

@@ -1,0 +1,238 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+flake_dir=$(CDPATH= cd -- "$script_dir/.." && pwd)
+cd "$flake_dir"
+
+plugin_inputs=(
+  zsh-plugin-completion
+  zsh-plugin-duration-info
+  zsh-plugin-environment
+  zsh-plugin-git-info
+  zsh-plugin-input
+  zsh-plugin-magic-enter
+  zsh-plugin-minimal
+  zsh-plugin-per-directory-history
+  zsh-plugin-prompt-pwd
+  zsh-plugin-termtitle
+  zsh-plugin-utility
+  zsh-plugin-walltime
+  zsh-plugin-zimfw-eza
+  zsh-plugin-zsh-autosuggestions
+  zsh-plugin-zsh-completions
+  zsh-plugin-zsh-history-substring-search
+  zsh-plugin-zsh-syntax-highlighting
+  zsh-plugin-zsh-vi-mode
+)
+
+usage() {
+  cat <<'EOF'
+Usage: zsh/update-plugins [--check] [PLUGIN_INPUT ...]
+
+With no plugin names, update every declarative Zsh plugin input. Names must be
+members of the zsh-plugin-* whitelist above. --check skips the lock update and
+only checks the currently locked plugin set. Targets matching the host platform
+are built and smoke-tested; non-native targets are evaluated.
+
+This command never activates or switches a generation.
+EOF
+}
+
+check_only=false
+case ${1-} in
+  --check)
+    check_only=true
+    shift
+    ;;
+  -h|--help)
+    usage
+    exit 0
+    ;;
+esac
+
+if $check_only && (($#)); then
+  printf 'error: --check does not accept plugin names\n' >&2
+  usage >&2
+  exit 2
+fi
+
+is_plugin_input() {
+  local candidate=$1 known
+  for known in "${plugin_inputs[@]}"; do
+    [[ $candidate == "$known" ]] && return 0
+  done
+  return 1
+}
+
+if ! $check_only; then
+  if ! git diff --quiet -- flake.lock || ! git diff --cached --quiet -- flake.lock; then
+    printf 'error: flake.lock already has uncommitted changes; review or commit them first\n' >&2
+    exit 2
+  fi
+
+  selected=("$@")
+  ((${#selected[@]})) || selected=("${plugin_inputs[@]}")
+  for input in "${selected[@]}"; do
+    if ! is_plugin_input "$input"; then
+      printf 'error: unknown Zsh plugin input: %s\n' "$input" >&2
+      usage >&2
+      exit 2
+    fi
+  done
+
+  nix flake update "${selected[@]}"
+  git diff -- flake.lock
+fi
+
+flake_ref="path:$flake_dir"
+darwin_config_ref="$flake_ref#darwinConfigurations.Normandy"
+normandy_config_ref="$flake_ref#homeConfigurations.\"spott@Normandy.local\""
+devbox_config_ref="$flake_ref#homeConfigurations.\"spott@devbox.sc.spott.us\""
+current_system=$(nix eval --impure --raw --expr builtins.currentSystem)
+
+build_result=
+build_or_evaluate() {
+  local label=$1 target_system=$2 package_ref=$3
+  printf '\nChecking %s (%s)...\n' "$label" "$target_system"
+  if [[ $target_system == "$current_system" ]]; then
+    build_result=$(nix build --no-link --print-out-paths "$package_ref")
+  else
+    nix eval --raw "$package_ref.drvPath" >/dev/null
+    build_result=
+    printf 'Evaluated only: host is %s.\n' "$current_system"
+  fi
+}
+
+build_or_evaluate \
+  'nix-darwin configuration' \
+  "$(nix eval --raw "$darwin_config_ref.pkgs.stdenv.hostPlatform.system")" \
+  "$darwin_config_ref.system"
+
+build_or_evaluate \
+  'standalone Normandy Home Manager configuration' \
+  "$(nix eval --raw "$normandy_config_ref.pkgs.stdenv.hostPlatform.system")" \
+  "$normandy_config_ref.activationPackage"
+normandy_generation=$build_result
+
+build_or_evaluate \
+  'standalone devbox Home Manager configuration' \
+  "$(nix eval --raw "$devbox_config_ref.pkgs.stdenv.hostPlatform.system")" \
+  "$devbox_config_ref.activationPackage"
+devbox_generation=$build_result
+
+check_generation() {
+  local label=$1 generation=$2 config_dir file expected_fpath actual_fpath expected_sources actual_sources
+  config_dir="$generation/home-files/.config/zsh"
+
+  printf '\nSmoke-checking %s...\n' "$label"
+  for file in .zshrc .zshrc_personal plugin-loader.zsh fzf.zsh; do
+    if [[ ! -e "$config_dir/$file" ]]; then
+      printf 'error: %s is missing %s\n' "$label" "$config_dir/$file" >&2
+      return 1
+    fi
+  done
+
+  for file in \
+    plugin-support/zsh-syntax-highlighting/highlighters/brackets/brackets-highlighter.zsh \
+    plugin-support/zsh-syntax-highlighting/highlighters/cursor/cursor-highlighter.zsh \
+    plugin-support/zsh-syntax-highlighting/highlighters/line/line-highlighter.zsh \
+    plugin-support/zsh-syntax-highlighting/highlighters/main/main-highlighter.zsh \
+    plugin-support/zsh-syntax-highlighting/highlighters/pattern/pattern-highlighter.zsh \
+    plugin-support/zsh-syntax-highlighting/highlighters/regexp/regexp-highlighter.zsh \
+    plugin-support/zsh-syntax-highlighting/highlighters/root/root-highlighter.zsh; do
+    if [[ ! -e "$config_dir/$file" ]]; then
+      printf 'error: %s is missing %s\n' "$label" "$config_dir/$file" >&2
+      return 1
+    fi
+  done
+
+  zsh -n \
+    "$config_dir/.zshrc" \
+    "$config_dir/.zshrc_personal" \
+    "$config_dir/plugin-loader.zsh" \
+    "$config_dir/fzf.zsh"
+
+  if grep -En '(\.zim(/|rc|fw)?|zimfw)' \
+    "$config_dir/.zshrc" \
+    "$config_dir/.zshrc_personal" \
+    "$config_dir/plugin-loader.zsh"; then
+    printf 'error: %s still references the runtime zimfw tree\n' "$label" >&2
+    return 1
+  fi
+
+  expected_fpath=$(cat <<'EOF'
+fpath=(
+  "$_spott_zsh_plugin_root/utility/functions"
+  "$_spott_zsh_plugin_root/prompt-pwd/functions"
+  "$_spott_zsh_plugin_root/duration-info/functions"
+  "$_spott_zsh_plugin_root/git-info/functions"
+  "$_spott_zsh_plugin_root/zsh-completions/src"
+  "$_spott_zsh_plugin_root/completion/functions"
+  ${fpath}
+)
+EOF
+  )
+  actual_fpath=$(awk '
+    /^fpath=\($/ { copying = 1 }
+    copying { print }
+    copying && /^\)$/ { exit }
+  ' "$config_dir/plugin-loader.zsh")
+  if [[ $actual_fpath != "$expected_fpath" ]]; then
+    printf 'error: %s has unexpected plugin fpath ordering\n' "$label" >&2
+    diff -u <(printf '%s\n' "$expected_fpath") <(printf '%s\n' "$actual_fpath") >&2 || true
+    return 1
+  fi
+
+  grep -Fqx \
+    'autoload -Uz -- mkcd mkpw prompt-pwd duration-info-precmd duration-info-preexec coalesce git-action git-info' \
+    "$config_dir/plugin-loader.zsh"
+
+  grep -Fqx \
+    'ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR="$ZDOTDIR/plugin-support/zsh-syntax-highlighting/highlighters"' \
+    "$config_dir/plugin-loader.zsh"
+
+  expected_sources=$(cat <<'EOF'
+source "${${:-$_spott_zsh_plugin_root/environment}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/input}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/termtitle}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/utility}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/eza}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/magic-enter}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/per-directory-history}:A}/per-directory-history.zsh"
+source "${${:-$_spott_zsh_plugin_root/zsh-vi-mode}:A}/zsh-vi-mode.zsh"
+source "$ZDOTDIR/fzf.zsh"
+source "${${:-$_spott_zsh_plugin_root/walltime}:A}/walltime.plugin.zsh"
+source "${${:-$_spott_zsh_plugin_root/duration-info}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/minimal}:A}/minimal.zsh-theme"
+source "${${:-$_spott_zsh_plugin_root/completion}:A}/init.zsh"
+source "${${:-$_spott_zsh_plugin_root/zsh-syntax-highlighting}:A}/.spott-preload.zsh"
+source "${${:-$_spott_zsh_plugin_root/zsh-syntax-highlighting}:A}/zsh-syntax-highlighting.zsh"
+source "${${:-$_spott_zsh_plugin_root/zsh-history-substring-search}:A}/zsh-history-substring-search.zsh"
+source "${${:-$_spott_zsh_plugin_root/zsh-autosuggestions}:A}/zsh-autosuggestions.zsh"
+EOF
+  )
+  actual_sources=$(grep '^source ' "$config_dir/plugin-loader.zsh")
+  if [[ $actual_sources != "$expected_sources" ]]; then
+    printf 'error: %s has unexpected plugin source ordering\n' "$label" >&2
+    diff -u <(printf '%s\n' "$expected_sources") <(printf '%s\n' "$actual_sources") >&2 || true
+    return 1
+  fi
+
+  grep -Fq 'source "$ZDOTDIR/plugin-loader.zsh"' \
+    "$config_dir/.zshrc_personal"
+
+  "$script_dir/pty-smoke.zsh" "$label" "$generation"
+}
+
+if [[ -n $normandy_generation ]]; then
+  check_generation Normandy "$normandy_generation"
+fi
+if [[ -n $devbox_generation ]]; then
+  check_generation devbox "$devbox_generation"
+fi
+
+printf '\nAll declarative Zsh plugin builds and smoke checks passed.\n'
+if ! $check_only; then
+  printf 'Review flake.lock and switch explicitly when ready.\n'
+fi

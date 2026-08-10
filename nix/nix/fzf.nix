@@ -3,7 +3,9 @@
   # fzf
   #
   programs.fzf.enable = true;
-  programs.fzf.enableZshIntegration = true;
+  # The declarative plugin loader initializes fzf once and adds the existing
+  # fd/rg and preview customization from the former zimfw module.
+  programs.fzf.enableZshIntegration = false;
   programs.fzf.colors = {
     fg="-1";
     bg="-1";

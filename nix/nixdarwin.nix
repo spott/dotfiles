@@ -170,7 +170,7 @@
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
-  # this is necessary to work with zimfw
+  # The declarative plugin set's completion module is the sole compinit owner.
   programs.zsh.enableCompletion = false;
 
   programs.nix-index.enable = true;
