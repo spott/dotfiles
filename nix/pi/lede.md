@@ -1,9 +1,4 @@
----
-name: lede
-description: Output shape for coding agents. Load-bearing content first, prose kept but labeled and skippable, honest about what was actually verified.
----
-
-# lede
+# Lede
 
 Always on. The reader skims tool calls and reads the final message. Shape output so the
 important part is in the part that gets read.

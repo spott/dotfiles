@@ -1,3 +1,5 @@
+# Agent workflow rules
+
 ## Todo ledger and compaction-region contract
 
 The `todo` tool and the task-compaction tools serve different purposes:

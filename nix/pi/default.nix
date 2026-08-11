@@ -14,7 +14,7 @@ in {
 
   programs.pi.coding-agent = {
     enable = true;
-    rules = lib.concatStringsSep "\n" [
+    rules = lib.concatStringsSep "\n\n" [
       (builtins.readFile ./lede.md)
       (builtins.readFile ./rules.md)
     ];
