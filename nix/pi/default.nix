@@ -2,22 +2,22 @@
   config,
   lib,
   pkgs,
+  piTaskCompaction,
   ...
 }: let
   mcpAdapter = "npm:pi-mcp-adapter@2.20.1";
-  taskCompaction = "git:github.com/spott/pi-task-compaction@6d7ed3eec58b2f8da4360e6445c5a01bf95da0d0";
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   # Pi uses npm to install packages declared in settings.json.
   home.packages = [pkgs.nodejs];
 
-  home.file.".pi/agent/extensions/modal-editor.ts" = {
-    source = ./extensions/modal-editor.ts;
-    force = true;
-  };
-
-  home.file.".pi/agent/extensions/system-prompt.ts" = {
-    source = ./extensions/system-prompt.ts;
-    force = true;
+  programs.pi.coding-agent = {
+    enable = true;
+    extensions = [
+      ./extensions/modal-editor.ts
+      ./extensions/system-prompt.ts
+      "${piTaskCompaction.packages.${system}.default}"
+    ];
   };
 
   xdg.configFile."mcp/mcp.json" = {
@@ -25,9 +25,9 @@ in {
     force = true;
   };
 
-  # Preserve settings that Pi owns while declaratively ensuring that the
-  # pinned packages are present. Keeping settings.json mutable allows Pi to
-  # save model, theme, and changelog preferences normally.
+  # Preserve settings that Pi owns while declaratively ensuring that the MCP
+  # adapter is present. Keeping settings.json mutable allows Pi to save model,
+  # theme, and changelog preferences normally.
   home.activation.piPackages = lib.hm.dag.entryAfter ["writeBoundary"] ''
     settings_path="${config.home.homeDirectory}/.pi/agent/settings.json"
     settings_dir="$(dirname "$settings_path")"
@@ -40,8 +40,7 @@ in {
 
     tmp="$(mktemp "$settings_dir/settings.json.XXXXXX")"
     ${pkgs.jq}/bin/jq \
-      --arg mcp_adapter '${mcpAdapter}' \
-      --arg task_compaction '${taskCompaction}' '
+      --arg mcp_adapter '${mcpAdapter}' '
       .packages = (
         [(.packages // [])[]
           | select(
@@ -56,7 +55,7 @@ in {
                 true
               end
             )
-        ] + [$mcp_adapter, $task_compaction]
+        ] + [$mcp_adapter]
       )
     ' "$settings_path" > "$tmp"
 

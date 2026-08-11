@@ -20,6 +20,7 @@ in {
 
     home.stateVersion = "24.11";
     programs.home-manager.enable = true;
+    programs.pi.coding-agent.enable = true;
     #dotfiles._1password.sshAgentConfig = true;
   };
 

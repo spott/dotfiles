@@ -43,6 +43,16 @@
       url = "github:sadjow/claude-code-nix";
     };
 
+    pi-nix = {
+      url = "github:lukasl-dev/pi.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pi-task-compaction = {
+      url = "github:spott/pi-task-compaction";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     tuicr = {
       url = "github:spott/tuicr/per-commit-review-workflow";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -117,6 +127,10 @@
       zsh-syntax-highlighting = inputs.zsh-plugin-zsh-syntax-highlighting;
       zsh-vi-mode = inputs.zsh-plugin-zsh-vi-mode;
     };
+    specialArgs = {
+      inherit zshSources;
+      piTaskCompaction = inputs.pi-task-compaction;
+    };
 
     overlay-unstable = final: prev: {
       unstable = import nixpkgs {
@@ -172,7 +186,7 @@
         })
         .lima;
     };
-    overlays = [
+    packageOverlays = [
       overlay-unstable
       overlay-inetutils-darwin
       overlay-tuicr
@@ -185,7 +199,8 @@
 
     pkgs = system:
       import nixpkgs-stable {
-        inherit system overlays;
+        inherit system;
+        overlays = packageOverlays;
         config = {allowUnfree = true;};
       };
   in {
@@ -200,7 +215,8 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {inherit zshSources;};
+            home-manager.extraSpecialArgs = specialArgs;
+            home-manager.sharedModules = [inputs.pi-nix.homeModules.default];
             home-manager.users.spott = {
               imports = [
                 ./normandy.nix
@@ -214,28 +230,37 @@
       "spott@Normandy.local" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs "aarch64-darwin";
         modules = [
+          inputs.pi-nix.homeModules.default
           ./normandy.nix
         ];
-        extraSpecialArgs = {inherit zshSources;};
+        extraSpecialArgs = specialArgs;
       };
 
       "spott@devbox.sc.spott.us" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs "x86_64-linux";
         modules = [
+          inputs.pi-nix.homeModules.default
           ./devbox.nix
         ];
-        extraSpecialArgs = {inherit zshSources;};
+        extraSpecialArgs = specialArgs;
       };
     };
     homeManagerModules = {
       devbox = {pkgs, ...}: {
         imports = [
+          inputs.pi-nix.homeModules.default
           (import ./devbox.nix)
         ];
-        _module.args = {inherit zshSources;};
+        _module.args = specialArgs;
         dotfiles.claude-code.package = claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
       };
     };
-    overlays = overlays;
+    overlays = {
+      unstable = overlay-unstable;
+      inetutils-darwin = overlay-inetutils-darwin;
+      tuicr = overlay-tuicr;
+      lima = overlay-lima;
+      default = nixpkgs.lib.composeManyExtensions packageOverlays;
+    };
   };
 }
