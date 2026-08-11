@@ -22,12 +22,6 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
-    # this is necessary now because nvim-treesitter on nixpkgs is kinda broken
-    nvim-treesitter-main = {
-      url = "github:iofq/nvim-treesitter-main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # runpodctl = {
     #   url = "path:/Users/spott/Documents/code/my_code/flakes/runpod";
     #   inputs.nixpkgs.follows = "nixpkgs-stable";
@@ -103,7 +97,6 @@
     claude-code-nix,
     nix-darwin,
     nix-rosetta-builder,
-    nvim-treesitter-main,
     tuicr,
     ...
   }: let
@@ -138,7 +131,6 @@
         config.allowUnfree = true;
         overlays = [
           claude-code-nix.overlays.default
-          nvim-treesitter-main.overlays.default
           (final: prev: {
             python312 = prev.python312.override {
               packageOverrides = pyFinal: pyPrev: {
@@ -148,20 +140,6 @@
                 });
               };
             };
-          })
-          (final: prev: {
-            vimPlugins = prev.vimPlugins.extend (
-              f: p: {
-                nvim-treesitter = p.nvim-treesitter.withAllGrammars; # or withPlugins...
-                # also redefine nvim-treesitter-textobjects (any other plugins that depend on nvim-treesitter)
-                nvim-treesitter-textobjects = p.nvim-treesitter-textobjects.overrideAttrs {
-                  dependencies = [f.nvim-treesitter];
-                };
-                neotest = p.neotest.overrideAttrs {
-                  dependencies = [f.nvim-treesitter];
-                };
-              }
-            );
           })
         ];
       };
