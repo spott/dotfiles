@@ -6,6 +6,7 @@
   ...
 }: let
   mcpAdapter = "npm:pi-mcp-adapter@2.20.1";
+  rpivTodo = "npm:@juicesharp/rpiv-todo@2.4.0";
   system = pkgs.stdenv.hostPlatform.system;
 in {
   # Pi uses npm to install packages declared in settings.json.
@@ -13,6 +14,10 @@ in {
 
   programs.pi.coding-agent = {
     enable = true;
+    rules = lib.concatStringsSep "\n" [
+      (builtins.readFile ./lede.md)
+      (builtins.readFile ./rules.md)
+    ];
     extensions = [
       ./extensions/modal-editor.ts
       ./extensions/system-prompt.ts
@@ -25,8 +30,8 @@ in {
     force = true;
   };
 
-  # Preserve settings that Pi owns while declaratively ensuring that the MCP
-  # adapter is present. Keeping settings.json mutable allows Pi to save model,
+  # Preserve settings that Pi owns while declaratively ensuring required npm
+  # packages are present. Keeping settings.json mutable allows Pi to save model,
   # theme, and changelog preferences normally.
   home.activation.piPackages = lib.hm.dag.entryAfter ["writeBoundary"] ''
     settings_path="${config.home.homeDirectory}/.pi/agent/settings.json"
@@ -40,13 +45,16 @@ in {
 
     tmp="$(mktemp "$settings_dir/settings.json.XXXXXX")"
     ${pkgs.jq}/bin/jq \
-      --arg mcp_adapter '${mcpAdapter}' '
+      --arg mcp_adapter '${mcpAdapter}' \
+      --arg rpiv_todo '${rpivTodo}' '
       .packages = (
         [(.packages // [])[]
           | select(
               if type == "string" then
                 . != "npm:pi-mcp-adapter" and
                 (startswith("npm:pi-mcp-adapter@") | not) and
+                . != "npm:@juicesharp/rpiv-todo" and
+                (startswith("npm:@juicesharp/rpiv-todo@") | not) and
                 . != "git:github.com/spott/pi-task-compaction" and
                 (startswith("git:github.com/spott/pi-task-compaction@") | not) and
                 . != "https://github.com/spott/pi-task-compaction" and
@@ -55,7 +63,7 @@ in {
                 true
               end
             )
-        ] + [$mcp_adapter]
+        ] + [$mcp_adapter, $rpiv_todo]
       )
     ' "$settings_path" > "$tmp"
 

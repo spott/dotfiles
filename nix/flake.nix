@@ -134,7 +134,7 @@
 
     overlay-unstable = final: prev: {
       unstable = import nixpkgs {
-        system = prev.system;
+        system = prev.stdenv.hostPlatform.system;
         config.allowUnfree = true;
         overlays = [
           claude-code-nix.overlays.default

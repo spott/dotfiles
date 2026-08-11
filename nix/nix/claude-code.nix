@@ -1,4 +1,9 @@
-{pkgs, lib, config, ...}: let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   cfg = config.dotfiles.claude-code;
 in {
   options.dotfiles.claude-code = {
@@ -18,6 +23,7 @@ in {
     programs.claude-code = {
       enable = true;
       package = cfg.package;
+      memory.source = ../pi/lede.md;
 
       settings = {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
