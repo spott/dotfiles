@@ -7,6 +7,7 @@
 }: let
   mcpAdapter = "npm:pi-mcp-adapter@2.20.1";
   rpivTodo = "npm:@juicesharp/rpiv-todo@2.4.0";
+  hashline = "npm:pi-hashline@0.2.0";
   system = pkgs.stdenv.hostPlatform.system;
 in {
   # Pi uses npm to install packages declared in settings.json.
@@ -46,7 +47,8 @@ in {
     tmp="$(mktemp "$settings_dir/settings.json.XXXXXX")"
     ${pkgs.jq}/bin/jq \
       --arg mcp_adapter '${mcpAdapter}' \
-      --arg rpiv_todo '${rpivTodo}' '
+      --arg rpiv_todo '${rpivTodo}' \
+      --arg hashline '${hashline}' '
       .packages = (
         [(.packages // [])[]
           | select(
@@ -55,6 +57,8 @@ in {
                 (startswith("npm:pi-mcp-adapter@") | not) and
                 . != "npm:@juicesharp/rpiv-todo" and
                 (startswith("npm:@juicesharp/rpiv-todo@") | not) and
+                . != "npm:pi-hashline" and
+                (startswith("npm:pi-hashline@") | not) and
                 . != "git:github.com/spott/pi-task-compaction" and
                 (startswith("git:github.com/spott/pi-task-compaction@") | not) and
                 . != "https://github.com/spott/pi-task-compaction" and
@@ -63,7 +67,7 @@ in {
                 true
               end
             )
-        ] + [$mcp_adapter, $rpiv_todo]
+        ] + [$mcp_adapter, $rpiv_todo, $hashline]
       )
     ' "$settings_path" > "$tmp"
 
