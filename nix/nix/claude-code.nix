@@ -27,6 +27,10 @@ in {
 
       settings = {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
+        statusLine = {
+          type = "command";
+          command = "~/.claude/statusline.sh";
+        };
         hooks = {
           Notification = [
             {
@@ -58,5 +62,10 @@ in {
 
     # force the settings file to be overwritten
     home.file.".claude/settings.json".force = true;
+
+    home.file.".claude/statusline.sh" = {
+      source = ./claude-code/statusline.sh;
+      executable = true;
+    };
   };
 }
