@@ -17,7 +17,7 @@ input=$(cat)
 # One jq call for every field we need; absent fields become "". Joined on the
 # \x1f unit separator: a tab in IFS is "IFS whitespace", which collapses empty
 # fields and shifts everything left, while a non-whitespace char keeps them.
-IFS=$'\x1f' read -r model_id model_name ctx_pct cwd repo_name pr_num pr_state wt_session git_wt five_h < <(
+IFS=$'\x1f' read -r model_id model_name ctx_pct cwd repo_name pr_num pr_state wt_session git_wt five_h five_h_reset < <(
   jq -r '
     def pct(v): if v == null then "" else (v | round | tostring) end;
     [
@@ -30,7 +30,8 @@ IFS=$'\x1f' read -r model_id model_name ctx_pct cwd repo_name pr_num pr_state wt
       (.pr.review_state // ""),
       (.worktree.name // ""),
       (.workspace.git_worktree // ""),
-      pct(.rate_limits.five_hour.used_percentage)
+      pct(.rate_limits.five_hour.used_percentage),
+      (.rate_limits.five_hour.resets_at // "" | tostring)
     ] | join("\u001f")' <<<"$input" 2>/dev/null
 ) || true
 
@@ -129,8 +130,19 @@ fi
 # from the Claude Code process env). Show just the job id.
 [[ -n ${CLAUDE_JOB_DIR:-} ]] && segs+=("${DIM}job:${CLAUDE_JOB_DIR##*/}${RESET}")
 
-# 5-hour rate limit (Pro/Max only; absent until the first API response).
-[[ -n $five_h ]] && segs+=("5h $(level_color "$five_h")${five_h}%${RESET}")
+# 5-hour rate limit (Pro/Max only; absent until the first API response),
+# with the local time the window resets. BSD date wants -r <epoch>, GNU date
+# wants -d @<epoch>; try both so it works with either in PATH.
+if [[ -n $five_h ]]; then
+  seg="5h $(level_color "$five_h")${five_h}%${RESET}"
+  if [[ -n $five_h_reset ]]; then
+    reset_hm=$(date -r "$five_h_reset" +%H:%M 2>/dev/null) ||
+      reset_hm=$(date -d "@$five_h_reset" +%H:%M 2>/dev/null) ||
+      reset_hm=""
+    [[ -n $reset_hm ]] && seg+=" ${DIM}↻${reset_hm}${RESET}"
+  fi
+  segs+=("$seg")
+fi
 
 # Join with a dim separator.
 out=""
