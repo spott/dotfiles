@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ps -o pid,ppid,etime,command -p 7514)",
+      "Bash(sudo -n launchctl list)",
+      "Bash(launchctl list *)",
+      "Read(//Users/spott/.dotfiles/**)",
+      "Read(//Users/spott/.dotfiles/.claude/**)"
+    ]
+  }
+}
