@@ -21,7 +21,8 @@
     set -gu default-command
     set -g default-shell ${pkgs.zsh}/bin/zsh
     set -g mouse on
-    set -s extended-keys on
+    set -g extended-keys on
+    set -g extended-keys-format csi-u
 
     # set the window size to be the same as whatever your current terminal is
     # this might be too agressive, we will see.
