@@ -17,7 +17,7 @@ input=$(cat)
 # One jq call for every field we need; absent fields become "". Joined on the
 # \x1f unit separator: a tab in IFS is "IFS whitespace", which collapses empty
 # fields and shifts everything left, while a non-whitespace char keeps them.
-IFS=$'\x1f' read -r model_id model_name ctx_pct cwd repo_name pr_num pr_state wt_session git_wt five_h five_h_reset < <(
+IFS=$'\x1f' read -r model_id model_name ctx_pct cwd repo_name pr_num pr_state wt_session git_wt five_h five_h_reset effort_lvl < <(
   jq -r '
     def pct(v): if v == null then "" else (v | round | tostring) end;
     [
@@ -31,7 +31,8 @@ IFS=$'\x1f' read -r model_id model_name ctx_pct cwd repo_name pr_num pr_state wt
       (.worktree.name // ""),
       (.workspace.git_worktree // ""),
       pct(.rate_limits.five_hour.used_percentage),
-      (.rate_limits.five_hour.resets_at // "" | tostring)
+      (.rate_limits.five_hour.resets_at // "" | tostring),
+      (.effort.level // "")
     ] | join("\u001f")' <<<"$input" 2>/dev/null
 ) || true
 
@@ -79,9 +80,17 @@ level_color() {
 
 segs=()
 
-# Model
+# Model, with reasoning effort as a dim suffix (absent when the model has
+# no effort parameter). low/medium/high/xhigh/max -> lo/md/hi/xh/max.
 model=$(short_model "$model_id" "$model_name")
-[[ -n $model ]] && segs+=("${BOLD}${CYAN}${model}${RESET}")
+case "$effort_lvl" in
+  low) effort="lo" ;;
+  medium) effort="md" ;;
+  high) effort="hi" ;;
+  xhigh) effort="xh" ;;
+  *) effort="$effort_lvl" ;;
+esac
+[[ -n $model ]] && segs+=("${BOLD}${CYAN}${model}${RESET}${effort:+ ${DIM}${effort}${RESET}}")
 
 # Context
 [[ -n $ctx_pct ]] && segs+=("ctx $(level_color "$ctx_pct")${ctx_pct}%${RESET}")
