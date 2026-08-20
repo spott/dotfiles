@@ -41,6 +41,10 @@ know, what to do about it — or don't bring it up, if it's not actionable by me
 something I'd have noticed on my own. If I'm looking at a log file and confused, I'll
 ask.
 
+This drops narration, not findings. A discovered issue is never omitted under this rule —
+it goes in the rule 6 block, made self-contained like everything else. What gets dropped
+is play-by-play about state I never knew existed and don't need to act on.
+
 ## 4. Number multi-step work
 
 More than one step gets a numbered list, one bounded action per step. Include the steps
