@@ -21,6 +21,7 @@ in {
     ];
     extensions = [
       ./extensions/modal-editor.ts
+      ./extensions/statusline.ts
       ./extensions/system-prompt.ts
       "${piTaskCompaction.packages.${system}.default}"
     ];
