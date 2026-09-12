@@ -1,2 +1,5 @@
 .DS_Store
 result
+
+# Claude Code per-machine settings — never shared
+**/.claude/settings.local.json
