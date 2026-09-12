@@ -33,8 +33,13 @@
     #   inputs.nixpkgs.follows = "nixpkgs-stable";
     # };
 
+    # Follows nixpkgs (unstable) rather than carrying its own. Without this it
+    # locked a separate nixpkgs and pulled a second glibc into every consumer's
+    # closure — `claude-code-nix.packages.<system>.default` builds from its own
+    # nixpkgs, so the overlay alone does not avoid it.
     claude-code-nix = {
       url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     pi-nix = {
