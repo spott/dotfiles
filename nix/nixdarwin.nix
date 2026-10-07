@@ -79,6 +79,13 @@
     # Higher than the nixbuild.net entries below so linux builds stay local
     # (and off metered nixbuild CPU-hours) whenever the VM is available.
     speedFactor = 2;
+    potentiallyInsecureExtraNixosModule = {
+      # lima's host-agent readiness probe can never authenticate (the guest only
+      # knows the `builder` key), and every host connection shares one NAT source
+      # address, so sshd's PerSourcePenalties block the real builder logins too
+      # for ~15s out of every ~36s. Exempt lima's usernet subnet.
+      services.openssh.settings.PerSourcePenaltyExemptList = "192.168.5.0/24";
+    };
   };
 
   programs.ssh.extraConfig = ''
