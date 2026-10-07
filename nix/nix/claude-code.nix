@@ -23,7 +23,7 @@ in {
     programs.claude-code = {
       enable = true;
       package = cfg.package;
-      memory.source = ../pi/lede.md;
+      context = ../pi/lede.md;
 
       settings = {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
@@ -60,10 +60,11 @@ in {
 
     programs.zsh.shellAliases.claude = "LD_LIBRARY_PATH= command claude";
 
-    # force the settings file to be overwritten
-    home.file.".claude/settings.json".force = true;
+    # force the settings file to be overwritten. Keyed on configDir (an absolute
+    # path) so it merges with the module's own entry instead of conflicting.
+    home.file."${config.programs.claude-code.configDir}/settings.json".force = true;
 
-    home.file.".claude/statusline.sh" = {
+    home.file."${config.programs.claude-code.configDir}/statusline.sh" = {
       source = ./claude-code/statusline.sh;
       executable = true;
     };

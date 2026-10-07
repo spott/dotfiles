@@ -14,9 +14,15 @@ let
 in {
 
   programs.neovim.enable = true;
+  # Plugins come from unstable (below); neovim must too, or the wrapper's luajit
+  # env gets stable's and unstable's luajit side by side and buildEnv refuses
+  # the conflicting bin/luajit-<ver>.
+  programs.neovim.package = pkgs.unstable.neovim-unwrapped;
   programs.neovim.defaultEditor = true;
   programs.neovim.withNodeJs = true;
   programs.neovim.withPython3 = true;
+  # HM 26.05 flipped the default to false; keep the previous behaviour explicitly.
+  programs.neovim.withRuby = true;
   programs.neovim.viAlias = true;
   programs.neovim.vimAlias = true;
   programs.neovim.vimdiffAlias = true;

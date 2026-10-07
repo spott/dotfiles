@@ -6,7 +6,7 @@
     dust
     fd
     duf
-    dogdns
+    doggo # replaces dogdns, removed from nixpkgs 26.05
     ripgrep
     eza
     age

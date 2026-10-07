@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
 
     # Pinned solely to supply the lima build recipe for nix-rosetta-builder.
     # It must stay version-matched to the lima fork that spott/nix-rosetta-builder
@@ -13,7 +13,7 @@
     nixpkgs-lima.url = "github:nixos/nixpkgs/104240a772428cc2e20d8fd86c9ddbb886bbaff2";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -42,6 +42,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    codex-cli-nix = {
+      url = "github:sadjow/codex-cli-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     pi-nix = {
       url = "github:lukasl-dev/pi.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,7 +63,7 @@
     };
 
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -100,6 +105,7 @@
     home-manager,
     nix-vscode-extensions,
     claude-code-nix,
+    codex-cli-nix,
     nix-darwin,
     nix-rosetta-builder,
     tuicr,
@@ -136,6 +142,7 @@
         config.allowUnfree = true;
         overlays = [
           claude-code-nix.overlays.default
+          codex-cli-nix.overlays.default
           (final: prev: {
             python312 = prev.python312.override {
               packageOverrides = pyFinal: pyPrev: {
@@ -177,6 +184,7 @@
       #pylsp-rope.overlays.default
       nix-vscode-extensions.overlays.default
       claude-code-nix.overlays.default
+      codex-cli-nix.overlays.default
       #runpodctl.overlays.default
     ];
 

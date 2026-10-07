@@ -33,7 +33,7 @@
     cat = "bat";
     diff = "delta";
     df = "duf";
-    dig = "dog";
+    dig = "doggo";
     find = "fd";
     top = "btm";
     grep = "rg";
