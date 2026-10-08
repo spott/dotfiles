@@ -18,8 +18,13 @@
   };
   # Nix configuration ------------------------------------------------------------------------------
   users = {
+    # nix-darwin only writes UserShell (via dscl) for users listed in knownUsers;
+    # without this entry `shell = pkgs.zsh` is a no-op and the login shell stays
+    # at Apple's /bin/zsh. knownUsers requires an explicit uid (gid defaults to 20).
+    knownUsers = ["spott"];
     users = {
       spott = {
+        uid = 501;
         home = "/Users/spott";
         shell = pkgs.zsh;
         ignoreShellProgramCheck = true;
