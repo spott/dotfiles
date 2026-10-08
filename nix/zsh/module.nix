@@ -86,14 +86,10 @@
         ${concatMapStringsSep "\n" (path: ''
           ${pkgs.zsh}/bin/zsh -fc 'zcompile -R "$1.zwc" "$1"' _ "$out/${path}"
         '') compileFiles}
-        ${concatMapStringsSep "\n" (path: ''
-          # Keep source fallbacks small. Zsh selects the sibling wordcode;
-          # the PTY smoke test verifies that initialization still occurred.
-          printf '%s\n' '# Definitions are in the sibling .zwc file.' > "$out/${path}"
-        '') plugin.initFiles}
-        ${optionalString (plugin.preloadFiles != []) ''
-          printf '%s\n' '# Definitions are in .spott-preload.zsh.zwc.' > "$out/.spott-preload.zsh"
-        ''}
+        # The sourced files are kept intact next to their .zwc siblings. Zsh only
+        # loads wordcode produced by the exact same version; any other zsh (for
+        # example Apple's /bin/zsh when it is the login shell) silently falls back
+        # to the plain file, which must therefore still hold the real code.
       '';
 
   fpathEntries = builtins.concatMap (

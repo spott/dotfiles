@@ -2,15 +2,18 @@
 emulate -L zsh
 setopt err_exit no_unset pipe_fail
 
-if (( $# != 2 )); then
-  print -u2 -- "usage: ${0:t} LABEL HOME_MANAGER_GENERATION"
+if (( $# < 2 || $# > 3 )); then
+  print -u2 -- "usage: ${0:t} LABEL HOME_MANAGER_GENERATION [ZSH_BINARY]"
   exit 2
 fi
 
 label=$1
 generation=$2
 config_dir=$generation/home-files/.config/zsh
-runtime_zsh=$generation/home-path/bin/zsh
+# Default to the generation's own zsh. A different binary (for example Apple's
+# /bin/zsh as a login shell) cannot read wordcode built by another zsh version
+# and must still initialize correctly from the plain plugin sources.
+runtime_zsh=${3:-$generation/home-path/bin/zsh}
 runtime_path=$generation/home-path/bin:$PATH
 tmp=$(mktemp -d)
 pty_name=spott-zsh-smoke-$$
@@ -32,9 +35,13 @@ print -r -- 'source "$ZDOTDIR/.zshrc_personal"' > $tmp/.config/zsh/.zshrc
 zmodload zsh/zpty
 checks_file=$tmp/checks.zsh
 cat > $checks_file <<'EOF'
-for fn in mkcd mkpw prompt-pwd duration-info-precmd duration-info-preexec coalesce git-action git-info; do
+for fn in mkcd mkpw prompt-pwd duration-info-precmd duration-info-preexec coalesce git-action git-info _prompt_mnml_keymap _prompt_mnml_precmd _mnml_set_worktree; do
   (( ${+functions[$fn]} )) || { print -u2 -- "missing function: $fn"; exit 11; }
 done
+# The minimal theme must have run: it enables PROMPT_SUBST, without which the
+# literal '$(prompt-pwd)${(e)git_info[rprompt]}' text shows up in the prompt.
+[[ ${options[promptsubst]} == on ]] || { print -u2 -- "PROMPT_SUBST is off: the minimal theme did not load"; exit 10; }
+[[ $RPS1 == *'$(prompt-pwd)'* ]] || { print -u2 -- "unexpected RPS1: $RPS1"; exit 10; }
 for widget in fzf-history-widget history-substring-search-up history-substring-search-down; do
   zle -l "$widget" >/dev/null || { print -u2 -- "missing widget: $widget"; exit 12; }
 done
@@ -71,4 +78,4 @@ if [[ $output != *__DECLARATIVE_ZSH_PTY_OK__* ]]; then
   exit 1
 fi
 
-print -- "PTY-backed interactive startup passed for $label."
+print -- "PTY-backed interactive startup passed for $label with ${runtime_zsh} ($($runtime_zsh --version))."

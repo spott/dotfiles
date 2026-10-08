@@ -223,6 +223,11 @@ EOF
     "$config_dir/.zshrc_personal"
 
   "$script_dir/pty-smoke.zsh" "$label" "$generation"
+  # On macOS the login shell may be Apple's /bin/zsh (a different zsh version
+  # that cannot load the generation's wordcode); it must still start cleanly.
+  if [[ -x /bin/zsh ]]; then
+    "$script_dir/pty-smoke.zsh" "$label" "$generation" /bin/zsh
+  fi
 }
 
 if [[ -n $normandy_generation ]]; then
