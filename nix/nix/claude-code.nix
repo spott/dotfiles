@@ -27,6 +27,8 @@ in {
 
       settings = {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
+        # vim key bindings in the prompt (same as /vim, but declarative)
+        editorMode = "vim";
         statusLine = {
           type = "command";
           command = "~/.claude/statusline.sh";
