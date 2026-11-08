@@ -29,6 +29,8 @@ in {
         skipDangerousModePermissionPrompt = cfg.allowDangerousMode;
         # vim key bindings in the prompt (same as /vim, but declarative)
         editorMode = "vim";
+        # default model for new sessions (alias for the current Opus)
+        model = "opus";
         statusLine = {
           type = "command";
           command = "~/.claude/statusline.sh";

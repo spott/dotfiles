@@ -5,7 +5,6 @@
   piTaskCompaction,
   ...
 }: let
-  mcpAdapter = "npm:pi-mcp-adapter@2.20.1";
   rpivTodo = "npm:@juicesharp/rpiv-todo@2.4.0";
   hashline = "npm:pi-hashline@0.2.0";
   system = pkgs.stdenv.hostPlatform.system;
@@ -27,14 +26,19 @@ in {
     ];
   };
 
-  xdg.configFile."mcp/mcp.json" = {
-    source = ./mcp.json;
-    force = true;
+  # MCP servers through pi's built-in support (pi >= 1.0; `pi-mcp-adapter`,
+  # which this used before, is gone from `packages` below — an installed
+  # adapter would replace the built-in /mcp). OAuth: `pi mcp login obsidian`
+  # once per machine; tokens live in ~/.pi/agent/mcp-auth.json. The orchard
+  # workspace image overrides this with bearer tokens from its secrets env.
+  programs.pi.coding-agent.mcp = {
+    mcpServers.obsidian.url = "https://mcp-obsidian.spott.us/mcp";
   };
 
   # Preserve settings that Pi owns while declaratively ensuring required npm
-  # packages are present. Keeping settings.json mutable allows Pi to save model,
-  # theme, and changelog preferences normally.
+  # packages are present (and that pi-mcp-adapter stays removed). Keeping
+  # settings.json mutable allows Pi to save model, theme, and changelog
+  # preferences normally.
   home.activation.piPackages = lib.hm.dag.entryAfter ["writeBoundary"] ''
     settings_path="${config.home.homeDirectory}/.pi/agent/settings.json"
     settings_dir="$(dirname "$settings_path")"
@@ -47,7 +51,6 @@ in {
 
     tmp="$(mktemp "$settings_dir/settings.json.XXXXXX")"
     ${pkgs.jq}/bin/jq \
-      --arg mcp_adapter '${mcpAdapter}' \
       --arg rpiv_todo '${rpivTodo}' \
       --arg hashline '${hashline}' '
       .packages = (
@@ -68,7 +71,7 @@ in {
                 true
               end
             )
-        ] + [$mcp_adapter, $rpiv_todo, $hashline]
+        ] + [$rpiv_todo, $hashline]
       )
     ' "$settings_path" > "$tmp"
 

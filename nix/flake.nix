@@ -244,6 +244,7 @@
         ];
         _module.args = specialArgs;
         dotfiles.claude-code.package = claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        dotfiles.ai.codexPackage = codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
       };
     };
     overlays = {
