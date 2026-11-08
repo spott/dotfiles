@@ -35,7 +35,9 @@ in {
         theme = "auto";
         statusLine = {
           type = "command";
-          command = "~/.claude/statusline.sh";
+          # the script is installed into configDir below; configDir is not
+          # ~/.claude everywhere (orchard workspaces move it to ~/work/.claude)
+          command = "${config.programs.claude-code.configDir}/statusline.sh";
         };
         hooks = {
           Notification = [
