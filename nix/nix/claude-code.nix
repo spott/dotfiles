@@ -31,6 +31,8 @@ in {
         editorMode = "vim";
         # default model for new sessions (alias for the current Opus)
         model = "opus";
+        # follow the terminal's light/dark background
+        theme = "auto";
         statusLine = {
           type = "command";
           command = "~/.claude/statusline.sh";
